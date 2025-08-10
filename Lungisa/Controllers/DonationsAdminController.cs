@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace Lungisa.Controllers
+{
+    public class DonationsAdminController : Controller
+    {
+        // GET: DonationsAdmin
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }
+}
