@@ -1,0 +1,100 @@
+﻿body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.login-card {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 48px 40px 56px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    text-align: center;
+}
+
+    .login-card img {
+        height: 56px;
+        margin-bottom: 32px;
+    }
+
+    .login-card h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .login-card p {
+        font-size: 14px;
+        color: dimgrey;
+        margin-bottom: 32px;
+    }
+
+.form-group {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+input[type=email],
+input[type=password] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color .2s;
+}
+
+    input[type=email]:focus,
+    input[type=password]:focus {
+        outline: none;
+        border: 2px solid #ed1f1f;
+    }
+
+.btn-primary {
+    width: 100%;
+    background: #ed1f1f;
+    color: white;
+    padding: 14px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .25s;
+}
+
+    .btn-primary:hover {
+        background: black;
+    }
+
+.footer-link {
+    margin-top: 16px;
+    font-size: 14px;
+    color: black;
+}
+
+    .footer-link a {
+        color: black;
+        text-decoration: none;
+    }
+
+        .footer-link a:hover {
+            text-decoration: underline
+        }
+
+/* Responsive tweak */
+@media(max-width:480px) {
+    .login-card {
+        padding: 40px 24px
+    }
+}

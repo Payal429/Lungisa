@@ -1,0 +1,86 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 10 August 2025 -->
+@{
+    ViewBag.Title = "Volunteer Signup";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Volunteer Signup</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/volunteer.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Home/Index" class="nav-link active">HOME</a></li>
+                <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <a class="btn-donate" href="/Home/Donations">DONATE</a>
+            <a class="btn-admin" href="/Admin/Login">ADMIN LOGIN</a>
+        </div>
+    </header>
+
+
+    <div class="form-container">
+        <h1>Volunteer Signup</h1>
+        <br />
+
+        <form asp-action="VolunteerSignup" method="post">
+            <div class="form-group">
+                <label for="FullName">Full Name</label>
+                <input type="text" id="FullName" name="FullName" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input type="email" id="Email" name="Email" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Phone">Phone Number</label>
+                <input type="tel" id="Phone" name="Phone" required />
+            </div>
+
+            <!-- UP-COMING EVENT DROPDOWN -->
+            <!--<div class="form-group">
+                <label for="EventName">Event Name</label>
+                <select id="EventName" name="EventName" required>
+                    <option value="" disabled selected>Select an upcoming event</option>-->
+                    @*                        @foreach (var evt in Model.Where(e => e.StartDate > DateTime.Now))
+                        {
+                            <option value="@evt.Name">@evt.Name – @evt.StartDate.ToString("dd MMM yyyy")</option>
+                        }*@
+                <!--</select>
+            </div>-->
+
+            <button type="submit" class="btn-primary">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>

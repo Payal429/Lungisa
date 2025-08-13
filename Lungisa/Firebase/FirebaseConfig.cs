@@ -15,7 +15,7 @@ namespace Lungisa.Firebase
             {
                 FirebaseApp.Create(new AppOptions()
                 {
-                    Credential = GoogleCredential.FromFile(AppDomain.CurrentDomain.BaseDirectory + "App_Data/lungisa-firebase-key.json")
+                    Credential = GoogleCredential.FromFile(AppDomain.CurrentDomain.BaseDirectory + "App_Data/firebaseServiceAccount.json")
                 });
             }
         }

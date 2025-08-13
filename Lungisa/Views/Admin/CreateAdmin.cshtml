@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <h2>Create New Admin</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div style="color:red">@ViewBag.Error</div>
+    }
+
+    @if (ViewBag.Success != null)
+    {
+        <div style="color:green">@ViewBag.Success</div>
+    }
+
+    <form method="post" action="@Url.Action("CreateAdmin", "Admin")">
+        <div>
+            <label>Email:</label>
+            <input type="email" name="email" required />
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" required />
+        </div>
+        <button type="submit">Create Admin</button>
+    </form>
+
+    <a href="@Url.Action("AdminDashboard", "Admin")">Back to Dashboard</a>
+</body>
+</html>

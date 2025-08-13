@@ -1,0 +1,113 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 06 August 2025 -->
+<!-- Description -->
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Login</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/login.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!--Scripts-->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="login-card">
+        <img src="~/Content/Images/LOGOLungisa.png" alt="Lungisa Logo">
+        <h1>Admin Portal</h1>
+        <p>Sign in to manage projects, events and more.</p>
+        <div class="form-group">
+            <label for="username">Email</label>
+            <input type="email" id="email" placeholder="Email" />
+        </div>
+        <div class="form-group">
+            <label for="username">Password</label>
+            <input type="password" id="password" placeholder="Password" />
+        </div>
+        <button onclick="loginEmail()" class="btn-primary">Login with Email</button>
+
+        <div class="footer-link">
+            <a href="#">Forgot password?</a>
+        </div>
+    </div>
+    <div id="error" style="color:red;"></div>
+
+    <form id="tokenForm" method="post" style="display:none;">
+        <input type="hidden" id="idToken" name="idToken" />
+    </form>
+
+    <script>
+            const firebaseConfig = {
+                apiKey: "AIzaSyDFYN_fQoTsI7fx4wn4_SMRClut50s7klQ",
+                authDomain: "lungisa-e03bd.firebaseapp.com",
+            };
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+
+            async function loginEmail() {
+                try {
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                    const token = await userCredential.user.getIdToken();
+                    document.getElementById('idToken').value = token;
+                    document.getElementById('tokenForm').submit();
+                } catch (err) {
+                    document.getElementById('error').innerText = err.message;
+                }
+            }
+
+            /*        async function loginGoogle() {
+                        try {
+                            const provider = new firebase.auth.GoogleAuthProvider();
+                            const result = await auth.signInWithPopup(provider);
+                            const token = await result.user.getIdToken();
+                            document.getElementById('idToken').value = token;
+                            document.getElementById('tokenForm').submit();
+                        } catch (err) {
+                            document.getElementById('error').innerText = err.message;
+                        }
+                    }*/
+    </script>
+
+    @*        @if (ViewBag.Error != null)
+        {
+            <p style="color:red;">@ViewBag.Error</p>
+        }
+        <form action="/Login" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Log In</button>
+        </form>*@
+
+
+    </div>
+</body>
+</html>

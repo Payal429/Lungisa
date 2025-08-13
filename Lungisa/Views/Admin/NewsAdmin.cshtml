@@ -1,0 +1,91 @@
+﻿@*@model List<Lungisa.Services.FirebaseService.FirebaseNewsArticle>*@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Manage News</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/projectInfo.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
+                <li><a href="/Admin/Donations" class="nav-link">DONATIONS</a></li>
+                <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
+                <li><a href="/Events" class="nav-link">EVENTS</a></li>
+                <li><a href="/Admin/Users" class="nav-link">USER ACCOUNTS</a></li>
+                <li><a href="/NewsInfo" class="nav-link active">NEWS ARTICLES</a></li>
+                <li><a href="/Admin/Volunteer" class="nav-link">VOLUNTEER SIGNUPS</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Post News Articles</h1>
+        <p>Create, schedule and publish stories.</p>
+        <section class="section-card">
+            <h2>New Article</h2>
+            <form>
+                <div class="form-group"><label>Headline</label><input type="text" required></div>
+                <div class="form-group"><label>Summary</label><textarea rows="2" required></textarea></div>
+                <div class="form-group"><label>Body</label><textarea rows="8" required></textarea></div>
+                <div class="form-group"><label>Featured Image</label><input type="file" accept="image/*"></div>
+                <button class="btn">Publish</button>
+            </form>
+        </section>
+
+        <section class="section-card">
+            <h2>Drafts & Published</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Article.Title</td>
+                            <td>@item.Article.Status</td>
+                            <td>@item.Article.Date</td>
+                            <td>
+                                <a class="btn" href="#">Edit</a>
+                                <a class="btn" style="background:#ef4444"
+                                   href="/News/Delete/@item.Key"
+                                   onclick="return confirm('Delete this article?');">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>
