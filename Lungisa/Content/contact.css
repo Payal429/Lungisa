@@ -59,18 +59,27 @@
 }
 
     .contact-top .container {
-        display: flex;
+        /*        display: flex;
         gap: 90px;
         align-items: flex-start;
+        flex-wrap: wrap;*/
+        display: flex;
         flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 40px 20px;
     }
 
 /* ---------- MESSAGE + DETAILS ---------- */
 .message-box,
 .details-box {
     flex: 1 1 500px;
-    max-width: 500px;
-    padding: 20px 5%;
+    max-width: 600px;
+    padding: 30px 25px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    gap:40px;
 }
     .message-box h2,
     .details-box h3 {

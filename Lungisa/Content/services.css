@@ -16,7 +16,7 @@
         content: "";
         position: absolute;
         inset: 0; /* top:0 right:0 bottom:0 left:0 */
-        background: url('Images/services.png') center/cover no-repeat;
+        background: url('Images/services2.jpg') center/cover no-repeat;
         opacity: 0.3; /* lighter image only */
         z-index: -1; /* behind content */
     }
@@ -69,7 +69,7 @@
 /* ---------- BLOCK 1 → PRIMARY HEALTHCARE, BLOCK 2 → PSYCHOSOCIAL SUPPORT, BLOCK 3 → YOUTH DEVELOPMENT, BLOCK 4 → COMMUNITY PARTNERSHIP ---------- */
 /* ---------- CARD BASE ---------- */
 .service-card {
-    background: #D3D3D3;
+    background: white;
     border-radius: 10px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     transition: .3s;
@@ -78,20 +78,12 @@
     flex-direction: column;
     padding: 10px 5%;
     max-width:auto;
-    margin:25px;
+    margin:30px;
 }
 
     .service-card:hover {
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
     }
-
-    .service-card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        display: block;
-    }
-
 /* ---------- CARD BODY ---------- */
 .card-body-left,
 .card-body-right {
@@ -99,7 +91,7 @@
 }
 
 .card-body-right {
-    order: -1
+    order: -1;
 }
 
 /* ---------- TYPOGRAPHY ---------- */
@@ -115,6 +107,13 @@
 .service-card p {
     color: dimgrey;
     margin-bottom: 12px;
+}
+/* Image styling */
+.service-card img {
+    width: 250px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
 }
 
 .service-card ul {
@@ -215,7 +214,7 @@
     }
 
         .service-card img {
-            width: 40%;
+            width: 20%;
             height: auto;
             min-height: 260px;
         }

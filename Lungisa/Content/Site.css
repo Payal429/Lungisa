@@ -66,6 +66,7 @@ header {
     /* ---------- ACTIVE COLOR ---------- */
     .nav-link.active {
         color: #ed1f1f; 
+        font-weight:bold;
     }
 
 /* ---------- DONATE BUTTON + ADMIN BUTTON ---------- */

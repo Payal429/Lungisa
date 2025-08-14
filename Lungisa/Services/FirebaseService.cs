@@ -110,9 +110,20 @@ namespace Lungisa.Services
             public string Title { get; set; }
             public string Description { get; set; }
             public string ImageUrl { get; set; }
-            public string Start { get; set; }   // maybe this is what you have
-            public string End { get; set; }
+            public string StartDate { get; set; }   // maybe this is what you have
+            public string EndDate { get; set; }
         }
+
+        public async Task<List<ProjectModel>> GetAllProjects()
+        {
+            var projects = await firebase
+                .Child("Projects") // Firebase node
+                .OnceAsync<ProjectModel>();
+
+            return projects.Select(p => p.Object).ToList();
+        }
+
+
 
         // ===================== EVENTS =====================
 
@@ -155,43 +166,6 @@ namespace Lungisa.Services
 
             return events;
         }
-        /*        public async Task<List<EventModel>> GetAllEventsAsync()
-                {
-                    var firebaseClient = new FirebaseClient("<YOUR_FIREBASE_URL>");
-                    var events = await firebaseClient
-                        .Child("Events")
-                        .OnceAsync<EventModel>();
-
-                    var eventList = new List<EventModel>();
-
-                    foreach (var ev in events)
-                    {
-                        // Split date and time
-                        string datePart = "";
-                        string timePart = "";
-                        if (!string.IsNullOrEmpty(ev.Object.Date))
-                        {
-                            var parts = ev.Object.Date.Split('T');
-                            if (parts.Length == 2)
-                            {
-                                datePart = parts[0];
-                                timePart = parts[1];
-                            }
-                        }
-
-                        eventList.Add(new EventModel
-                        {
-                            Name = ev.Object.Name,
-                            Date = datePart,
-                            Time = timePart,
-                            Venue = ev.Object.Venue,
-                            Description = ev.Object.Description
-                        });
-                    }
-
-                    return eventList;
-                }*/
-
 
     }
 }

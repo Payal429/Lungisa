@@ -98,11 +98,11 @@
 
 /* ========== PROJECT SECTION ========== */
 /* ---------- PROJECTS ---------- */
-.projects {
-    padding: 80px 10%;
+.project {
+    padding: 10px 5%;
     background: #ed1f1f;
 }
-    .projects h2 {
+    .project h2 {
         font-size: 34px;
         font-weight: 700;
         margin-bottom: 50px;
@@ -110,11 +110,11 @@
     }
 
 /* ---------- GRID ---------- */
-.projects .grid {
+/*.projects .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
     gap: 40px;
-}
+}*/
 
 /* ---------- CARDS ---------- */
 .card {
@@ -123,11 +123,18 @@
     border: 5px double black;
     padding: 32px 28px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    display: flex;
+    flex: 1 1 280px; /* grow/shrink, 260 px minimum */
     flex-direction: column;
     justify-content: space-between;
     min-height: 260px;
+    max-width: 420px; /* optional upper limit */
 }
+    .card img {
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
     .card h4 {
         font-size: 20px;
         font-weight: 600;
@@ -161,6 +168,49 @@
         .card a:hover svg {
             transform: translateX(4px)
         }
+
+/* ---------- PROJECTS WRAPPER ---------- */
+.projects {
+    padding: 20px 5%;
+    background: #ed1f1f;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 20px;
+}
+
+/* ---------- EACH HEADING + ROW ---------- */
+.project-group {
+    margin-bottom: 20px;
+}
+
+    .project-group h3 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #000;
+        text-align:center;
+    }
+
+/* ---------- ROW OF CARDS ---------- */
+.project-row {
+    display: flex;
+    flex-wrap: wrap; /* cards wrap to next line */
+    gap: 20px; /* space between cards */
+}
+
+/* ---------- CARD ---------- */
+/*.card {
+    background: #fff;
+    border-radius: 10px;
+    border: 5px double #000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
+    padding: 32px 28px;
+    flex: 1 1 260px;*/ /* grow/shrink, 260 px minimum */
+    /*max-width: 320px;*/ /* optional upper limit */
+    /*display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}*/
 
 /* ========== SERVICES SECTION ========== */
 /* ---------- SERVICES ---------- */

@@ -46,10 +46,26 @@ namespace Lungisa.Controllers
             return View();
         }
 
+        /*        public async Task<ActionResult> Index()
+                {
+                    var allEvents = await firebase.GetAllEvents() ?? new List<EventModel>();
+
+                    var latestEvents = allEvents
+                        .OrderByDescending(e =>
+                        {
+                            DateTime dt;
+                            DateTime.TryParse(e.DateTime, out dt);
+                            return dt;
+                        })
+                        .Take(3)
+                        .ToList();
+
+                    return View(latestEvents); // send to Index.cshtml
+                }*/
         public async Task<ActionResult> Index()
         {
+            // ==== EVENTS ====
             var allEvents = await firebase.GetAllEvents() ?? new List<EventModel>();
-
             var latestEvents = allEvents
                 .OrderByDescending(e =>
                 {
@@ -57,11 +73,41 @@ namespace Lungisa.Controllers
                     DateTime.TryParse(e.DateTime, out dt);
                     return dt;
                 })
+                .Take(1)
+                .ToList();
+
+            // ==== PROJECTS ====
+            var allProjects = await firebase.GetAllProjectsWithKeys() ?? new List<FirebaseService.FirebaseProject>();
+
+            var completedProjects = allProjects
+                .Where(p => p.Project.Type?.ToLower() == "completed")
+                .Select(p => p.Project)
+                .Take(1)
+                .ToList();
+
+            var currentProjects = allProjects
+                .Where(p => p.Project.Type?.ToLower() == "currently")
+                .Select(p => p.Project)
                 .Take(3)
                 .ToList();
 
-            return View(latestEvents); // send to Index.cshtml
+            var upcomingProjects = allProjects
+                .Where(p => p.Project.Type?.ToLower() == "upcoming")
+                .Select(p => p.Project)
+                .Take(1)
+                .ToList();
+
+
+            // ==== CREATE VIEWMODEL ====
+            var model = new HomeViewModel
+            {
+                LatestEvents = latestEvents,
+                CompletedProjects = completedProjects,
+                CurrentProjects = currentProjects,
+                UpcomingProjects = upcomingProjects
+            };
+
+            return View(model);
         }
-        
     }
 }

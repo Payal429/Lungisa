@@ -8,7 +8,7 @@
         public string Type { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
-        public string Start { get; set; }   // maybe this is what you have
-        public string End { get; set; }
+        public string StartDate { get; set; }   // maybe this is what you have
+        public string EndDate { get; set; }
     }
 }

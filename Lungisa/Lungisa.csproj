@@ -161,20 +161,29 @@
     <Content Include="Content\events.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\Images\aboutus.jpg" />
+    <Content Include="Content\Images\accessibility.png" />
     <Content Include="Content\Images\blackbackground.jpg" />
     <Content Include="Content\Images\community-contact2.jpg" />
     <Content Include="Content\Images\community.png" />
     <Content Include="Content\Images\contact-us.jpg" />
+    <Content Include="Content\Images\Creditcards.jpg" />
+    <Content Include="Content\Images\donationsBackground.jpg" />
     <Content Include="Content\Images\empathy.png" />
     <Content Include="Content\Images\event.png" />
     <Content Include="Content\Images\Events.jpeg" />
     <Content Include="Content\Images\FAQ3.jpg" />
     <Content Include="Content\Images\hero-img.jpg" />
     <Content Include="Content\Images\hero_image.png" />
+    <Content Include="Content\Images\honesty.png" />
     <Content Include="Content\Images\LOGOLungisa.png" />
     <Content Include="Content\Images\LungisaLogo.png" />
     <Content Include="Content\Images\primary-care.png" />
     <Content Include="Content\Images\requests2.jpg" />
+    <Content Include="Content\Images\service.png" />
+    <Content Include="Content\Images\services.jpg" />
+    <Content Include="Content\Images\services2.jpg" />
+    <Content Include="Content\Images\shake.png" />
+    <Content Include="Content\Images\weekly-news.jpg" />
     <Content Include="Content\Images\youth-day.png" />
     <Content Include="Content\login.css" />
     <Content Include="Content\news.css" />
@@ -205,6 +214,7 @@
     </Compile>
     <Compile Include="Models\EventModel.cs" />
     <Compile Include="Models\FirebaseProject.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FirebaseService.cs" />
@@ -212,6 +222,8 @@
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="App_Data\firebaseServiceAccount.json" />
+    <Content Include="Content\Images\MakeDonation.avif" />
+    <Content Include="Content\Images\services.avif" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Admin\AdminDashboard.cshtml" />

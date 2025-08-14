@@ -6,7 +6,8 @@
     Users can subscribe to the newsletter for updates, explore upcoming events and find answers to common questions
     in the FAQ section. Additionally, the page includes a section for user requests and an “Ask” feature, providing
     visitors with a way to engage directly with the organisation. -->
-@model List<Lungisa.Models.EventModel>
+
+@model Lungisa.Models.HomeViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -87,36 +88,60 @@
     </section>
 
     <!-- ================= PROJECTS ================= -->
-    <section class="projects">
+    <section class="project">
         <h2>Projects</h2>
-        <div class="grid">
-            <div class="card">
-                <h4>Completed Projects</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
-                <a href="#">
-                    Learn more
-                    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" /></svg>
-                </a>
+        <section class="projects">
+            <!-- 1. Completed -->
+            <div class="project-group">
+                <h3>Completed Projects</h3>
+                <div class="project-row">
+                    @foreach (var p in Model.CompletedProjects)
+                    {
+                        <div class="card">
+                            <img src="@p.ImageUrl" alt="@p.Title" />
+                            <h4>@p.Title</h4>
+                            <p>@p.Description</p>
+                            <p><strong>Start:</strong> @p.StartDate</p>
+                            <p><strong>End:</strong> @p.EndDate</p>
+                        </div>
+                    }
+                </div>
             </div>
 
-            <div class="card">
-                <h4>Current Projects</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
-                <a href="#">
-                    Learn more
-                    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" /></svg>
-                </a>
+            <!-- 2. Current -->
+            <div class="project-group">
+                <h3>Current Projects</h3>
+                <div class="project-row">
+                    @foreach (var p in Model.CurrentProjects)
+                    {
+                        <div class="card">
+                            <img src="@p.ImageUrl" alt="@p.Title" />
+                            <h4>@p.Title</h4>
+                            <p>@p.Description</p>
+                            <p><strong>Start:</strong> @p.StartDate</p>
+                            <p><strong>End:</strong> @p.EndDate</p>
+                        </div>
+                    }
+                </div>
             </div>
 
-            <div class="card">
-                <h4>Upcoming Projects</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
-                <a href="#">
-                    Learn more
-                    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" /></svg>
-                </a>
+            <!-- 3. Upcoming -->
+            <div class="project-group">
+                <h3>Upcoming Projects</h3>
+                <div class="project-row">
+                    @foreach (var p in Model.UpcomingProjects)
+                    {
+                        <div class="card">
+                            <img src="@p.ImageUrl" alt="@p.Title" />
+                            <h4>@p.Title</h4>
+                            <p>@p.Description</p>
+                            <p><strong>Start:</strong> @p.StartDate</p>
+                            <p><strong>End:</strong> @p.EndDate</p>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
+        </section>
     </section>
 
     <!-- ================= SERVICES ================= -->
@@ -162,13 +187,11 @@
 
     <!-- ================= EVENTS ================= -->
     <section class="events">
-        <h2>Our Latest Events</h2>
-
-        @if (Model != null && Model.Count > 0)
+        <h2>Our Latest Events and Programs</h2>
+        @if (Model.LatestEvents != null && Model.LatestEvents.Count > 0)
         {
-            foreach (var ev in Model)
+            foreach (var ev in Model.LatestEvents)
             {
-                // Try to parse DateTime string
                 DateTime eventDateTime;
                 DateTime.TryParse(ev.DateTime, out eventDateTime);
 
@@ -189,6 +212,7 @@
             <p>No upcoming events found.</p>
         }
     </section>
+
 
     <!-- ================= FAQ / REQUESTS / ASK ================= -->
     <section class="faq-requests">
