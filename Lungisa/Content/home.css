@@ -99,16 +99,16 @@
 /* ========== PROJECT SECTION ========== */
 /* ---------- PROJECTS ---------- */
 .project {
-    padding: 10px 5%;
+    padding: 80px 10%;
     background: #ed1f1f;
 }
+
     .project h2 {
         font-size: 34px;
         font-weight: 700;
-        margin-bottom: 50px;
+        margin-bottom: 20px;
         color: black;
     }
-
 /* ---------- GRID ---------- */
 /*.projects .grid {
     display: grid;

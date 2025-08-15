@@ -48,7 +48,7 @@
 
         <div class="header-buttons">
             <a class="btn-donate" href="/Home/Donations">DONATE</a>
-            <a class="btn-admin" href="/Admin/Login">ADMIN LOGIN</a>
+            <a class="btn-admin" href="/Login/Index">ADMIN LOGIN</a>
         </div>
     </header>
 
@@ -64,7 +64,6 @@
             <input type="search" placeholder="Search.." />
         </div>
     </div>
-
 
     <!-- ================= CONTACT US ================= -->
     <section class="contact-top">
@@ -83,8 +82,8 @@
                 <h3>Contact Details</h3>
                 <p><strong>Registered Office</strong><br>4850 ext2, KANANA, HAMMANSKRAAL 0407</p>
                 <p><strong>Operations</strong><br>27269, Iqabothuleare Street, Soshanguve, 0152</p>
-                <p><strong>Phone</strong><br><a href="tel:+27823039195">+27 82 303 9195</a></p>
-                <p><strong>Email</strong><br><a href="mailto:lungisanpo@gmail.com">lungisanpo@gmail.com</a></p>
+                <p><strong>Phone</strong><br><a href="tel:+27682516154">+27 68 251 6154</a></p>
+                <p><strong>Email</strong><br><a href="mailto:lungisanpc@gmail.com">lungisanpc@gmail.com</a></p>
             </div>
         </div>
     </section>
@@ -93,14 +92,23 @@
     <section class="contact-form-section">
         <h2>Contact Us</h2>
         <br />
-        <form>
-            <input type="text" placeholder="First Name" required />
-            <input type="text" placeholder="Last Name" required />
-            <input type="email" placeholder="Email" required />
-            <input type="text" placeholder="Subject" required />
-            <textarea rows="5" placeholder="Type your Message"></textarea>
+        <form action="/Home/Contact" method="post">
+            <input type="text" name="firstName" placeholder="First Name" required />
+            <input type="text" name="lastName" placeholder="Last Name" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="text" name="subject" placeholder="Subject" required />
+            <textarea name="message" rows="5" placeholder="Type your Message"></textarea>
             <button type="submit">Send Message</button>
         </form>
+
+        @if (TempData["Success"] != null)
+        {
+            <p style="color:green; margin-top:10px;">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p style="color:red; margin-top:10px;">@TempData["Error"]</p>
+        }
     </section>
 
     <!-- ================= FAQ + REQUESTS ================= -->

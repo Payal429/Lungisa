@@ -1,61 +1,66 @@
-﻿using Lungisa.Services;
+﻿using Lungisa.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Mail;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Lungisa.Services;
 
 namespace Lungisa.Controllers
 {
-    public class VolunteersController : Controller
+    public class ContactsController : Controller
     {
         private readonly FirebaseService _firebase = new FirebaseService();
 
-        // This action explicitly loads the volunteers management page
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            // Retrieve all volunteers from Firebase
-            var volunteers = await _firebase.GetAllVolunteers() ?? new List<Lungisa.Models.VolunteerModel>();
+            // Retrieve all contacts from Firebase
+            var contacts = await _firebase.GetAllContacts() ?? new List<Lungisa.Models.ContactModel>();
 
             // Pass any temporary success or error messages to the view
             ViewBag.Success = TempData["Success"];
             ViewBag.Error = TempData["Error"];
 
-            // Render the Volunteers view with the retrieved list
-            return View("~/Views/Admin/Volunteers.cshtml", volunteers);
+            // Render the Contacts view with the retrieved list
+            return View("~/Views/Admin/Contacts.cshtml", contacts);
         }
 
-        // This action explicitly loads the volunteers management page
+        // This action explicitly loads the contacts management page.
         [HttpGet]
-        public async Task<ActionResult> Volunteers()
+        public async Task<ActionResult> Contacts()
         {
-            // Retrieve all volunteers from Firebase
-            var volunteers = await _firebase.GetAllVolunteers() ?? new List<Lungisa.Models.VolunteerModel>();
+            // Retrieve all contacts from Firebase
+            var contacts = await _firebase.GetAllContacts() ?? new List<Lungisa.Models.ContactModel>();
 
             // Pass any temporary success or error messages to the view
             ViewBag.Success = TempData["Success"];
             ViewBag.Error = TempData["Error"];
 
-            // Render the Volunteers view with the retrieved list
-            return View("~/Views/Admin/Volunteers.cshtml", volunteers);
+            // Render the Contacts view with the retrieved list
+            return View("~/Views/Admin/Contacts.cshtml", contacts);
         }
 
+        // GET USERS THAT CONTACTED LUNGISA
 
-        // Fetch all volunteers
+        /*        public async Task<ActionResult> Contacts()
+                {
+                    var contacts = await _firebase.GetAllContacts() ?? new List<ContactModel>();
+                    return View(contacts); // send Dictionary<string, ContactModel> to the view
+                }*/
         [HttpPost]
-        public ActionResult SendVolunteerEmail(string email, string name)
+        public ActionResult SendContactEmail(string email, string name)
         {
             try
             {
                 var fromAddress = new MailAddress("payal.sunil429@gmail.com", "Lungisa NPO");
                 var toAddress = new MailAddress(email, name);
-                string fromPassword = "bpzk wbru lwur xbrl"; // Gmail App Password
-                string subject = "Volunteering Opportunity";
-                string body = $"Dear {name},\n\nThank you for volunteering with Lungisa NPO. We have new opportunities available and would love your help!\n\nBest Regards,\nLungisa NPO Team";
+                string fromPassword = "bpzk wbru lwur xbrl";
+                string subject = "Thank You for Contacting Us";
+                string body = $"Dear {name},\n\nThank you for reaching out to Lungisa NPO. We have received your message and will get back to you shortly.\n\nBest Regards,\nLungisa NPO Team";
 
                 var smtp = new SmtpClient
                 {
@@ -83,7 +88,7 @@ namespace Lungisa.Controllers
                 TempData["Error"] = "Error sending email: " + ex.Message;
             }
 
-            return RedirectToAction("Volunteers");
+            return RedirectToAction("Contacts");
         }
     }
 }

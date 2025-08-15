@@ -1,9 +1,9 @@
 ﻿<!-- Payal and Nyanda -->
 <!-- 22 July 2025 -->
-<!-- The Latest News page keeps visitors informed about Lungisa NPO’s ongoing work and community engagement. It includes weekly highlights 
-    that recap important updates and accomplishments, as well as detailed news articles covering relevant events, partnerships and stories 
+<!-- The Latest News page keeps visitors informed about Lungisa NPO’s ongoing work and community engagement. It includes weekly highlights
+    that recap important updates and accomplishments, as well as detailed news articles covering relevant events, partnerships and stories
     from the field. This page ensures transparency and maintains strong communication with the public. -->
-
+@model List<Lungisa.Services.FirebaseService.FirebaseNewsArticle>
 @{
     ViewBag.Title = "Latest News";
     Layout = null;
@@ -43,7 +43,7 @@
 
         <div class="header-buttons">
             <a class="btn-donate" href="/Home/Donations">DONATE</a>
-            <a class="btn-admin" href="/Admin/Login">ADMIN LOGIN</a>
+            <a class="btn-admin" href="/Login/Index">ADMIN LOGIN</a>
         </div>
     </header>
 
@@ -79,55 +79,94 @@
 
             </aside>
             <!-- ================= NEWS CARDS ================= -->
+            <!--<main class="middle-cols">-->
+            <!-- Card 1 -->
+            <!--<article class="news-cards">
+        <h2 class="title">Title</h2>
+        <p class="body">
+            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
+        </p>
+    </article>-->
+            <!-- Card 2 -->
+            <!--<article class="news-cards">
+        <h2 class="title">Title</h2>
+        <p class="body">
+            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
+        </p>
+    </article>-->
+            <!-- Card 3 -->
+            <!--<article class="news-cards">
+        <h2 class="title">Title</h2>
+        <p class="body">
+            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
+        </p>
+    </article>-->
+            <!-- Card 4 -->
+            <!--<article class="news-cards">
+        <h2 class="title">Title</h2>
+        <p class="body">
+            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
+        </p>
+    </article>-->
+            <!-- Card 5 -->
+            <!--<article class="news-cards">
+        <h2 class="title">Title</h2>
+        <p class="body">
+            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
+        </p>
+    </article>-->
+            <!-- Card 6 -->
+            <!--<article class="news-cards">
+            <h2 class="title">Title</h2>
+            <p class="body">
+                Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
+            </p>
+        </article>
+    </main>-->
             <main class="middle-cols">
-                <!-- Card 1 -->
-                <article class="news-cards">
-                    <h2 class="title">Title</h2>
-                    <p class="body">
-                        Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-                    </p>
-                </article>
-
-                <!-- Card 2 -->
-                <article class="news-cards">
-                    <h2 class="title">Title</h2>
-                    <p class="body">
-                        Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-                    </p>
-                </article>
-
-                <!-- Card 3 -->
-                <article class="news-cards">
-                    <h2 class="title">Title</h2>
-                    <p class="body">
-                        Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-                    </p>
-                </article>
-
-                <!-- Card 4 -->
-                <article class="news-cards">
-                    <h2 class="title">Title</h2>
-                    <p class="body">
-                        Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-                    </p>
-                </article>
-
-                <!-- Card 5 -->
-                <article class="news-cards">
-                    <h2 class="title">Title</h2>
-                    <p class="body">
-                        Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-                    </p>
-                </article>
-
-                <!-- Card 6 -->
-                <article class="news-cards">
-                    <h2 class="title">Title</h2>
-                    <p class="body">
-                        Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-                    </p>
-                </article>
+                @foreach (var item in Model ?? new List<Lungisa.Services.FirebaseService.FirebaseNewsArticle>())
+                {
+                    if (item.Article != null)
+                    {
+                        <article class="news-cards">
+                            <h2 class="title">
+                                <a href="@Url.Action("Details", "News", new { id = item.Key })">
+                                    @item.Article.Title
+                                </a>
+                            </h2>
+                            <p class="body">
+                                @item.Article.Summary
+                            </p>
+                        </article>
+                    }
+                }
             </main>
+
+            <div class="pagination">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <a href="@Url.Action("Index", "News", new { page = ViewBag.CurrentPage - 1 })">Previous</a>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    if (i == ViewBag.CurrentPage)
+                    {
+                        <span class="current">@i</span>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Index", "News", new { page = i })">@i</a>
+                    }
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <a href="@Url.Action("Index", "News", new { page = ViewBag.CurrentPage + 1 })">Next</a>
+                }
+            </div>
+
+
         </section>
     </section>
 

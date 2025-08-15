@@ -1,4 +1,7 @@
-﻿@{
+﻿@model List<Lungisa.Models.SubscriberModel>
+
+@{
+    ViewBag.Title = "Subscriptions";
     Layout = null;
 }
 
@@ -41,31 +44,41 @@
         </nav>
     </header>
 
+    <h1>Subscriber List</h1>
 
-    <h2>Create New Admin</h2>
-
-    @if (ViewBag.Error != null)
+    @if (TempData["Success"] != null)
     {
-        <div style="color:red">@ViewBag.Error</div>
+        <p style="color:green;">@TempData["Success"]</p>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <p style="color:red;">@TempData["Error"]</p>
     }
 
-    @if (ViewBag.Success != null)
-    {
-        <div style="color:green">@ViewBag.Success</div>
-    }
-
-    <form method="post" action="@Url.Action("CreateAdmin", "Admin")">
-        <div>
-            <label>Email:</label>
-            <input type="email" name="email" required />
-        </div>
-        <div>
-            <label>Password:</label>
-            <input type="password" name="password" required />
-        </div>
-        <button type="submit">Create Admin</button>
-    </form>
-
-    <a href="@Url.Action("AdminDashboard", "Admin")">Back to Dashboard</a>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Date Subscribed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sub in Model)
+            {
+                <tr>
+                    <td>@sub.Email</td>
+                    <td>@sub.Date</td>
+                    <td>
+                        <form action="/Subscribers/NotifySubscriber" method="post" style="display:inline;">
+                            <input type="hidden" name="email" value="@sub.Email" />
+                            <input type="hidden" name="name" value="@sub.Email" /> @* Use email as name if no name stored *@
+                            <button type="submit">Notify</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </body>
 </html>

@@ -162,35 +162,54 @@
     <Content Include="Content\home.css" />
     <Content Include="Content\Images\aboutus.jpg" />
     <Content Include="Content\Images\accessibility.png" />
+    <Content Include="Content\Images\AkanyangMalope.jpg" />
+    <Content Include="Content\Images\BettyMkhonza.jpg" />
     <Content Include="Content\Images\blackbackground.jpg" />
     <Content Include="Content\Images\community-contact2.jpg" />
     <Content Include="Content\Images\community.png" />
+    <Content Include="Content\Images\confidential.png" />
     <Content Include="Content\Images\contact-us.jpg" />
     <Content Include="Content\Images\Creditcards.jpg" />
+    <Content Include="Content\Images\DelisileKhumalo.jpg" />
     <Content Include="Content\Images\donationsBackground.jpg" />
+    <Content Include="Content\Images\DrLeahShibambo.jpg" />
     <Content Include="Content\Images\empathy.png" />
     <Content Include="Content\Images\event.png" />
     <Content Include="Content\Images\Events.jpeg" />
     <Content Include="Content\Images\FAQ3.jpg" />
     <Content Include="Content\Images\hero-img.jpg" />
     <Content Include="Content\Images\hero_image.png" />
-    <Content Include="Content\Images\honesty.png" />
+    <Content Include="Content\Images\Integrity.png" />
+    <Content Include="Content\Images\JohannahBaloyi.jpg" />
+    <Content Include="Content\Images\JohannahMtsweni.jpg" />
+    <Content Include="Content\Images\KoketsoDitlamelo.jpg" />
     <Content Include="Content\Images\LOGOLungisa.png" />
+    <Content Include="Content\Images\LouisaMolaudi.jpg" />
     <Content Include="Content\Images\LungisaLogo.png" />
+    <Content Include="Content\Images\MarthaMnisi.jpg" />
+    <Content Include="Content\Images\MmapulaMonakisi.jpg" />
+    <Content Include="Content\Images\NaomeSibanda.jpg" />
+    <Content Include="Content\Images\OfentseMbewe.jpg" />
     <Content Include="Content\Images\primary-care.png" />
     <Content Include="Content\Images\requests2.jpg" />
-    <Content Include="Content\Images\service.png" />
+    <Content Include="Content\Images\QualityService.png" />
     <Content Include="Content\Images\services.jpg" />
     <Content Include="Content\Images\services2.jpg" />
-    <Content Include="Content\Images\shake.png" />
+    <Content Include="Content\Images\respect.png" />
+    <Content Include="Content\Images\SrEuniceMaphanga.jpg" />
+    <Content Include="Content\Images\SrJulieMakgalo.jpg" />
+    <Content Include="Content\Images\TinyikoMasha.jpg" />
+    <Content Include="Content\Images\TinySono.jpg" />
+    <Content Include="Content\Images\TsietsiKgopa.jpg" />
+    <Content Include="Content\Images\VioletMashigo.jpg" />
     <Content Include="Content\Images\weekly-news.jpg" />
     <Content Include="Content\Images\youth-day.png" />
     <Content Include="Content\login.css" />
     <Content Include="Content\news.css" />
-    <Content Include="Content\projectInfo.css" />
     <Content Include="Content\services.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\createAdmin.css" />
+    <Content Include="Content\formStyle.css" />
     <Content Include="Content\volunteer.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -198,24 +217,31 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\DonationsAdminController.cs" />
     <Compile Include="Controllers\DonationsController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NewsAdminController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\SubscribersController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\VolunteerController.cs" />
     <Compile Include="Controllers\VolunteersController.cs" />
     <Compile Include="Firebase\FirebaseConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ArticleModel.cs" />
+    <Compile Include="Models\ContactModel.cs" />
     <Compile Include="Models\EventModel.cs" />
     <Compile Include="Models\FirebaseProject.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
+    <Compile Include="Models\NewsArticleModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
+    <Compile Include="Models\SubscriberModel.cs" />
+    <Compile Include="Models\VolunteerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FirebaseService.cs" />
   </ItemGroup>
@@ -239,6 +265,10 @@
     <Content Include="Views\Admin\NewsAdmin.cshtml" />
     <Content Include="Views\Admin\CreateAdmin.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Home\NewsDetails.cshtml" />
+    <Content Include="Views\Admin\Volunteers.cshtml" />
+    <Content Include="Views\Admin\Contacts.cshtml" />
+    <Content Include="Views\Admin\Subscribers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -247,11 +277,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Contacts\" />
+    <Folder Include="Views\Contact\" />
     <Folder Include="Views\DonationsAdmin\" />
     <Folder Include="Views\Donations\" />
     <Folder Include="Views\Events\" />
     <Folder Include="Views\NewsAdmin\" />
+    <Folder Include="Views\News\" />
     <Folder Include="Views\Projects\" />
+    <Folder Include="Views\Subscribers\" />
+    <Folder Include="Views\Subscription\" />
     <Folder Include="Views\Users\" />
     <Folder Include="Views\Volunteers\" />
     <Folder Include="Views\Volunteer\" />

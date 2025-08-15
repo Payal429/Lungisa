@@ -43,11 +43,8 @@ namespace Lungisa.Services
             );
         }
 
-
-
         // ===================== AUTH =====================    
         // Verify Firebase ID token
-
         public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
         {
             try
@@ -69,8 +66,6 @@ namespace Lungisa.Services
             };
             return await FirebaseAuth.DefaultInstance.CreateUserAsync(userArgs);
         }
-
-
 
         // ===================== PROJECTS =====================
 
@@ -165,6 +160,90 @@ namespace Lungisa.Services
             var events = firebaseEvents.Select(f => f.Object).ToList();
 
             return events;
+        }
+
+        // ===================== NEWS ARTICLE =====================
+        public async Task<List<FirebaseNewsArticle>> GetAllNewsWithKeys()
+        {
+            var newsList = await firebase.Child("News").OnceAsync<NewsArticleModel>();
+            return newsList.Select(n => new FirebaseNewsArticle
+            {
+                Key = n.Key,
+                Article = n.Object
+            }).ToList();
+        }
+
+        public async Task SaveNews(NewsArticleModel article)
+        {
+            await firebase.Child("News").PostAsync(article);
+        }
+
+        public async Task DeleteNews(string key)
+        {
+            await firebase.Child("News").Child(key).DeleteAsync();
+        }
+
+        public class FirebaseNewsArticle
+        {
+            public string Key { get; set; }
+            public NewsArticleModel Article { get; set; }
+        }
+
+
+        // ===================== SUBSCRIBE =====================
+        // Save subscriber
+        public async Task SaveSubscriber(SubscriberModel subscriber)
+        {
+            await firebase
+                .Child("Subscribers")
+                .PostAsync(subscriber);
+        }
+
+        // Optional: fetch all subscribers
+        public async Task<List<SubscriberModel>> GetAllSubscribers()
+        {
+            var subscribers = await firebase
+                .Child("Subscribers")
+                .OnceAsync<SubscriberModel>();
+
+            return subscribers.Select(x => x.Object).ToList();
+        }
+
+        // ===================== CONTACT =====================
+        public async Task SaveContact(ContactModel contact)
+        {
+            await firebase
+                .Child("Contacts")
+                .PostAsync(contact);
+        }
+
+        // Optional: fetch all contacts
+        public async Task<List<ContactModel>> GetAllContacts()
+        {
+            var contacts = await firebase
+                .Child("Contacts")
+                .OnceAsync<ContactModel>();
+
+            return contacts.Select(x => x.Object).ToList();
+        }
+
+        // ===================== VOLUNTEER =====================
+        // Save Volunteer
+        public async Task SaveVolunteer(VolunteerModel volunteer)
+        {
+            await firebase
+                .Child("Volunteers")
+                .PostAsync(volunteer);
+        }
+
+        // Optional: get all volunteers
+        public async Task<List<VolunteerModel>> GetAllVolunteers()
+        {
+            var volunteers = await firebase
+                .Child("Volunteers")
+                .OnceAsync<VolunteerModel>();
+
+            return volunteers.Select(x => x.Object).ToList();
         }
 
     }

@@ -19,7 +19,7 @@
     <title>Events and Programs Form</title>
 
     <!-- Links -->
-    <link rel="stylesheet" href="~/Content/events.css" />
+    <link rel="stylesheet" href="~/Content/formStyle.css" />
     <link rel="stylesheet" href="~/Content/Site.css" />
 
     <!-- Google fonts -->
@@ -39,9 +39,10 @@
                 <li><a href="/Donations" class="nav-link">DONATIONS</a></li>
                 <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
                 <li><a href="/Events" class="nav-link active">EVENTS</a></li>
-                <li><a href="/Users" class="nav-link">USER ACCOUNTS</a></li>
-                <li><a href="/NewsAdmin" class="nav-link">NEWS ARTICLES</a></li>
-                <li><a href="/Volunteers" class="nav-link">VOLUNTEER SIGNUPS</a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
+                <li><a href="/Volunteers" class="nav-link">VOLUNTEERS</a></li>
+                <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
+                <li><a href="/Contact" class="nav-link">CONTACT</a></li>
             </ul>
         </nav>
     </header>
@@ -89,34 +90,36 @@
 
         <section class="section-card2">
             <h2>Upcoming Events</h2>
-            <table>
-                <thead>
-                    <tr><th>Name</th><th>Date</th><th>Venue</th><th>Actions</th></tr>
-                </thead>
-                <tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        foreach (var item in Model)
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>Name</th><th>Date</th><th>Venue</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Event.Name</td>
+                                    <td>@DateTime.Parse(item.Event.DateTime).ToString("f")</td>
+                                    <td>@item.Event.Venue</td>
+                                    <td>
+                                        <a class="btn-edit" href="#">Edit</a>
+                                        <a class="btn-delete" href="/Events/Delete/@item.Key" onclick="return confirm('Delete this event?');">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>@item.Event.Name</td>
-                                <td>@DateTime.Parse(item.Event.DateTime).ToString("f")</td>
-                                <td>@item.Event.Venue</td>
-                                <td>
-                                    <a class="btn-edit" href="#">Edit</a>
-                                    <a class="btn-delete" href="/Events/Delete/@item.Key" onclick="return confirm('Delete this event?');">Delete</a>
-                                </td>
+                                <td colspan="4">⚠️ No events found.</td>
                             </tr>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="4">⚠️ No events found.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </div>
 </body>

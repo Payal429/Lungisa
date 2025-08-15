@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace Lungisa.Controllers
 {
@@ -45,8 +46,26 @@ namespace Lungisa.Controllers
 
         // Handles adding a new project to Firebase when submitted from a form.
         [HttpPost]
-        public async Task<ActionResult> AddProject(string title, string type, string description, string startDate, string endDate)
+        public async Task<ActionResult> AddProject(string title, string type, string description, string startDate, string endDate, HttpPostedFileBase image)
         {
+            string imageUrl = "/Content/Images/default-news.png"; // fallback
+
+            // If an image was uploaded
+            if (image != null && image.ContentLength > 0)
+            {
+                // Get filename
+                string fileName = System.IO.Path.GetFileName(image.FileName);
+
+                // Create path in Content/Images folder
+                string path = Server.MapPath("~/Content/Images/" + fileName);
+
+                // Save file to server
+                image.SaveAs(path);
+
+                // Set imageUrl to be stored in Firebase
+                imageUrl = "/Content/Images/" + fileName;
+            }
+
             // Create a new project model with form values and default image URL
             ProjectModel Project = new ProjectModel
             {
@@ -56,7 +75,7 @@ namespace Lungisa.Controllers
                 StartDate = startDate,
                 EndDate = endDate,
                 // Default placeholder for the images for the projects
-                ImageUrl = "/Content/Images/default.png"
+                ImageUrl = imageUrl
             };
 
             // Save the new project in Firebase
