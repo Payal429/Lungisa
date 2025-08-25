@@ -13,13 +13,87 @@ namespace Lungisa.Services
         private readonly FirebaseApp _firebaseApp;
         private readonly FirebaseClient _firebaseClient;
 
-
         public FirebaseService(IConfiguration config, IWebHostEnvironment env)
         {
-            string path = Path.Combine(env.ContentRootPath, "Config", "firebaseServiceAccount.json");
+            string firebaseJson = Environment.GetEnvironmentVariable("FIREBASE_CONFIG");
 
+            if (!string.IsNullOrEmpty(firebaseJson))
+            {
+                // ✅ Production (Render) → read from ENV var
+                var credential = GoogleCredential.FromJson(firebaseJson);
+
+                if (FirebaseApp.DefaultInstance == null)
+                {
+                    _firebaseApp = FirebaseApp.Create(new AppOptions
+                    {
+                        Credential = credential
+                    });
+                }
+                else
+                {
+                    _firebaseApp = FirebaseApp.DefaultInstance;
+                }
+            }
+            else
+            {
+                // ✅ Local development → fall back to file in Config/
+                string path = Path.Combine(env.ContentRootPath, "Config", "firebaseServiceAccount.json");
+                if (!File.Exists(path))
+                    throw new Exception("Firebase service account file not found.");
+
+                if (FirebaseApp.DefaultInstance == null)
+                {
+                    _firebaseApp = FirebaseApp.Create(new AppOptions
+                    {
+                        Credential = GoogleCredential.FromFile(path)
+                    });
+                }
+                else
+                {
+                    _firebaseApp = FirebaseApp.DefaultInstance;
+                }
+            }
+
+            // Firebase Realtime Database client
+            _firebaseClient = new FirebaseClient(
+                config["Firebase:DatabaseUrl"],
+                new FirebaseOptions
+                {
+                    AuthTokenAsyncFactory = () => Task.FromResult(config["Firebase:DatabaseSecret"])
+                });
+        }
+
+        public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
+            => await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+
+        /*public FirebaseService(IConfiguration config)
+        {
             if (FirebaseApp.DefaultInstance == null)
             {
+                _firebaseApp = FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile(
+                        Path.Combine(Directory.GetCurrentDirectory(), "Config", "firebaseServiceAccount.json"))
+                });
+            }
+            else
+            {
+                _firebaseApp = FirebaseApp.DefaultInstance;
+            }
+        }
+
+        public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
+        {
+            return await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+        }
+
+
+    public FirebaseService(IWebHostEnvironment env)
+        {
+            // Initialize Firebase Admin SDK
+            if (FirebaseApp.DefaultInstance == null)
+            {
+                string path = Path.Combine(env.ContentRootPath, "Config", "firebaseServiceAccount.json");
                 _firebaseApp = FirebaseApp.Create(new AppOptions
                 {
                     Credential = GoogleCredential.FromFile(path)
@@ -30,79 +104,30 @@ namespace Lungisa.Services
                 _firebaseApp = FirebaseApp.DefaultInstance;
             }
 
+            // Initialize Realtime Database client
             _firebaseClient = new FirebaseClient(
-                config["Firebase:DatabaseUrl"], // <-- put in appsettings.json
+                "https://lungisa-e03bd-default-rtdb.firebaseio.com/",
                 new FirebaseOptions
                 {
-                    AuthTokenAsyncFactory = () => Task.FromResult(config["Firebase:DatabaseSecret"])
+                    AuthTokenAsyncFactory = () => Task.FromResult("NjOwtbddPfLXqPHWEtgYQA2JSz81WCbVjylCXmfk")
                 });
-        }
+        }*/
 
-        public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
-            => await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
-    
-    /*public FirebaseService(IConfiguration config)
-    {
-        if (FirebaseApp.DefaultInstance == null)
-        {
-            _firebaseApp = FirebaseApp.Create(new AppOptions()
-            {
-                Credential = GoogleCredential.FromFile(
-                    Path.Combine(Directory.GetCurrentDirectory(), "Config", "firebaseServiceAccount.json"))
-            });
-        }
-        else
-        {
-            _firebaseApp = FirebaseApp.DefaultInstance;
-        }
-    }
-
-    public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
-    {
-        return await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
-    }
-
-
-public FirebaseService(IWebHostEnvironment env)
-    {
-        // Initialize Firebase Admin SDK
-        if (FirebaseApp.DefaultInstance == null)
-        {
-            string path = Path.Combine(env.ContentRootPath, "Config", "firebaseServiceAccount.json");
-            _firebaseApp = FirebaseApp.Create(new AppOptions
-            {
-                Credential = GoogleCredential.FromFile(path)
-            });
-        }
-        else
-        {
-            _firebaseApp = FirebaseApp.DefaultInstance;
-        }
-
-        // Initialize Realtime Database client
-        _firebaseClient = new FirebaseClient(
-            "https://lungisa-e03bd-default-rtdb.firebaseio.com/",
-            new FirebaseOptions
-            {
-                AuthTokenAsyncFactory = () => Task.FromResult("NjOwtbddPfLXqPHWEtgYQA2JSz81WCbVjylCXmfk")
-            });
-    }*/
-
-    // ===================== AUTHENTICATION  =====================    
-    // Verify Firebase ID token
-    /*        public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
-            {
-                try
+        // ===================== AUTHENTICATION  =====================    
+        // Verify Firebase ID token
+        /*        public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
                 {
-                    return await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
-                }
-                catch
-                {
-                    return null;
-                }
-            }*/
-    // Create a new user in Firebase Authentication
-    public async Task<UserRecord> CreateUserAsync(string email, string password)
+                    try
+                    {
+                        return await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }*/
+        // Create a new user in Firebase Authentication
+        public async Task<UserRecord> CreateUserAsync(string email, string password)
         {
             var userArgs = new UserRecordArgs()
             {
