@@ -1,0 +1,108 @@
+﻿/* ---------- PAGE WRAPPER ---------- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    background: #f5f7fa;
+    color: black;
+    line-height: 1.6;
+}
+
+/* ---------- HEADING ---------- */
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: black;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.container > p {
+    color: dimgrey;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+/* 2.  Make the two cards identical width & spacing */
+.section-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 40px;
+    margin: 0 auto 32px;
+    max-width: 900px; /* same width as Projects form */
+}
+
+    .section-card h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1F2937;
+        margin-bottom: 24px;
+    }
+
+/* 3.  Form fields in the first card */
+form input,
+form select {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border: 1px solid black;
+    border-radius: 14px;
+    font-size: 15px;
+    transition: border-color .2s;
+}
+
+    form input:focus,
+    form select:focus {
+        border-color: #ed1f1f;
+        outline: none;
+    }
+
+/* 4.  Submit button (same red style) */
+button[type="submit"] {
+    background: #ed1f1f;
+    color: #fff;
+    padding: 12px 32px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .25s;
+}
+
+    button[type="submit"]:hover {
+        background: #000;
+        color: #fff;
+    }
+
+/* 5.  Table tweaks (centered text, consistent height) */
+table th,
+table td {
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+table th {
+    font-weight: 600;
+    color: #1F2937;
+}
+
+table tr:hover {
+    background: #f9fafb
+}
+
+/* 6.  Error block */
+.error-block {
+    color: #ef4444;
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+/* 7.  Mobile padding shrink */
+@media(max-width:600px) {
+    .section-card {
+        padding: 24px 20px
+    }
+}

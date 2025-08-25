@@ -83,10 +83,16 @@ COPY . .
 WORKDIR "/src/Lungisa"
 RUN dotnet build "Lungisa.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+
+
 # Publish the app
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "Lungisa.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Double-check wwwroot is present
+RUN ls -R /app/publish/wwwroot || echo "wwwroot missing!"
+
 
 # Copy static files explicitly to make sure wwwroot comes across
 COPY Lungisa/wwwroot /app/publish/wwwroot
