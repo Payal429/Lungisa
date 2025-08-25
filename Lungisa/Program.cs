@@ -42,4 +42,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllers(); // or app.MapRazorPages();
+
 app.Run();

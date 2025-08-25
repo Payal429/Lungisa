@@ -50,6 +50,13 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "Lungisa.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
+# ?? Optional check: ensure wwwroot was copied
+RUN dir /app/publish/wwwroot
+
+# Copy wwwroot explicitly (in case msbuild skips it)
+COPY Lungisa/wwwroot /app/publish/wwwroot
+
+
 # Final runtime image
 FROM base AS final
 WORKDIR /app
