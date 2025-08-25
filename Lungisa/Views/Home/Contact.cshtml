@@ -1,0 +1,185 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 22 July 2025 -->
+<!-- The Contact Us page provides users with a straightforward way to get in touch with Lungisa NPO. On the right-hand side, 
+    it presents clear contact details, including the organisation's address, phone number, and email. On the left, there's a 
+    brief introductory message encouraging visitors to reach out with questions or feedback. Below this section, a simple 
+    contact form allows users to send messages directly through the site, enhancing accessibility and responsiveness. -->
+
+@{
+    ViewBag.Title = "Contact";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Contact</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/contact.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Home/Index" class="nav-link ">HOME</a></li>
+                <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                <li><a href="/Home/Contact" class="nav-link active">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <a class="btn-donate" href="/Home/Donations">DONATE</a>
+            <a class="btn-admin" href="/Login/Index">ADMIN LOGIN</a>
+        </div>
+    </header>
+
+    <!-- ================= HEADING ================= -->
+    <div class="help">
+        <h1>How Can We Help?</h1>
+        <p>
+            Whether you have a question, suggestion, or want to connect, the Lungisa team is here and ready to help.
+            Reach out through the form below or via our contact details — we’re always open to meaningful conversations.
+            Let’s work together to change our communities.
+        </p>
+        <div class="search">
+            <input type="search" placeholder="Search.." />
+        </div>
+    </div>
+
+    <!-- ================= CONTACT US ================= -->
+    <section class="contact-top">
+        <div class="container">
+            <!-- ================= MESSAGE ================= -->
+            <div class="message-box">
+                <h2>Let's talk!</h2>
+                <p>
+                    We'd love to hear from you! Whether you have a question, suggestion, or want to connect, the Lungisa team is here and ready to help.<br><br>
+                    Have any question in mind or want to enquire? Please feel free to contact us through the form or the following details.
+                </p>
+            </div>
+
+            <!-- ================= DETAILS ================= -->
+            <div class="details-box">
+                <h3>Contact Details</h3>
+                <p><strong>Registered Office</strong><br>4850 ext2, KANANA, HAMMANSKRAAL 0407</p>
+                <p><strong>Operations</strong><br>27269, Iqabothuleare Street, Soshanguve, 0152</p>
+                <p><strong>Phone</strong><br><a href="tel:+27682516154">+27 68 251 6154</a></p>
+                <p><strong>Email</strong><br><a href="mailto:lungisanpc@gmail.com">lungisanpc@gmail.com</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FORM ================= -->
+    <section class="contact-form-section">
+        <h2>Contact Us</h2>
+        <br />
+        <form action="/Home/Contact" method="post">
+            <input type="text" name="firstName" placeholder="First Name" required />
+            <input type="text" name="lastName" placeholder="Last Name" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="text" name="subject" placeholder="Subject" required />
+            <textarea name="message" rows="5" placeholder="Type your Message"></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        @if (TempData["Success"] != null)
+        {
+            <p style="color:green; margin-top:10px;">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p style="color:red; margin-top:10px;">@TempData["Error"]</p>
+        }
+    </section>
+
+    <!-- ================= FAQ + REQUESTS ================= -->
+    <section class="faq-requests">
+        <div class="faq-requests__inner">
+            <!-- card 1 -->
+            <div class="card">
+                <img src="~/Content/Images/FAQ3.jpg" alt="FAQ icon" />
+                <h2>FAQS</h2>
+                <p>Find quick answers to the most common questions about Lungisa and how it works.</p>
+                <a href="#">FAQS</a>
+            </div>
+
+            <!-- card 2 -->
+            <div class="card">
+                <img src="~/Content/Images/requests2.jpg" alt="Requests icon" />
+                <h2>Requests</h2>
+                <p>Need support or want to report something? Submit a request and we'll get on it.</p>
+                <a href="#">Requests</a>
+            </div>
+
+            <!-- card 3 -->
+            <div class="card">
+                <img src="~/Content/Images/community-contact2.jpg" alt="Community icon" />
+                <h2>Ask&nbsp;the&nbsp;Community</h2>
+                <p>Start a discussion, share insights, or get advice from others who care—your voice matters.</p>
+                <a href="#">Ask the Community</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <a class="logo" href="/">
+                <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+            </a>
+            <div class="footer-col">
+                <h3>LUNGIS</h3>
+                <ul>
+                    <li><a href="/Home/Index" class="nav-link">HOME</a></li>
+                    <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                    <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                    <li><a href="#">PROJECTS</a></li>
+                    <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                    <li><a href="/Home/Contact" class="nav-link active">CONTACT</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <div class="socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+
+            <div class="footer-col subscribe">
+                <h3>Subscribe to get latest updates</h3>
+                <form>
+                    <input type="email" placeholder="your email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Lungis. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

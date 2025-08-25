@@ -1,0 +1,298 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 22 July 2025 -->
+<!-- The Home page of the Lungisa NPO website serves as a vibrant and welcoming entry point for visitors.
+    It features a clear welcome message that sets the tone for the organisation's mission. The page showcases
+    key statistics to highlight Lungisa’s impact, along with a detailed overview of its projects and services.
+    Users can subscribe to the newsletter for updates, explore upcoming events and find answers to common questions
+    in the FAQ section. Additionally, the page includes a section for user requests and an “Ask” feature, providing
+    visitors with a way to engage directly with the organisation. -->
+
+@model Lungisa.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Home</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/home.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Home/Index" class="nav-link active">HOME</a></li>
+                <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <a class="btn-donate" href="/Home/Donations">DONATE</a>
+            <a class="btn-admin" href="/Login/Index">ADMIN LOGIN</a>
+        </div>
+    </header>
+
+    <!-- ================= WELCOME MESSAGE ================= -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Lungisa</h1>
+
+            <p>
+                Lungisa means fixing what hurts – because every life deserves a second chance.<br><br>
+
+                At Lungisa, we believe that healing is possible. From healthcare and mental wellness to tackling gender-based violence
+                and uplifting through culture and education, we help people fix what is been broken, restore dignity, and build stronger,
+                more resilient communities. Together, we fix it!
+            </p>
+            <a class="btn-volunteer" href="/Home/Volunteer">Volunteer Now!!!</a>
+
+            <div class="stats">
+                <div class="stat">
+                    <h3>5 000</h3>
+                    <p>Children under <br> care</p>
+                </div>
+                <div class="stat">
+                    <h3>26</h3>
+                    <p>Years of community <br> impact (since 1999)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-img">
+            <img src="~/Content/Images/hero-img.jpg" alt="Lungisa Members" />
+        </div>
+    </section>
+
+    <!-- ================= PROJECTS ================= -->
+    <section class="project">
+        <h2>Projects</h2>
+        <section class="projects">
+            <!-- 1. Completed -->
+            <div class="project-group">
+                <h3>Completed Projects</h3>
+                <div class="project-row">
+                    @foreach (var p in Model.CompletedProjects)
+                    {
+                        <div class="card">
+                            <img src="@p.ImageUrl" alt="@p.Title" />
+                            <h4>@p.Title</h4>
+                            <p>@p.Description</p>
+                            <p><strong>Start:</strong> @p.StartDate</p>
+                            <p><strong>End:</strong> @p.EndDate</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- 2. Current -->
+            <div class="project-group">
+                <h3>Current Projects</h3>
+                <div class="project-row">
+                    @foreach (var p in Model.CurrentProjects)
+                    {
+                        <div class="card">
+                            <img src="@p.ImageUrl" alt="@p.Title" />
+                            <h4>@p.Title</h4>
+                            <p>@p.Description</p>
+                            <p><strong>Start:</strong> @p.StartDate</p>
+                            <p><strong>End:</strong> @p.EndDate</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- 3. Upcoming -->
+            <div class="project-group">
+                <h3>Upcoming Projects</h3>
+                <div class="project-row">
+                    @foreach (var p in Model.UpcomingProjects)
+                    {
+                        <div class="card">
+                            <img src="@p.ImageUrl" alt="@p.Title" />
+                            <h4>@p.Title</h4>
+                            <p>@p.Description</p>
+                            <p><strong>Start:</strong> @p.StartDate</p>
+                            <p><strong>End:</strong> @p.EndDate</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- ================= SERVICES ================= -->
+    <section class="services">
+        <h2>WHAT WE DO</h2>
+
+        <div class="grid">
+            <div class="service-card">
+                <h4>Primary Health Care</h4>
+                <img src="~/Content/Images/primary-care.png" />
+                <p>Professional nurses deliver on-site care.</p>
+                @*https://www.flaticon.com/free-icon/primary-care_18803497?term=primary+care&page=1&position=2&origin=tag&related_id=18803497*@
+            </div>
+            <div class="service-card">
+                <h4>Psychosocial Support</h4>
+                <img src="~/Content/Images/empathy.png" />
+                <p>Qualified social workers provide therapy & referrals.</p>
+                @*https://www.flaticon.com/free-icon/empathy_11142143?term=psychological+help&page=1&position=2&origin=tag&related_id=11142143*@
+            </div>
+            <div class="service-card">
+                <h4>Youth Development</h4>
+                <img src="~/Content/Images/youth-day.png" />
+                <p>After-school programmes that build life skills.</p>
+                @*https://www.flaticon.com/free-icon/youth-day_7861971?term=youth&page=1&position=1&origin=tag&related_id=7861971*@
+            </div>
+            <div class="service-card">
+                <h4>Community Partnership</h4>
+                <img src="~/Content/Images/community.png" />
+                <p>Collaboration that multiplies impact.</p>
+                @*https://www.flaticon.com/free-icon/community_17898900?term=community&page=1&position=3&origin=search&related_id=17898900*@
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SUBSCRIBE ================= -->
+    <section class="subscribe-section">
+        <h2>Subscribe to get latest updates</h2>
+        <form action="/Home/Subscribe" method="post">
+            <input type="email" name="email" placeholder="Enter your email" required />
+            <button type="submit">SUBSCRIBE</button>
+        </form>
+
+        @if (TempData["Success"] != null)
+        {
+            <p style="color:green; margin-top:10px;">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p style="color:red; margin-top:10px;">@TempData["Error"]</p>
+        }
+    </section>
+
+    <!-- ================= EVENTS ================= -->
+    <section class="events">
+        <h2>Our Latest Events and Programs</h2>
+        @if (Model.LatestEvents != null && Model.LatestEvents.Count > 0)
+        {
+            foreach (var ev in Model.LatestEvents)
+            {
+                DateTime eventDateTime;
+                DateTime.TryParse(ev.DateTime, out eventDateTime);
+
+                <div class="event-card">
+                    <img src="~/Content/Images/event.png" alt="@ev.Name" />
+                    <div class="event-content">
+                        <h4>@ev.Name</h4>
+                        <p><strong>Date:</strong> @eventDateTime.ToString("yyyy-MM-dd")</p>
+                        <p><strong>Time:</strong> @eventDateTime.ToString("HH:mm")</p>
+                        <p><strong>Venue:</strong> @ev.Venue</p>
+                        <p>@ev.Description</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No upcoming events found.</p>
+        }
+    </section>
+
+
+    <!-- ================= FAQ / REQUESTS / ASK ================= -->
+    <section class="faq-requests">
+        <div class="faq-requests__inner">
+            <!-- card 1 -->
+            <div class="faqcard">
+                <img src="~/Content/Images/FAQ3.jpg" alt="FAQ icon" />
+                <h2>FAQS</h2>
+                <p>Find quick answers to the most common questions about Lungisa and how it works.</p>
+                <a href="#">FAQS</a>
+            </div>
+
+            <!-- card 2 -->
+            <div class="faqcard">
+                <img src="~/Content/Images/requests2.jpg" alt="Requests icon" />
+                <h2>Requests</h2>
+                <p>Need support or want to report something? Submit a request and we'll get on it.</p>
+                <a href="#">Requests</a>
+            </div>
+
+            <!-- card 3 -->
+            <div class="faqcard">
+                <img src="~/Content/Images/community-contact2.jpg" alt="Community icon" />
+                <h2>Ask&nbsp;the&nbsp;Community</h2>
+                <p>Start a discussion, share insights, or get advice from others who care—your voice matters.</p>
+                <a href="#">Ask the Community</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <a class="logo" href="/">
+                <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+            </a>
+            <div class="footer-col">
+                <h3>LUNGIS</h3>
+                <ul>
+                    <li><a href="/Home/Index" class="nav-link active">HOME</a></li>
+                    <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                    <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                    <li><a href="#">PROJECTS</a></li>
+                    <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                    <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <div class="socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+
+            <div class="footer-col subscribe">
+                <h3>Subscribe to get latest updates</h3>
+                <form action="/Home/Subscribe" method="post">
+                    <input type="email" name="email" placeholder="your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Lungis. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,126 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 06 August 2025 -->
+<!--  -->
+@model List<Lungisa.Services.FirebaseService.FirebaseEvent>
+@{
+    ViewBag.Title = "Manage Events and Programs";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Events and Programs Form</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/formStyle.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
+                <li><a href="/Donations" class="nav-link">DONATIONS</a></li>
+                <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
+                <li><a href="/Events" class="nav-link active">EVENTS</a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
+                <li><a href="/Volunteers" class="nav-link">VOLUNTEERS</a></li>
+                <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
+                <li><a href="/Contact" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Manage Events</h1>
+        <p>Add, edit or delete public events.</p>
+
+        @* Show success message *@
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert-success">@ViewBag.Success</div>
+        }
+
+        <section class="section-card1">
+            <h2>New Event</h2>
+
+            <form action="/Events/AddEvent" method="post">
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input name="name" type="text" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Date & Time</label>
+                    <input name="dateTime" type="datetime-local" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Venue</label>
+                    <input name="venue" type="text" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="4" required></textarea>
+                </div>
+
+                <button class="btn-save" type="submit">Save Event</button>
+            </form>
+        </section>
+
+        <br />
+        <br />
+
+        <section class="section-card2">
+            <h2>Upcoming Events</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>Name</th><th>Date</th><th>Venue</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Event.Name</td>
+                                    <td>@DateTime.Parse(item.Event.DateTime).ToString("f")</td>
+                                    <td>@item.Event.Venue</td>
+                                    <td>
+                                        <a class="btn-edit" href="#">Edit</a>
+                                        <a class="btn-delete" href="/Events/Delete/@item.Key" onclick="return confirm('Delete this event?');">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">⚠️ No events found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 22 July 2025 -->
+<!-- The Services page outlines the four core services offered by Lungisa NPO. Each service is clearly presented with a brief 
+    description, allowing users to understand how the organisation supports communities. The layout ensures that visitors can 
+    easily identify which services align with their needs or interests, whether they are seeking assistance, volunteering, or 
+    contributing resources. -->
+
+@{
+    ViewBag.Title = "Services";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Services</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/services.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Home/Index" class="nav-link ">HOME</a></li>
+                <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                <li><a href="/Home/Services" class="nav-link active">SERVICES</a></li>
+                <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <a class="btn-donate" href="/Home/Donations">DONATE</a>
+            <a class="btn-admin" href="/Login/Index">ADMIN LOGIN</a>
+        </div>
+    </header>
+
+
+    <section class="service-section-heading">
+        <!-- ================= SERVICE AREAS HEADER ================= -->
+        <section class="service-hero">
+            <h2>SERVICES</h2>
+            <p>
+                Empowering communities through culture, education and opportunity. Join us as we create lasting change,
+                one initiative at a time.<br>Together, we strive to uplift lives and preserve heritage through innovative,
+                community-driven solutions
+            </p>
+            <br />
+            <a href="#" class="btn-primary">LEARN MORE</a>
+        </section>
+
+        <h2>Key Service Areas</h2>
+
+        <!-- ================= BLOCK 1 → PRIMARY HEALTHCARE ================= -->
+        <article class="service-card">
+            <img src="~/Content/Images/primary-care.png" alt="Primary Healthcare">
+            <div class="card-body-left">
+                <h4>Primary Healthcare</h4>
+                <p>Lungisa offers primary healthcare services delivered by professional nurses. These services include:</p>
+                <br />
+                <ul>
+                    <li>Management of minor ailments</li>
+                    <li>Baby vaccinations</li>
+                    <li>Management of chronic conditions</li>
+                    <li>Family planning</li>
+                    <li>HIV prevention, awareness, counselling, and testing facilitated by peer educators and HIV counsellors</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- ================= BLOCK 2 → PSYCHOSOCIAL SUPPORT ================= -->
+        <article class="service-card">
+            <div class="card-body-right">
+                <h4>Psychosocial Support</h4>
+                <p>Lungisa's qualified social workers provide vital psychosocial therapy to:</p>
+                <p><strong>Individuals • Families • Couples • Groups</strong></p>
+                <p>This comprehensive approach addresses a wide range of social problems, and the organization provides referrals when specialised care is necessary.</p>
+            </div>
+            <img src="~/Content/Images/empathy.png" alt="Psychosocial Support">
+        </article>
+
+        <!-- ================= BLOCK 3 → YOUTH DEVELOPMENT ================= -->
+        <article class="service-card">
+            <img src="~/Content/Images/youth-day.png"  alt="Primary Healthcare">
+            <div class="card-body-left">
+                <h4>Youth Development</h4>
+                <p>Lungisa's youth program empowers young people through:</p>
+                <br />
+                <ul>
+                    <li>Life skills training</li>
+                    <li>Extra-mural activities including dance and cultural workshops</li>
+                    <li>Dialogues on relevant and challenging topics</li>
+                    <li>Homework assistance</li>
+                </ul>
+                <p>These programs offer opportunities to learn new skills, engage in cultural activities, improve academic performance, and develop healthy coping mechanisms</p>
+            </div>
+        </article>
+
+        <!-- ================= BLOCK 4 → COMMUNITY PARTNERSHIP ================= -->
+        <article class="service-card">
+            <div class="card-body-right">
+                <h4>Community Partnerships</h4>
+                <p> Lungisa recognizes the importance of collaboration and actively seeks partnerships with: </p>
+                <p><strong>Community structures • Other non-governmental organizations (NGOs)</strong></p>
+                <p>This collaborative approach maximizes impact and fosters sustainable community development.</p>
+            </div>
+            <img src="~/Content/Images/community.png" alt="Primary Healthcare">
+        </article>
+
+        <!-- ================= INFORMATION CARDS ================= -->
+@*        <section class="projects">
+            <h2>Projects</h2>
+            <div class="grid">
+                <div class="card">
+                    <h4>Completed Projects</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
+                    <a href="#">
+                        Learn more
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" /></svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h4>Current Projects</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
+                    <a href="#">
+                        Learn more
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" /></svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h4>Upcoming Projects</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
+                    <a href="#">
+                        Learn more
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" /></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </section>*@
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <a class="logo" href="/">
+                <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+            </a>
+            <div class="footer-col">
+                <h3>LUNGIS</h3>
+                <ul>
+                    <li><a href="/Home/Index" class="nav-link">HOME</a></li>
+                    <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                    <li><a href="/Home/Services" class="nav-link active">SERVICES</a></li>
+                    <li><a href="#">PROJECTS</a></li>
+                    <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                    <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <div class="socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+
+            <div class="footer-col subscribe">
+                <h3>Subscribe to get latest updates</h3>
+                <form>
+                    <input type="email" placeholder="your email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Lungis. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

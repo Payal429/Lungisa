@@ -1,0 +1,157 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 22 July 2025 -->
+<!-- The Donations page provides a structured and user-friendly interface for making contributions to Lungisa NPO.
+    It is divided into three main sections: a form to select donation amounts, a personal information form to capture donor details
+    and a secure payment form to process transactions. This organized approach makes it easy for donors to contribute and support
+    the organisation’s initiatives. -->
+
+@{
+    ViewBag.Title = "Donations";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Donations</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/donations.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Home/Index" class="nav-link">HOME</a></li>
+                <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <a class="btn-donate" href="/Home/Donations">DONATE</a>
+            <a class="btn-admin" href="/Login/Index">ADMIN LOGIN</a>
+        </div>
+    </header>
+
+    <!-- ================= DONATIONS ================= -->
+    <section class="donation-split">
+        <h1>Lungisa Donation Page</h1>
+
+        <div class="donation-grid">
+            <!-- ================= LEFT: AMOUNT AND PERSONAL INFORMATION ================= -->
+            <div class="left-panel">
+                <!-- ================= AMOUNT ================= -->
+                <div class="panel">
+                    <h2>Donation Amount</h2>
+                    <div class="amount-buttons">
+                        <button type="button" class="amount-btn">R50</button>
+                        <button type="button" class="amount-btn">R100</button>
+                        <button type="button" class="amount-btn">R200</button>
+                        <button type="button" class="amount-btn">R500</button>
+                    </div>
+                    <br />
+                    <input type="number" placeholder="Custom Amount" class="custom-amount">
+                    <br />
+                    <br />
+                    <!-- ================= PERSONAL INFORMATION ================= -->
+                    <h2>Personal Information</h2>
+                    <input type="text" placeholder="First Name" required>
+                    <input type="text" placeholder="Last Name" required>
+                    <input type="tel" placeholder="Phone Number" required>
+                    <input type="email" placeholder="Email Address" required>
+                </div>
+            </div>
+
+            <!-- ================= RIGHT : PAYMENT ================= -->
+            <div class="right-panel">
+                <div class="panel">
+                    <h2>Credit Card Information</h2>
+                    <img src="~/Content/Images/Creditcards.jpg" alt="Credit Cards"/>
+                    <br />
+                    <label for="paymentSelect">Payment Method</label>
+                    <div class="payment-header">
+                        <!-- Inside the <div class="panel"> that holds payment info -->
+                        <select id="paymentSelect" class="dropdown-payment">
+                            <option value="" disabled selected>Select a method</option>
+                            <option value="credit">Credit Card</option>
+                            <option value="debit">Debit Card</option>
+                            <option value="eft">EFT / Bank Transfer</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="snapscan">SnapScan</option>
+                        </select>
+                    </div>
+
+                    <input type="text" placeholder="Card Holder Name" required>
+                    <input type="text" placeholder="Credit Card Number" required>
+                    <div class="card-row">
+                        <input type="text" placeholder="CVV" maxlength="3" required>
+                        <input type="text" placeholder="MM / YY" required>
+                    </div>
+                    <br />
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <a class="logo" href="/">
+                <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+            </a>
+            <div class="footer-col">
+                <h3>LUNGIS</h3>
+                <ul>
+                    <li><a href="/Home/Index" class="nav-link active">HOME</a></li>
+                    <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
+                    <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                    <li><a href="#">PROJECTS</a></li>
+                    <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                    <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <div class="socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+
+            <div class="footer-col subscribe">
+                <h3>Subscribe to get latest updates</h3>
+                <form>
+                    <input type="email" placeholder="your email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Lungis. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

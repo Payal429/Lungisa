@@ -1,0 +1,94 @@
+﻿@model List<Lungisa.Models.ContactModel>
+@{
+    ViewBag.Title = "Contacts";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Contact Us Feedback</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/formStyle.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
+                <li><a href="/Donations" class="nav-link">DONATIONS</a></li>
+                <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
+                <li><a href="/Events" class="nav-link ">EVENTS</a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
+                <li><a href="/Volunteers" class="nav-link">VOLUNTEERS</a></li>
+                <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
+                <li><a href="/Contacts" class="nav-link active">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    </br>
+    </br>
+
+    <section class="section-card2">
+        <h1>Contact Submissions</h1>
+        @if (TempData["Success"] != null)
+        {
+            <p style="color:green">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p style="color:red">@TempData["Error"]</p>
+        }
+        <div class="table-container">
+            <table border="1" cellpadding="5" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in Model)
+                    {
+                        <tr>
+                            <td>@contact.FirstName @contact.LastName</td>
+                            <td>@contact.Email</td>
+                            <td>@contact.Subject</td>
+                            <td>@contact.Message</td>
+                            <td>@contact.Date</td>
+                            <td>
+                                <form action="/Contacts/SendContactEmail" method="post" style="display:inline;">
+                                    <input type="hidden" name="email" value="@contact.Email" />
+                                    <input type="hidden" name="name" value="@contact.FirstName" />
+                                    <button class="btn-sendEmail" type="submit">Send Email</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

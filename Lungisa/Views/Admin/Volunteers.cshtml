@@ -1,0 +1,98 @@
+﻿@model List<Lungisa.Models.VolunteerModel>
+
+@{
+    ViewBag.Title = "Volunteers";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Volunteers</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/formStyle.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
+                <li><a href="/Donations" class="nav-link">DONATIONS</a></li>
+                <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
+                <li><a href="/Events" class="nav-link">EVENTS</a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
+                <li><a href="/Volunteers" class="nav-link active">VOLUNTEERS</a></li>
+                <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
+                <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <br />
+    <br />
+    <section class="section-card2">
+        <h1>Volunteers</h1>
+        </br>
+        @if (TempData["Success"] != null)
+        {
+            <p style="color:green">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p style="color:red">@TempData["Error"]</p>
+        }
+        <div class="table-container">
+            <table border="1" cellpadding="5" style="border-collapse:collapse; width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Availability</th>
+                        <th>Role Preference</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in Model)
+                    {
+                        <tr>
+                            <td>@v.FullName</td>
+                            <td>@v.Email</td>
+                            <td>@v.Phone</td>
+                            <td>@v.Availability</td>
+                            <td>@v.RolePreference</td>
+                            <td>@v.Date</td>
+                            <td>
+                                <form method="post" action="@Url.Action("SendVolunteerEmail", "Volunteers")">
+                                    <input type="hidden" name="email" value="@v.Email" />
+                                    <input type="hidden" name="name" value="@v.FullName" />
+                                    <button class="btn-send" type="submit">Send Email</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</body>
+</html>

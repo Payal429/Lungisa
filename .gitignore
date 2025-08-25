@@ -1,0 +1,12 @@
+# Firebase keys
+Config/firebaseServiceAccount.json
+
+# User secrets
+appsettings.json
+appsettings.*.json
+
+bin/
+obj/
+.vs/
+
+*.user

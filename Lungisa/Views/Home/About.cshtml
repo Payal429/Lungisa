@@ -1,0 +1,320 @@
+﻿<!-- Payal and Nyanda -->
+<!-- 22 July 2025 -->
+<!-- The About Us page offers a comprehensive overview of Lungisa NPO's identity and purpose. It begins with a bold header 
+    followed by sections outlining the organisation’s mission and vision, which emphasize community empowerment and sustainable 
+    change. The page also details Lungisa’s core values, demonstrating its commitment to integrity, transparency, and inclusivity. 
+    Visitors can also learn about investment opportunities and meet the dedicated team driving the organization forward.-->
+
+@{
+    ViewBag.Title = "About";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>About Us</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/about.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Home/Index" class="nav-link ">HOME</a></li>
+                <li><a href="/Home/About" class="nav-link active">ABOUT</a></li>
+                <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <a class="btn-donate" href="/Home/Donations">DONATE</a>
+            <a class="btn-admin" href="/Login/Index">ADMIN LOGIN</a>
+        </div>
+    </header>
+
+    <!-- ================= ABOUT-US SECTION ================= -->
+    <section class="about-us-wrapper">
+        <div class="about-us-overlay">
+            <section class="about-us">
+                <h1>KNOW ABOUT US</h1>
+
+                <p class="intro">
+                    We are a non-profit organization (NPO) in South Africa with a Public Benefit Organization status and Section 18A tax-exempt status.
+                    Established in 1999, Lungisa is dedicated to addressing the healthcare and psychosocial needs of vulnerable communities, with a particular focus on children and youth.
+                    Guided by the Sustainable Development Goals, particularly Goal 3, Lungisa strives to ensure healthy lives and promote well-being for all ages.
+                </p>
+
+                <!-- ================= MISSION AND VISION ================= -->
+                <div class="vision-mission">
+                    <div class="mission">
+                        <h2>OUR MISSION</h2>
+                        <p>To provide quality healthcare and psychosocial services, enhance knowledge and skills among vulnerable community members.</p>
+                    </div>
+
+                    <div class="vision">
+                        <h2>OUR VISION</h2>
+                        <p>To cultivate a community characterized by:</p>
+                        <ul>
+                            <li>High-quality physical well-being</li>
+                            <li>Psychosocial awareness</li>
+                            <li>Healthy cultural practices</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= VALUES ================= -->
+        <div class="values">
+            <h2>Organizational Values</h2>
+            <p>Lungisa's work is guided by the following core values:</p>
+
+            <ul>
+                <!-- Accessibility -->
+                <li>
+                    <div class="title-row">
+                        <strong>Accessibility</strong>
+                        <img src="~/Content/Images/accessibility.png" alt="">
+                    </div>
+                    Ensuring that the community has access to the services provided by Lungisa and to available services.
+                </li>
+
+                <!-- Respect -->
+                <li>
+                    <div class="title-row">
+                        <strong>Respect</strong> 
+                        <img src="~/Content/Images/respect.png" alt="">
+                    </div>
+                    Treating all clients with respect and practice inclusiveness in our organisation and the community.
+                </li>
+
+                <!-- Confidentiality -->
+                <li>
+                    <div class="title-row">
+                        <strong>Confidentiality</strong>
+                        <img src="~/Content/Images/confidential.png" alt="">
+                    </div>
+                    All information that is brought to our attention will be kept confidentially and will not be unduly exposed.
+                </li>
+
+                <!-- Integrity -->
+                <li>
+                    <div class="title-row">
+                        <strong>Integrity</strong>
+                        <img src="~/Content/Images/Integrity.png" alt="">
+                    </div>
+                    We aspire to live to the highest standards of honesty and never compromise the reputation of our organisation and/or our partners, sponsors and supporters.
+                </li>
+
+                <!-- Quality Service -->
+                <li>
+                    <div class="title-row">
+                        <strong>Quality Service</strong>
+                        <img src="~/Content/Images/QualityService.png" alt="">
+                    </div>
+                    We are committed to putting our client's needs first, be courteous and rendering services of a high quality.
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ================= INVESTMENT OPPORTUNITY ================= -->
+    <section class="investment modern-investment">
+        <h2>Investment Opportunity</h2>
+        <p>
+            Lungisa Entrepreneurial Development presents a compelling opportunity for funders seeking to make a tangible difference in the lives of vulnerable communities in South Africa.
+            By investing in Lungisa, funders contribute to:
+        </p>
+        <ul class="impact-list">
+            <li>Improved health outcomes</li>
+            <li>Enhanced psychosocial well-being</li>
+            <li>Empowered youth</li>
+            <li>Strengthened community resilience</li>
+        </ul>
+        <p> Your support will enable Lungisa to expand its reach, enhance service delivery, and continue making a lasting impact on the communities it serves.</p>
+    </section>
+
+    <!-- ================= TEAM ================= -->
+    <section class="team">
+        <h2>Our Team</h2>
+        <div class="team-grid">
+            <div class="member">
+                <img src="~/Content/Images/DrLeahShibambo.jpg" alt="Dr Leah">
+                <h4>Dr Leah Shibambo</h4>
+                <p>Executive Director</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/LouisaMolaudi.jpg" alt="Louisa">
+                <h4>Louisa Molaudi</h4>
+                <p>Linkage officer/ Office Manager</p>
+            </div>
+
+            <div class="member">
+                <img src="https://via.placeholder.com/140" alt="Oupa">
+                <h4>Oupa Moloisane</h4>
+                <p>Project coordinator</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/SrJulieMakgalo.jpg" alt="Julie">
+                <h4>Sr Julie Makgalo</h4>
+                <p>Professional Nurse</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/MarthaMnisi.jpg" alt="Martha">
+                <h4>Martha Mnisi</h4>
+                <p>Finance Officer</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/JohannahMtsweni.jpg" alt="Johannah">
+                <h4>Johannah Mtsweni</h4>
+                <p>Data Capturer</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/OfentseMbewe.jpg" alt="Ofentse">
+                <h4>Ofentse Mbewe</h4>
+                <p>Data Capturer</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/MmapulaMonakisi.jpg" alt="Mmapula">
+                <h4>Mmapula Monakisi</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/TinySono.jpg" alt="Tiny">
+                <h4>Tiny Sono</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/TinyikoMasha.jpg" alt="Tinyiko">
+                <h4>Tinyiko Masha</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/NaomeSibanda.jpg" alt="Naome">
+                <h4>Naome Sibanda</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/TsietsiKgopa.jpg" alt="Tsietsi">
+                <h4>Tsietsi Kgopa</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/AkanyangMalope.jpg" alt="Akanyang">
+                <h4>Akanyang Malope</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/DelisileKhumalo.jpg" alt="Delisile">
+                <h4>Delisile Khumalo</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/JohannahBaloyi.jpg" alt="Johannah">
+                <h4>Johannah Baloyi</h4>
+                <p>HTS Counsellor</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/KoketsoDitlamelo.jpg" alt="Koketso">
+                <h4>Koketso Ditlamelo</h4>
+                <p>Demand Creator</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/SrEuniceMaphanga.jpg" alt="Eunice">
+                <h4>Sr Eunice Maphanga</h4>
+                <p>Nurse Practitioner</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/VioletMashigo.jpg" alt="Violet">
+                <h4>Violet Mashigo</h4>
+                <p>Peer Educator</p>
+            </div>
+
+            <div class="member">
+                <img src="~/Content/Images/BettyMkhonza.jpg" alt="Betty">
+                <h4>Betty Mkhonza</h4>
+                <p>Linkage Officer</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <a class="logo" href="/">
+                <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+            </a>
+            <div class="footer-col">
+                <h3>LUNGIS</h3>
+                <ul>
+                    <li><a href="/Home/Index" class="nav-link">HOME</a></li>
+                    <li><a href="/Home/About" class="nav-link active">ABOUT</a></li>
+                    <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
+                    <li><a href="#">PROJECTS</a></li>
+                    <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
+                    <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <div class="socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+
+            <div class="footer-col subscribe">
+                <h3>Subscribe to get latest updates</h3>
+                <form>
+                    <input type="email" placeholder="your email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Lungis. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
