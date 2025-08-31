@@ -5,9 +5,13 @@ namespace Lungisa.Controllers
 {
     public class NewsController : Controller
     {
-        // GET: News
-        private readonly FirebaseService firebase;
+        private readonly FirebaseService _firebase;
 
+        // Inject FirebaseService via constructor
+        public NewsController(FirebaseService firebase)
+        {
+            _firebase = firebase ?? throw new ArgumentNullException(nameof(firebase));
+        }
         // GET: News/Index?page=1
         [HttpGet]
         public async Task<ActionResult> Index(int page = 1)
@@ -15,7 +19,7 @@ namespace Lungisa.Controllers
             const int pageSize = 6;
 
             // Fetch all news from Firebase
-            var allNews = await firebase.GetAllNewsWithKeys()
+            var allNews = await _firebase.GetAllNewsWithKeys()
                           ?? new List<FirebaseService.FirebaseNewsArticle>();
 
             // Sort by date descending to show latest news first
@@ -42,16 +46,34 @@ namespace Lungisa.Controllers
         [HttpGet]
         public async Task<ActionResult> Details(string id)
         {
-            // Fetch all news articles from Firebase
-            var allNews = await firebase.GetAllNewsWithKeys();
+            // Validate input
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest("Article ID cannot be empty.");
 
-            // Find the specific article by its Firebase key
+            List<FirebaseService.FirebaseNewsArticle> allNews;
+
+            // Safely fetch all news from Firebase
+            try
+            {
+                allNews = await _firebase.GetAllNewsWithKeys() ?? new List<FirebaseService.FirebaseNewsArticle>();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging (use a proper logger in production)
+                Console.WriteLine($"Error fetching news: {ex}");
+                return StatusCode(500, "Error fetching news from Firebase.");
+            }
+
+            // Filter out null items just in case
+            allNews = allNews.Where(a => a != null).ToList();
+
+            // Find the specific article by Firebase key
             var article = allNews.FirstOrDefault(a => a.Key == id)?.Article;
 
             if (article == null)
-                return NotFound(); // Show 404 if the article doesn't exist
+                return NotFound(); // 404 if article doesn't exist
 
-            // Pass the article to a detailed view
+            // Return the detailed view
             return View("~/Views/Home/NewsDetails.cshtml", article);
         }
     }

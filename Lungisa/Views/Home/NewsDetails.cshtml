@@ -15,6 +15,7 @@
     <!-- Links -->
     <link rel="stylesheet" href="~/Content/home.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/news.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
 
     <!-- Google fonts -->
@@ -48,11 +49,14 @@
 
     <div class="news-details">
         <h1>@Model.Title</h1>
+        <div class="news-meta">
+            <span class="news-date">@Model.Date</span>
+        </div>
         <img src="@Model.ImageUrl" alt="@Model.Title" />
-        <p><strong>Date:</strong> @Model.Date</p>
-        <p>@Model.Body</p>
-        <a href="@Url.Action("Index", "News")">Back to News</a>
+        <p class="news-body">@Model.Body</p>
+        <a class="back-link" href="@Url.Action("Index", "News")">&larr; Back to News</a>
     </div>
+
 
     <!-- ================= FOOTER ================= -->
     <footer class="site-footer">
