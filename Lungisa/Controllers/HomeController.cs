@@ -6,9 +6,12 @@ namespace Lungisa.Controllers
 {
     public class HomeController : Controller
     {
+        // Firebase service to fetch and save data (events, projects, subscribers, contacts, volunteers, news)
         private readonly FirebaseService _firebase;
+        // Email helper service to send confirmation emails
         private readonly EmailHelper _emailHelper;
 
+        // Constructor: inject FirebaseService and EmailHelper
         public HomeController(FirebaseService firebase, EmailHelper emailHelper)
         {
             _firebase = firebase;
@@ -50,12 +53,17 @@ namespace Lungisa.Controllers
         {
             return View();
         }
+        public ActionResult FAQs()
+        {
+            return View();
+        }
 
-        // ==== INDEX ====
+        // ===================== INDEX PAGE =====================
         public async Task<ActionResult> Index()
         {
             // ==== EVENTS ====
             var allEvents = await _firebase.GetAllEvents() ?? new List<EventModel>();
+            // Get latest 3 events sorted by date descending
             var latestEvents = allEvents
                 .OrderByDescending(e =>
                 {
@@ -69,6 +77,7 @@ namespace Lungisa.Controllers
             // ==== PROJECTS ====
             var allProjects = await _firebase.GetAllProjectsWithKeys() ?? new List<FirebaseService.FirebaseProject>();
 
+            // Get latest completed project
             var completedProjects = allProjects
                 .Where(p => p.Project.Type?.ToLower() == "completed")
                 .OrderByDescending(p => p.Project.StartDate)   // Sort by date, newest first
@@ -76,6 +85,7 @@ namespace Lungisa.Controllers
                 .Take(1)
                 .ToList();
 
+            // Get latest current project
             var currentProjects = allProjects
                 .Where(p => p.Project.Type?.ToLower() == "currently")
                 .OrderByDescending(p => p.Project.StartDate)
@@ -83,6 +93,7 @@ namespace Lungisa.Controllers
                 .Take(1)
                 .ToList();
 
+            // Get latest upcoming project
             var upcomingProjects = allProjects
                 .Where(p => p.Project.Type?.ToLower() == "upcoming")
                 .OrderByDescending(p => p.Project.StartDate)
@@ -91,7 +102,7 @@ namespace Lungisa.Controllers
                 .ToList();
 
 
-            // ==== CREATE VIEWMODEL ====
+            // Create view model containing all data for the homepage
             var model = new HomeViewModel
             {
                 LatestEvents = latestEvents,
@@ -113,12 +124,14 @@ namespace Lungisa.Controllers
                 return RedirectToAction("Index");
             }
 
+            // Create subscriber model
             var subscriber = new SubscriberModel
             {
                 Email = email,
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
+            // Save subscriber to Firebase
             await _firebase.SaveSubscriber(subscriber);
 
             try
@@ -150,6 +163,7 @@ namespace Lungisa.Controllers
                 return RedirectToAction("Contact");
             }
 
+            // Create contact model
             var contact = new ContactModel
             {
                 FirstName = firstName,
@@ -160,10 +174,12 @@ namespace Lungisa.Controllers
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
+            // Save contact message to Firebase
             await _firebase.SaveContact(contact);
 
             try
             {
+                // Send thank-you email to the contact
                 string emailSubject = "Thank You for Contacting Us!";
                 string emailBody = $"Hi {firstName},\n\nThank you for reaching out to Lungisa NPO. " +
                                    "We have received your message and will get back to you shortly.\n\n" +
@@ -191,6 +207,7 @@ namespace Lungisa.Controllers
                 return RedirectToAction("Volunteer");
             }
 
+            // Create volunteer model
             var volunteer = new VolunteerModel
             {
                 FullName = fullName,
@@ -201,10 +218,12 @@ namespace Lungisa.Controllers
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
+            // Save volunteer to Firebase
             await _firebase.SaveVolunteer(volunteer);
 
             try
             {
+                // Send confirmation email to volunteer
                 string subject = "Thank You for Signing up!";
                 string body = $"Hi {fullName},\n\nThank you for signing up as a volunteer with Lungisa NPO. " +
                               "We appreciate your willingness to help and will get back to you with more details soon.\n\n" +
@@ -228,11 +247,13 @@ namespace Lungisa.Controllers
             const int pageSize = 6;
             var allNews = await _firebase.GetAllNewsWithKeys() ?? new List<FirebaseService.FirebaseNewsArticle>();
 
+            // Sort news by date descending
             var sortedNews = allNews
                              .Where(n => n.Article != null)
                              .OrderByDescending(n => DateTime.Parse(n.Article.Date))
                              .ToList();
 
+            // Paginate news articles
             var pagedNews = sortedNews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             ViewBag.CurrentPage = page;
@@ -253,246 +274,6 @@ namespace Lungisa.Controllers
 
             return View("~/Views/Home/NewsDetails.cshtml", article);
         }
-
-
-
-
-
-        /*// ==== SUBSCRIPTION ====
-        [HttpPost]
-        public async Task<ActionResult> Subscribe(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                TempData["Error"] = "Please enter a valid email.";
-                return RedirectToAction("Index");
-            }
-
-            var subscriber = new SubscriberModel
-            {
-                Email = email,
-                Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            };
-
-            await firebase.SaveSubscriber(subscriber);
-
-            // --- SEND THANK YOU EMAIL ---
-            try
-            {
-                var fromAddress = new MailAddress("noreplylungisa@gmail.com", "Lungisa NPO");
-                var toAddress = new MailAddress(email);
-                string fromPassword = "rxue wsuh idcr oupw"; // Gmail App Password
-                string subject = "Thank You for Subscribing!";
-                string body = $"Dear Subscriber,\n\nThank you for subscribing to updates from Lungisa NPO. " +
-                              "We are excited to keep you informed about our latest news, events, and opportunities.\n\n" +
-                              "Best Regards,\nLungisa NPO Team";
-
-                using (var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                    Timeout = 20000
-                })
-                using (var message = new MailMessage(fromAddress, toAddress)
-                {
-                    Subject = subject,
-                    Body = body
-                })
-                {
-                    smtp.Send(message);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Optional: log the error or show TempData message
-                TempData["Error"] = "Subscription saved, but email could not be sent: " + ex.Message;
-                return RedirectToAction("Index");
-            }
-
-            TempData["Success"] = "✅ Thank you for subscribing! A confirmation email has been sent.";
-            return RedirectToAction("Index");
-
-        }*/
-
-
-
-        // ==== CONTACT DETAILS ====
-        /*[HttpPost]
-        public async Task<ActionResult> Contact(string firstName, string lastName, string email, string subject, string message)
-        {
-            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(message))
-            {
-                TempData["Error"] = "Please fill in all required fields.";
-                return RedirectToAction("Contact");
-            }
-
-            var contact = new ContactModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Subject = subject,
-                Message = message,
-                Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            };
-
-            await firebase.SaveContact(contact);
-
-            TempData["Success"] = "✅ Your message has been sent!";
-            return RedirectToAction("Contact");
-       *//* }*//*
-        [HttpPost]
-        public async Task<ActionResult> Contact(string firstName, string lastName, string email, string subject, string message)
-        {
-            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(message))
-            {
-                TempData["Error"] = "Please fill in all required fields.";
-                return RedirectToAction("Contact");
-            }
-
-            var contact = new ContactModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Subject = subject,
-                Message = message,
-                Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            };
-
-            await firebase.SaveContact(contact);
-
-            // --- SEND AUTOMATED THANK YOU EMAIL ---
-            try
-            {
-                var fromAddress = new MailAddress("noreplylungisa@gmail.com", "Lungisa NPO");
-                var toAddress = new MailAddress(email, firstName);
-                string fromPassword = "rxue wsuh idcr oupw"; // Gmail App Password
-                string emailSubject = "Thank You for Contacting Us!";
-                string emailBody = $"Hi {firstName},\n\n" +
-                                   "Thank you for reaching out to Lungisa NPO. " +
-                                   "We have received your message and will get back to you shortly.\n\n" +
-                                   "Best Regards,\nLungisa NPO Team";
-
-                using (var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                    Timeout = 20000
-                })
-                using (var messageMail = new MailMessage(fromAddress, toAddress)
-                {
-                    Subject = emailSubject,
-                    Body = emailBody
-                })
-                {
-                    smtp.Send(messageMail);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Optional: log error or show TempData message
-                TempData["Error"] = "Message sent, but confirmation email could not be delivered: " + ex.Message;
-                return RedirectToAction("Contact");
-            }
-
-            TempData["Success"] = "✅ Your message has been sent! A confirmation email has been sent to you.";
-            return RedirectToAction("Contact");
-        }
-*/
-
-        /* [HttpPost]
-         public async Task<ActionResult> Volunteer(string fullName, string email, string phone, string availability, string rolePreference)
-         {
-             if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(email))
-             {
-                 TempData["Error"] = "Please fill in all required fields.";
-                 return RedirectToAction("Volunteer");
-             }
-
-             var volunteer = new VolunteerModel
-             {
-                 FullName = fullName,
-                 Email = email,
-                 Phone = phone,
-                 Availability = availability,
-                 RolePreference = rolePreference,
-                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-             };
-
-             await firebase.SaveVolunteer(volunteer);
-
-             TempData["Success"] = "✅ Thank you for signing up!";
-             return RedirectToAction("Index");
-         }*/
-        /*  [HttpPost]
-          public async Task<ActionResult> Volunteer(string fullName, string email, string phone, string availability, string rolePreference)
-          {
-              if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(email))
-              {
-                  TempData["Error"] = "Please fill in all required fields.";
-                  return RedirectToAction("Volunteer");
-              }
-
-              var volunteer = new VolunteerModel
-              {
-                  FullName = fullName,
-                  Email = email,
-                  Phone = phone,
-                  Availability = availability,
-                  RolePreference = rolePreference,
-                  Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-              };
-
-              await firebase.SaveVolunteer(volunteer);
-
-              // --- SEND AUTOMATED THANK YOU EMAIL ---
-              try
-              {
-                  var fromAddress = new MailAddress("noreplylungisa@gmail.com", "Lungisa NPO");
-                  var toAddress = new MailAddress(email, fullName);
-                  string fromPassword = "rxue wsuh idcr oupw"; // Gmail App Password
-                  string emailSubject = "Thank You for Signing up!";
-                  string emailBody = $"Hi {fullName},\n\n" +
-                                     "Thank you for signing up as a volunteer with Lungisa NPO. " +
-                                     "We appreciate your willingness to help and will get back to you with more details soon.\n\n" +
-                                     "Best Regards,\nLungisa NPO Team";
-
-                  using (var smtp = new SmtpClient
-                  {
-                      Host = "smtp.gmail.com",
-                      Port = 587,
-                      EnableSsl = true,
-                      DeliveryMethod = SmtpDeliveryMethod.Network,
-                      Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                      Timeout = 20000
-                  })
-                  using (var messageMail = new MailMessage(fromAddress, toAddress)
-                  {
-                      Subject = emailSubject,
-                      Body = emailBody
-                  })
-                  {
-                      smtp.Send(messageMail);
-                  }
-              }
-              catch (Exception ex)
-              {
-                  TempData["Error"] = "Volunteer saved, but confirmation email could not be sent: " + ex.Message;
-                  return RedirectToAction("Volunteer");
-              }
-
-              TempData["Success"] = "✅ Thank you for signing up! A confirmation email has been sent.";
-              return RedirectToAction("Volunteer");
-          }
-  */
-
 
     }
 }

@@ -10,15 +10,6 @@ namespace Lungisa.Controllers
         private readonly FirebaseService firebase;
         private readonly IWebHostEnvironment _env;
 
-        //public ProjectsController(IWebHostEnvironment env)
-        //{
-        //    _env = env;
-        //}
-        //public ProjectsController(FirebaseService firebase)
-        //{
-        //    this.firebase = firebase;
-        //}
-
         public ProjectsController(FirebaseService firebase, IWebHostEnvironment env)
         {
             this.firebase = firebase;
@@ -109,26 +100,6 @@ namespace Lungisa.Controllers
             // Redirect to ProjectInfo page to show updated project list
             return RedirectToAction("Projects");
         }
-
-        // GET: Projects/Edit/{id} - Loads project info into the form
-        [HttpGet]
-        public async Task<ActionResult> Edit(string id)
-        {
-            var allProjects = await firebase.GetAllProjectsWithKeys();
-            var project = allProjects.FirstOrDefault(p => p.Key == id);
-
-            if (project == null)
-                return NotFound();
-
-            // Pass the selected project first in the list to pre-populate the form
-            var projectList = new List<FirebaseService.FirebaseProject> { project };
-            ViewBag.Success = TempData["Success"];
-            return View("~/Views/Admin/Projects.cshtml", projectList);
-        }
-
-        // Edits an existing project from Firebase 
-
-
 
     }
 }

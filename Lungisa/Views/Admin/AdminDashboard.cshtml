@@ -10,146 +10,149 @@
 <!DOCTYPE html>
 
 <html>
-<!-- Meta -->
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width" />
+    <head>
+        <!-- Meta -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
 
-<!-- Title -->
-<title>Admin Dashboard</title>
+        <!-- Title -->
+        <title>Admin Dashboard</title>
 
-<!-- Links -->
-<link rel="stylesheet" href="~/Content/admin.css" />
-<link href="~/css/admin.css" rel="stylesheet" />
-<link rel="stylesheet" href="~/Content/Site.css" />
-<link rel="stylesheet" href="~/css/site.css" />
-<link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
+        <!-- Links -->
+        <link rel="stylesheet" href="~/Content/admin.css" />
+        <link href="~/css/admin.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
 
-<!-- Google Fonts (Poppins + Material Icons) -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+            <!-- Bootstrap 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-<body>
-    <!-- ================= HEADER ================= -->
-    <header class="admin-header">
-        <a class="logo" href="/">
-            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
-        </a>
+        <!-- Google Fonts (Poppins + Material Icons) -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- ================= HEADER ================= -->
+        <header class="admin-header">
+            <a class="logo" href="/">
+                <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+            </a>
 
-        <div class="admin-title">
-            <h1>Admin Dashboard</h1>
-            <p>Manage Lungisa’s back-office in one place.</p>
-        </div>
+            <div class="admin-title">
+                <h1>Admin Dashboard</h1>
+                <p>Manage Lungisa’s back-office in one place.</p>
+            </div>
 
-        <a class="btn-logout" href="/Home/Index">LOGOUT</a>
-    </header>
+            <a class="btn-logout" href="/Home/Index">LOGOUT</a>
+        </header>
 
-    <!-- ================= GRIDS ================= -->
-    <!-- ================= 1. PROJECTS ================= -->
-    <div class="container">
-        <!-- 1 Projects -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80" alt="Projects">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">folder</i></div>
-                <h3>Projects</h3>
-                <p>Create, edit or delete organisational projects and assign managers.</p>
-                <a class="card-btn" href="/Projects">Manage Projects</a>
+        <!-- ================= GRIDS ================= -->
+        <!-- ================= 1. PROJECTS ================= -->
+        <div class="container">
+            <!-- 1 Projects -->
+            <div class="card">
+                <img src="~/css/Images/projectsheading.jpeg" alt="Projects" class="thumb" />
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">folder</i></div>
+                    <h3>Projects</h3>
+                    <p>Create, edit or delete organisational projects and assign managers.</p>
+                    <a class="card-btn" href="/Projects">Manage Projects</a>
+                </div>
+            </div>
+
+            <!-- ================= 2. DONATIONS ================= -->
+            <div class="card">
+                <img src="~/css/Images/donationsheading.jpeg" alt="Donations" class="thumb">
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">favorite</i></div>
+                    <h3>Donations</h3>
+                    <p>Track incoming gifts, download donor reports and issue receipts.</p>
+                    <a class="card-btn" href="/DonationsAdmin">Manage Donations</a>
+                </div>
+            </div>
+
+            <!-- ================= 3. USER ACCOUNTS ================= -->
+            <div class="card">
+                <img class="thumb" src="https://images.unsplash.com/photo-1520333789090-1afc82db536a?auto=format&fit=crop&w=600&q=80" alt="Users">
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">people</i></div>
+                    <h3>User Accounts</h3>
+                    <p>Add staff, assign roles, reset passwords and audit activity.</p>
+                    <a class="card-btn" href="@Url.Action("CreateAdmin", "Admin")">Create Admin</a>
+                </div>
+            </div>
+
+            <!-- ================= 4. NEWS ARTICLES ================= -->
+            <div class="card">
+                <img src="~/css/Images/newsheading.jpeg" alt="News" class="thumb">
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">article</i></div>
+                    <h3>News Articles</h3>
+                    <p>Write, schedule and publish stories to the public site.</p>
+                    <a class="card-btn" href="/NewsAdmin">Create Post</a>
+                </div>
+            </div>
+
+            <!-- ================= 5. VOLUNTEER SIGN-UPS ================= -->
+            <div class="card">
+                <img src="~/css/Images/volunteerheading.jpeg" alt="Volunteers" class="thumb">
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">person</i></div>
+                    <h3>Volunteer Sign-ups</h3>
+                    <p>Review applications, approve shifts and export contact lists.</p>
+                    <a class="card-btn" href="/Volunteers">View Sign-ups</a>
+                </div>
+            </div>
+
+            <!-- ================= 6. EVENTS ================= -->
+            <div class="card">
+                <img src="~/css/Images/eventsheading.jpeg" alt="Events" class="thumb">
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">event</i></div>
+                    <h3>Events</h3>
+                    <p>Add upcoming events, edit details and manage RSVPs.</p>
+                    <a class="card-btn" href="/Events">Manage Events</a>
+                </div>
+            </div>
+
+            <!-- ================= 7. CONTACTS ================= -->
+            <div class="card">
+                <img src="~/css/Images/contactheading.jpeg" alt="Contacts" class="thumb">
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">contact</i></div>
+                    <h3>Contacts</h3>
+                    <p>Send emails to users who have contacted Lungisa.</p>
+                    <a class="card-btn" href="/Contacts">Contact Us Management</a>
+                </div>
+            </div>
+
+            <!-- ================= 8. SUBSCRIBERS ================= -->
+            <div class="card">
+                <img class="thumb" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Subscribers">
+                <div class="card-body">
+                    <div class="icon"><i class="material-icons">people</i></div>
+                    <h3>Subscibers</h3>
+                    <p>Send subscribers notifications to updates.</p>
+                    <a class="card-btn" href="/Subscribers">Subscribers Management</a>
+                </div>
             </div>
         </div>
+    </body>
 
-        <!-- ================= 2. DONATIONS ================= -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=600&q=80" alt="Donations">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">favorite</i></div>
-                <h3>Donations</h3>
-                <p>Track incoming gifts, download donor reports and issue receipts.</p>
-                <a class="card-btn" href="/DonationsAdmin">Manage Donations</a>
-            </div>
-        </div>
-        
-        <!-- ================= 3. USER ACCOUNTS ================= -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1520333789090-1afc82db536a?auto=format&fit=crop&w=600&q=80" alt="Users">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">people</i></div>
-                <h3>User Accounts</h3>
-                <p>Add staff, assign roles, reset passwords and audit activity.</p>
-                <a class="card-btn" href="@Url.Action("CreateAdmin", "Admin")">Create Admin</a>
-            </div>
-        </div>
 
-        <!-- ================= 4. NEWS ARTICLES ================= -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=600&q=80" alt="News">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">article</i></div>
-                <h3>News Articles</h3>
-                <p>Write, schedule and publish stories to the public site.</p>
-                <a class="card-btn" href="/NewsAdmin">Create Post</a>
-            </div>
-        </div>
-
-        <!-- ================= 5. VOLUNTEER SIGN-UPS ================= -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1559027666-8dc7508f0a6d?auto=format&fit=crop&w=600&q=80" alt="Volunteers">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">volunteer</i></div>
-                <h3>Volunteer Sign-ups</h3>
-                <p>Review applications, approve shifts and export contact lists.</p>
-                <a class="card-btn" href="/Volunteers">View Sign-ups</a>
-            </div>
-        </div>
-
-        <!-- ================= 6. EVENTS ================= -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Events">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">event</i></div>
-                <h3>Events</h3>
-                <p>Add upcoming events, edit details and manage RSVPs.</p>
-                <a class="card-btn" href="/Events">Manage Events</a>
-            </div>
-        </div>
-
-        <!-- ================= 7. CONTACTS ================= -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Contacts">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">contact</i></div>
-                <h3>Contacts</h3>
-                <p>Send emails to users who have contacted Lungisa.</p>
-                <a class="card-btn" href="/Contacts">Contact Us Management</a>
-            </div>
-        </div>
-
-        <!-- ================= 8. SUBSCRIBERS ================= -->
-        <div class="card">
-            <img class="thumb" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Subscribers">
-            <div class="card-body">
-                <div class="icon"><i class="material-icons">subscribers</i></div>
-                <h3>Subscibers</h3>
-                <p>Send subscribers notifications to updates.</p>
-                <a class="card-btn" href="/Subscribers">Subscribers Management</a>
-            </div>
+    <!-- LOADING OVERLAY -->
+    <!--<div id="loading-overlay">
+        <div class="loader-box">
+            <img src="https://lungisa.org.za/Content/Images/LOGOLungisa.png" alt="Lungisa" class="loader-logo">
+            <div class="spinner"></div>
+            <p>Loading dashboard…</p>
         </div>
     </div>
-</body>
 
-
-<!-- LOADING OVERLAY -->
-<!--<div id="loading-overlay">
-    <div class="loader-box">
-        <img src="https://lungisa.org.za/Content/Images/LOGOLungisa.png" alt="Lungisa" class="loader-logo">
-        <div class="spinner"></div>
-        <p>Loading dashboard…</p>
-    </div>
-</div>
-
-<script>/* Hide overlay as soon as DOM + images are ready */
-  window.addEventListener('load', () => {
-    const overlay = document.getElementById('loading-overlay');
-    overlay.style.opacity = 0;
-    setTimeout(() => overlay.remove(), 400); /* match CSS transition */
-  });</script>-->
+    <script>/* Hide overlay as soon as DOM + images are ready */
+      window.addEventListener('load', () => {
+        const overlay = document.getElementById('loading-overlay');
+        overlay.style.opacity = 0;
+        setTimeout(() => overlay.remove(), 400); /* match CSS transition */
+      });</script>-->
 </html>

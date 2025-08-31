@@ -1,4 +1,7 @@
-﻿using System.Net.Mail;
+﻿// Payal and Nyanda 
+// 15 August 2025
+
+using System.Net.Mail;
 using System.Net;
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,86 +10,73 @@ namespace Lungisa.Controllers
 {
     public class ContactsController : Controller
     {
+        // Firebase service to interact with Firebase Realtime Database
         private readonly FirebaseService firebase;
+        // Helper service to handle sending emails
+        private readonly EmailHelper emailHelper;
 
-        public ContactsController(FirebaseService firebase)
+        // Constructor: inject FirebaseService and EmailHelper via dependency injection
+        public ContactsController(FirebaseService firebase, EmailHelper emailHelper)
         {
             this.firebase = firebase;
+            this.emailHelper = emailHelper;
         }
 
+        // GET: /Contacts/Index
+        // Retrieves all contact messages and displays them in the Contacts view
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            // Retrieve all contacts from Firebase
+            // Get all contacts from Firebase, or return an empty list if null
             var contacts = await firebase.GetAllContacts() ?? new List<Lungisa.Models.ContactModel>();
 
-            // Pass any temporary success or error messages to the view
+            // Pass temporary success/error messages to the view
             ViewBag.Success = TempData["Success"];
             ViewBag.Error = TempData["Error"];
 
-            // Render the Contacts view with the retrieved list
+            // Return the Contacts view with the list of contacts
             return View("~/Views/Admin/Contacts.cshtml", contacts);
         }
 
-        // This action explicitly loads the contacts management page.
+        // GET: /Contacts/Contacts
+        // Same as Index, can be used for a different route if needed
         [HttpGet]
         public async Task<ActionResult> Contacts()
         {
-            // Retrieve all contacts from Firebase
             var contacts = await firebase.GetAllContacts() ?? new List<Lungisa.Models.ContactModel>();
 
-            // Pass any temporary success or error messages to the view
             ViewBag.Success = TempData["Success"];
             ViewBag.Error = TempData["Error"];
 
-            // Render the Contacts view with the retrieved list
             return View("~/Views/Admin/Contacts.cshtml", contacts);
         }
 
-        // GET USERS THAT CONTACTED LUNGISA
-
-        /*        public async Task<ActionResult> Contacts()
-                {
-                    var contacts = await _firebase.GetAllContacts() ?? new List<ContactModel>();
-                    return View(contacts); // send Dictionary<string, ContactModel> to the view
-                }*/
+        // POST: /Contacts/SendContactEmail
+        // Sends a thank-you email to a user who submitted a contact form
         [HttpPost]
-        public ActionResult SendContactEmail(string email, string name)
+        public async Task<ActionResult> SendContactEmail(string email, string name)
         {
             try
             {
-                var fromAddress = new MailAddress("noreplylungisa@gmail.com", "Lungisa NPO");
-                var toAddress = new MailAddress(email, name);
-                string fromPassword = "rxue wsuh idcr oupw";
+                // Email subject and body
                 string subject = "Thank You for Contacting Us";
-                string body = $"Dear {name},\n\nThank you for reaching out to Lungisa NPO. We have received your message and will get back to you shortly.\n\nBest Regards,\nLungisa NPO Team";
+                string body = $"Dear {name},\n\nThank you for reaching out to Lungisa NPO. " +
+                              $"We have received your message and will get back to you shortly.\n\n" +
+                              "Best Regards,\nLungisa NPO Team";
 
-                var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                    Timeout = 20000
-                };
+                // Use the email helper service to send the email asynchronously
+                await emailHelper.SendEmailAsync(email, name, subject, body);
 
-                using (var message = new MailMessage(fromAddress, toAddress)
-                {
-                    Subject = subject,
-                    Body = body
-                })
-                {
-                    smtp.Send(message);
-                }
-
+                // Set a temporary success message to display in the view
                 TempData["Success"] = "Email sent successfully!";
             }
             catch (Exception ex)
             {
+                // Catch any errors during email sending and set an error message
                 TempData["Error"] = "Error sending email: " + ex.Message;
             }
 
+            // Redirect back to the Contacts page to show updated messages
             return RedirectToAction("Contacts");
         }
     }

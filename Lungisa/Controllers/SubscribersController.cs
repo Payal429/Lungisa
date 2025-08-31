@@ -3,93 +3,83 @@ using System.Net;
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;
 
+
+using System.Net.Mail;
+using System.Net;
+using Lungisa.Services;
+using Microsoft.AspNetCore.Mvc;
+
 namespace Lungisa.Controllers
 {
     public class SubscribersController : Controller
     {
+        // Firebase service to fetch and manage subscriber data
         private readonly FirebaseService firebase;
+        // Email helper service to send emails to subscribers
+        private readonly EmailHelper emailHelper;
 
-        public SubscribersController(FirebaseService firebase)
+        // Constructor: inject FirebaseService and EmailHelper via dependency injection
+        public SubscribersController(FirebaseService firebase, EmailHelper emailHelper)
         {
             this.firebase = firebase;
+            this.emailHelper = emailHelper;
         }
 
-
-
-        // GET: Subscribers
+        // GET: /Subscribers/Index
+        // Loads the Subscribers management page and retrieves all subscribers
         public async Task<ActionResult> Index()
         {
-            // Loads the list of all subscribers and displays them on the Admin Subscribers page
-                // Retrieve all subscribers from Firebase
-                // If no subscribers exist, return an empty list to prevent null reference issues
-                var subscribers = await firebase.GetAllSubscribers() ?? new List<Lungisa.Models.SubscriberModel>();
-
-                // Retrieve any success message stored in TempData from a previous request
-                ViewBag.Success = TempData["Success"];
-                ViewBag.Error = TempData["Error"];
-
-                // Render the Subscribers view with the retrieved list
-                return View("~/Views/Admin/Subscribers.cshtml", subscribers);
-            
-
-        }
-        // This action explicitly loads the subscribers management page.
-        [HttpGet]
-        public async Task<ActionResult> Subscribers()
-        {
-            // Retrieve all subscribers from Firebase
+            // Get all subscribers from Firebase, or return an empty list if none exist
             var subscribers = await firebase.GetAllSubscribers() ?? new List<Lungisa.Models.SubscriberModel>();
 
-            // Pass any temporary success or error messages to the view
+            // Pass any temporary success/error messages to the view
             ViewBag.Success = TempData["Success"];
             ViewBag.Error = TempData["Error"];
 
-            // Render the Subscribers view with the retrieved list
+            // Return the Subscribers admin view with the list of subscribers
             return View("~/Views/Admin/Subscribers.cshtml", subscribers);
         }
 
+        // GET: /Subscribers/Subscribers
+        // Explicit action for loading subscribers page (same as Index)
+        [HttpGet]
+        public async Task<ActionResult> Subscribers()
+        {
+            var subscribers = await firebase.GetAllSubscribers() ?? new List<Lungisa.Models.SubscriberModel>();
 
-        // Send notification to subscriber
+            ViewBag.Success = TempData["Success"];
+            ViewBag.Error = TempData["Error"];
+
+            return View("~/Views/Admin/Subscribers.cshtml", subscribers);
+        }
+
+        // POST: /Subscribers/NotifySubscriber
+        // Sends a notification email to a subscriber
         [HttpPost]
-        public ActionResult NotifySubscriber(string email, string name)
+        public async Task<ActionResult> NotifySubscriber(string email, string name)
         {
             try
             {
-                var fromAddress = new MailAddress("noreplylungisa@gmail.com", "Lungisa NPO");
-                var toAddress = new MailAddress(email);
-                string fromPassword = "rxue wsuh idcr oupw"; // Gmail App Password
+                // Prepare the email subject and body
                 string subject = "Lungisa Update!";
-                string body = $"Dear Subscriber,\n\nWe have an important update for you! Please check our website for the latest news and opportunities.\n\nBest Regards,\nLungisa NPO Team";
+                string body = $"Dear {name},\n\nWe have an important update for you! " +
+                              $"Please check our website for the latest news and opportunities.\n\n" +
+                              "Best Regards,\nLungisa NPO Team";
 
-                var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                    Timeout = 20000
-                };
+                // Send the email asynchronously using EmailHelper
+                await emailHelper.SendEmailAsync(email, name, subject, body);
 
-                using (var message = new MailMessage(fromAddress, toAddress)
-                {
-                    Subject = subject,
-                    Body = body
-                })
-                {
-                    smtp.Send(message);
-                }
-
+                // Set temporary success message to display in the view
                 TempData["Success"] = $"Email sent to {name}!";
             }
             catch (Exception ex)
             {
+                // Set temporary error message if email sending fails
                 TempData["Error"] = "Error sending email: " + ex.Message;
             }
 
+            // Redirect back to the Subscribers page to show updated messages
             return RedirectToAction("Subscribers");
         }
-
-
     }
 }

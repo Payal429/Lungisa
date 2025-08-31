@@ -7,84 +7,73 @@ namespace Lungisa.Controllers
 {
     public class VolunteersController : Controller
     {
+        // Firebase service to fetch and manage volunteer data
         private readonly FirebaseService firebase;
+        // Helper service to send emails to volunteers
+        private readonly EmailHelper emailHelper;
 
-        public VolunteersController(FirebaseService firebase)
+        // Constructor: inject FirebaseService and EmailHelper via dependency injection
+        public VolunteersController(FirebaseService firebase, EmailHelper emailHelper)
         {
             this.firebase = firebase;
+            this.emailHelper = emailHelper;
         }
 
-
-
-        // This action explicitly loads the volunteers management page
+        // GET: /Volunteers/Index
+        // Loads the Volunteers management page and retrieves all volunteers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            // Retrieve all volunteers from Firebase
+            // Get all volunteers from Firebase, or return an empty list if none exist
             var volunteers = await firebase.GetAllVolunteers() ?? new List<Lungisa.Models.VolunteerModel>();
 
-            // Pass any temporary success or error messages to the view
+            // Pass any temporary success/error messages to the view
             ViewBag.Success = TempData["Success"];
             ViewBag.Error = TempData["Error"];
 
-            // Render the Volunteers view with the retrieved list
+            // Return the Volunteers admin view with the list of volunteers
             return View("~/Views/Admin/Volunteers.cshtml", volunteers);
         }
 
-        // This action explicitly loads the volunteers management page
+        // GET: /Volunteers/Volunteers
+        // Explicit action for loading volunteers page (same as Index)
         [HttpGet]
         public async Task<ActionResult> Volunteers()
         {
-            // Retrieve all volunteers from Firebase
             var volunteers = await firebase.GetAllVolunteers() ?? new List<Lungisa.Models.VolunteerModel>();
 
-            // Pass any temporary success or error messages to the view
             ViewBag.Success = TempData["Success"];
             ViewBag.Error = TempData["Error"];
 
-            // Render the Volunteers view with the retrieved list
             return View("~/Views/Admin/Volunteers.cshtml", volunteers);
         }
 
-
-        // Fetch all volunteers
+        // POST: /Volunteers/SendVolunteerEmail
+        // Sends an email to a volunteer notifying them about volunteering opportunities
         [HttpPost]
-        public ActionResult SendVolunteerEmail(string email, string name)
+        public async Task<ActionResult> SendVolunteerEmail(string email, string name)
         {
             try
             {
-                var fromAddress = new MailAddress("noreplylungisa@gmail.com", "Lungisa NPO");
-                var toAddress = new MailAddress(email, name);
-                string fromPassword = "rxue wsuh idcr oupw"; // Gmail App Password
+                // Prepare email subject and body
                 string subject = "Volunteering Opportunity";
-                string body = $"Dear {name},\n\nThank you for volunteering with Lungisa NPO. We have new opportunities available and would love your help!\n\nBest Regards,\nLungisa NPO Team";
+                string body = $"Dear {name},\n\nThank you for volunteering with Lungisa NPO. " +
+                              $"We have new opportunities available and would love your help!\n\n" +
+                              "Best Regards,\nLungisa NPO Team";
 
-                var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                    Timeout = 20000
-                };
+                // Send the email asynchronously using EmailHelper
+                await emailHelper.SendEmailAsync(email, name, subject, body);
 
-                using (var message = new MailMessage(fromAddress, toAddress)
-                {
-                    Subject = subject,
-                    Body = body
-                })
-                {
-                    smtp.Send(message);
-                }
-
+                // Set temporary success message to display in the view
                 TempData["Success"] = "Email sent successfully!";
             }
             catch (Exception ex)
             {
+                // Set temporary error message if email sending fails
                 TempData["Error"] = "Error sending email: " + ex.Message;
             }
 
+            // Redirect back to the Volunteers page to display updated messages
             return RedirectToAction("Volunteers");
         }
     }

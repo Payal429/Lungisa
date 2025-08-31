@@ -1,0 +1,101 @@
+﻿@model List<Lungisa.Models.DonationModel>
+
+@{
+    ViewBag.Title = "Donations Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Volunteers</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/Content/formStyle.css" />
+    <link rel="stylesheet" href="~/css/formStyle.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
+                <li><a href="/DonationsAdmin" class="nav-link active">DONATIONS</a></li>
+                <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
+                <li><a href="/Events" class="nav-link">EVENTS</a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
+                <li><a href="/Volunteers" class="nav-link ">VOLUNTEERS</a></li>
+                <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
+                <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <br />
+    <br />
+
+    <section class="section-card2">
+        <h1>Donations Dashboard</h1>
+        <div class="table-container">
+            <table>
+                <thead class="table-dark">
+                    <tr>
+                        <th>Donor Name</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Payment ID</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var donation in Model)
+                        {
+                            <tr>
+                                <td>@donation.DonorName</td>
+                                <td>@donation.Email</td>
+                                <td>R @donation.Amount</td>
+                                <td>
+                                    @if (donation.Status == "Success")
+                                    {
+                                        <span class="badge bg-success">Success</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Failed</span>
+                                    }
+                                </td>
+                                <td>@donation.PayFastPaymentId</td>
+                                <td>@donation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No donations found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

@@ -38,7 +38,7 @@
         <nav>
             <ul>
                 <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
-                <li><a href="/Donations" class="nav-link">DONATIONS</a></li>
+                <li><a href="/DonationsAdmin" class="nav-link">DONATIONS</a></li>
                 <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
                 <li><a href="/Events" class="nav-link active">EVENTS</a></li>
                 <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
@@ -107,7 +107,6 @@
                                     <td>@DateTime.Parse(item.Event.DateTime).ToString("f")</td>
                                     <td>@item.Event.Venue</td>
                                     <td>
-                                        <a class="btn-edit" href="#">Edit</a>
                                         <a class="btn-delete" href="/Events/Delete/@item.Key" onclick="return confirm('Delete this event?');">Delete</a>
                                     </td>
                                 </tr>

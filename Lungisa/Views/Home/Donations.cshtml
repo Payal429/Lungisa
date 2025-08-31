@@ -5,6 +5,7 @@
     and a secure payment form to process transactions. This organized approach makes it easy for donors to contribute and support
     the organisation’s initiatives. -->
 
+@model Lungisa.Models.DonationModel
 @{
     ViewBag.Title = "Donations";
     Layout = null;
@@ -54,32 +55,20 @@
     <!-- ================= DONATIONS ================= -->
     <section class="donation-split">
         <h1>Lungisa Donation Page</h1>
+        <!-- ================= Change the asp-action ================= -->
+        <form asp-controller="Donations" asp-action="LocalPay" method="post">
+            <h2>Donation Amount</h2>
+            <input type="number" name="Amount" placeholder="Donation Amount" required />
 
-        <div class="donation-grid">
-            <!-- ================= LEFT: AMOUNT AND PERSONAL INFORMATION ================= -->
-            <div class="left-panel">
-                <!-- ================= AMOUNT ================= -->
-                <div class="panel">
-                    <h2>Donation Amount</h2>
-                    <div class="amount-buttons">
-                        <button type="button" class="amount-btn">R50</button>
-                        <button type="button" class="amount-btn">R100</button>
-                        <button type="button" class="amount-btn">R200</button>
-                        <button type="button" class="amount-btn">R500</button>
-                    </div>
-                    <br />
-                    <input type="number" placeholder="Custom Amount" class="custom-amount">
-                    <br />
-                    <br />
-                    <!-- ================= PERSONAL INFORMATION ================= -->
-                    <h2>Personal Information</h2>
-                    <input type="text" placeholder="First Name" required>
-                    <input type="text" placeholder="Last Name" required>
-                    <input type="tel" placeholder="Phone Number" required>
-                    <input type="email" placeholder="Email Address" required>
-                </div>
-            </div>
+            <h2>Personal Information</h2>
+            <input type="text" name="FirstName" placeholder="First Name" required />
+            <input type="text" name="LastName" placeholder="Last Name" required />
+            <input type="email" name="Email" placeholder="Email Address" required />
 
+            <button type="submit" class="submit-btn">Donate Now</button>
+        </form>
+    </section>
+@* 
             <!-- ================= RIGHT : PAYMENT ================= -->
             <div class="right-panel">
                 <div class="panel">
@@ -109,8 +98,8 @@
                     <button type="submit" class="submit-btn">Submit</button>
                 </div>
             </div>
-        </div>
-    </section>
+        </div> *@
+  @*   </section> *@
 
     <!-- ================= FOOTER ================= -->
     <footer class="site-footer">

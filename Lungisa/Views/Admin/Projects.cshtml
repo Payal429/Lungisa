@@ -39,7 +39,7 @@
         <nav>
             <ul>
                 <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
-                <li><a href="/Donations" class="nav-link">DONATIONS</a></li>
+                <li><a href="/DonationsAdmin" class="nav-link">DONATIONS</a></li>
                 <li><a href="/Projects" class="nav-link active">PROJECTS</a></li>
                 <li><a href="/Events" class="nav-link">EVENTS</a></li>
                 <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
@@ -102,11 +102,6 @@
             </div>
             <button class="btn-save" type="submit">Save Project</button>
 
-            @if (Model?.FirstOrDefault()?.Key != null)
-            {
-                <!-- Only visible when editing -->
-                <button class="btn-update" type="submit" formaction="/Projects/UpdateProject">Update Project</button>
-            }
         </form>
 
 
@@ -143,8 +138,6 @@
                                         <td>@item.Project.StartDate</td>
                                         <td>@item.Project.EndDate</td>
                                         <td>
-                                            <a class="btn-edit" href="#">Edit</a>
-                                            <br />
                                             <a class="btn-delete" href="/Projects/Delete/@item.Key" onclick="return confirm('Delete this project?');">Delete</a>
                                         </td>
                                     </tr>

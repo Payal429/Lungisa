@@ -35,7 +35,7 @@
         <nav>
             <ul>
                 <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
-                <li><a href="/Donations" class="nav-link">DONATIONS</a></li>
+                <li><a href="/DonationsAdmin" class="nav-link">DONATIONS</a></li>
                 <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
                 <li><a href="/Events" class="nav-link">EVENTS</a></li>
                 <li><a href="/NewsAdmin" class="nav-link active">NEWS </a></li>
@@ -47,8 +47,15 @@
     </header>
 
     <div class="container">
+
         <h1>Post News Articles</h1>
         <p>Create, schedule and publish stories.</p>
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert-success">
+                @TempData["Success"]
+            </div>
+        }
         <section class="section-card1">
             <h2>New Article</h2>
             <form action="/NewsAdmin/AddNews" method="post" enctype="multipart/form-data">
@@ -83,9 +90,8 @@
                                     <td>@item.Article.Summary</td>
                                     <td>@item.Article.Date</td>
                                     <td>
-                                        <a class="btn-edit" href="#">Edit</a>
-                                        <br />
-                                        <a class="btn-delete" href="/News/Delete/@item.Key" onclick="return confirm('Delete this article?');">Delete</a>
+                                    <td>
+                                        <a class="btn-delete" href="/NewsAdmin/Delete/@item.Key" onclick="return confirm('Delete this article?');">Delete</a>
                                     </td>
                                 </tr>
                             }
