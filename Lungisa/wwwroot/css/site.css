@@ -134,8 +134,7 @@ nav ul li a {
 #main-nav.open ~ .menu-toggle span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
 }
-
-/* ---------- FOOTER ---------- */
+/* ---------- FOOTER BASE ---------- */
 .site-footer {
     background: black;
     color: white;
@@ -144,16 +143,10 @@ nav ul li a {
 
 .footer-top {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     align-items: start;
 }
-
-    .footer-top .logo img {
-        height: 48px;
-        width: auto;
-        display: block;
-    }
 
 .footer-col h3 {
     font-size: 18px;
@@ -166,6 +159,8 @@ nav ul li a {
     list-style: none;
     line-height: 2;
     font-size: 15px;
+    padding: 0;
+    margin: 0;
 }
 
 .footer-col a {
@@ -194,10 +189,9 @@ nav ul li a {
     flex: 1;
     padding: 12px 16px;
     border: none;
-    border-top: 1px solid #222;
+    border-radius: 10px;
     font-size: 14px;
     background: white;
-    border-radius: 10px;
 }
 
 .subscribe button {
@@ -208,7 +202,7 @@ nav ul li a {
     border-radius: 10px;
     font-size: 14px;
     cursor: pointer;
-    transition: background 0.25s;
+    transition: background 0.25s, color 0.25s;
 }
 
     .subscribe button:hover {
@@ -224,6 +218,32 @@ nav ul li a {
     border-top: 1px solid #222;
     padding-top: 20px;
 }
+
+/* ---------- FOOTER RESPONSIVE ---------- */
+@media (max-width: 900px) {
+    .footer-top {
+        grid-template-columns: 1fr 1fr; /* 2 columns on tablet */
+        gap: 16px;
+    }
+}
+
+@media (max-width: 550px) {
+    .footer-top {
+        grid-template-columns: 1fr; /* 1 column on mobile */
+        gap: 12px;
+    }
+
+    .subscribe form {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .subscribe input,
+    .subscribe button {
+        width: 100%;
+    }
+}
+
 
 /* ---------- RESPONSIVE DESIGN ---------- */
 @media (max-width: 900px) {
