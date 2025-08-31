@@ -15,7 +15,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 60px;
+    display: flex;
+    align-items: center;
+    gap: 24px; /* space between text and image */
     padding: 90px 10%;
     z-index: 0; /* Keep text on top */
 }
@@ -87,14 +89,70 @@
 /* ---------- HERO IMAGE ---------- */
 .hero-img {
     flex: 1;
-    position: relative
+    position: relative;
+    max-width: 100%;
 }
 
     .hero-img img {
-        width: 100%;
-        border-radius: 10PX;
+        width: 100%; /* full width of container */
+        height: auto; /* maintain aspect ratio */
+        border-radius: 10px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        display: block; /* removes inline spacing issues */
     }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column; /* stack text above image */
+        align-items: center; /* center content */
+        gap: 20px;
+    }
+
+    .hero-content {
+        order: 1; /* text first */
+        text-align: center;
+        width: 100%;
+    }
+
+    .hero-img {
+        order: 2; /* image below text */
+        margin-top: 20px; /* spacing above image */
+        width: 100%; /* full width */
+    }
+
+        .hero-img img {
+            border-radius: 8px; /* slightly smaller radius */
+            width: 100%; /* responsive */
+            height: auto;
+        }
+}
+
+@media (max-width: 480px) {
+    .hero-img img {
+        border-radius: 6px; /* even smaller radius for mobile */
+    }
+
+    .hero-content h1 {
+        font-size: 28px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+        max-width: 100%;
+    }
+
+    .btn-volunteer {
+        padding: 12px 20px;
+    }
+
+    .stats {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 20px;
+    }
+}
+
 
 /* ========== PROJECT SECTION ========== */
 /* ---------- PROJECTS ---------- */

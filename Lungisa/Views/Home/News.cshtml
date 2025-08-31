@@ -55,80 +55,34 @@
 
 
     <section class="news-section">
-        <!-- ================= LATEST NEWS HEADER ================= -->
+        <!-- LATEST NEWS HEADER -->
         <div class="news-img">
             <section class="news">
                 <h1>Latest News and Updates</h1>
             </section>
         </div>
 
-        <!-- ================= NEWS ================= -->
+        <!-- NEWS PANES -->
         <section class="simple-panes">
-            <!-- ================= LEFT: WEEKLY HIGHLIGHTS ================= -->
+            <!-- LEFT: WEEKLY HIGHLIGHTS -->
             <aside class="pane-left">
                 <h2>Weekly Highlights!</h2>
-                <br />
+
                 <article class="news-card feature">
                     <img src="~/css/Images/danceactivities.jpg" alt="Youth Programmes">
                     <div class="news-content">
                         <h3>Youth Programmes</h3>
-                        <p>Our youth programme provides life skills and extra-mural activities through dance and cultural workshops, helping children with homework and engaging in dialogue on various topics that affect them</strong>.</p>
-                        @* <a href="#" class="btn-more">Click for more →</a> *@
+                        <p>Our youth programme provides life skills and extra-mural activities through dance and cultural workshops, helping children with homework and engaging in dialogue on various topics that affect them.</p>
                     </div>
                 </article>
-                <br />
+
                 <article class="news-card urgent">
                     <h3>Homework and Reading Programme!</h3>
                     <p>The homework and reading programme is aimed at improving the young people’s literacy skills and enhancing learning at the school.</p>
-                    @* <a href="#" class="btn-more">Full Story →</a> *@
                 </article>
-
             </aside>
-            <!-- ================= NEWS CARDS ================= -->
-            <!--<main class="middle-cols">-->
-            <!-- Card 1 -->
-            <!--<article class="news-cards">
-        <h2 class="title">Title</h2>
-        <p class="body">
-            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-        </p>
-    </article>-->
-            <!-- Card 2 -->
-            <!--<article class="news-cards">
-        <h2 class="title">Title</h2>
-        <p class="body">
-            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-        </p>
-    </article>-->
-            <!-- Card 3 -->
-            <!--<article class="news-cards">
-        <h2 class="title">Title</h2>
-        <p class="body">
-            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-        </p>
-    </article>-->
-            <!-- Card 4 -->
-            <!--<article class="news-cards">
-        <h2 class="title">Title</h2>
-        <p class="body">
-            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-        </p>
-    </article>-->
-            <!-- Card 5 -->
-            <!--<article class="news-cards">
-        <h2 class="title">Title</h2>
-        <p class="body">
-            Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-        </p>
-    </article>-->
-            <!-- Card 6 -->
-            <!--<article class="news-cards">
-            <h2 class="title">Title</h2>
-            <p class="body">
-                Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.
-            </p>
-        </article>
-    </main>-->
+
+            <!-- NEWS ARTICLES -->
             <main class="middle-cols">
                 @foreach (var item in Model ?? new List<Lungisa.Services.FirebaseService.FirebaseNewsArticle>())
                 {
@@ -147,7 +101,7 @@
                     }
                 }
             </main>
-
+        </section>
             <div class="pagination">
                 @if (ViewBag.CurrentPage > 1)
                 {
@@ -173,7 +127,7 @@
             </div>
 
 
-        </section>
+        
     </section>
 
     <!-- ================= FOOTER ================= -->

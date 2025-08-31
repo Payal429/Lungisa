@@ -140,6 +140,13 @@ nav ul li a {
     color: white;
     padding: 50px 5% 20px;
 }
+    /* Footer Logo */
+    .site-footer .logo img {
+        max-width: 150px; /* adjust as needed */
+        width: 100%;
+        height: auto;
+        display: block;
+    }
 
 .footer-top {
     display: grid;
