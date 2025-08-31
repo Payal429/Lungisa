@@ -1,5 +1,13 @@
 ﻿<!-- Payal and Nyanda -->
 <!-- 10 August 2025 -->
+<!-- This is the volunteer-registration page for the Lungisa Community Initiative website.
+Its purpose is to allow prospective volunteers to sign-up by providing their personal details 
+(full name, email, phone), their availability (weekdays, weekends, evenings) and their preferred 
+volunteer role (Healthcare, Education, Community Outreach, Administration). Upon successful submission 
+the system displays a success message; if any error occurs an error message is shown instead. The page 
+shares the site-wide header, navigation and styling so that the volunteer-signup experience feels consistent 
+with the rest of the site. -->
+
 @model Lungisa.Models.VolunteerModel
 @{
     ViewBag.Title = "Volunteer Signup";
@@ -7,7 +15,7 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en" data-bs-theme="none">
 <head>
     <!-- Meta -->
     <meta charset="utf-8" />
@@ -21,8 +29,35 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
 
+    <!-- 1️⃣  Bootstrap first (only the grid + utilities) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous">
+
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Bootstrap override: keep original colours -->
+    
+    <style>
+        :root {
+            --bs-body-bg: inherit;
+            --bs-body-color: inherit;
+        }
+
+        body {
+            background-color: inherit !important;
+            color: inherit !important;
+        }
+
+
+        /* if you use .btn-primary and want it untouched, add: */
+        .btn-primary {
+            background-color: var(--lungisa-primary, #ed1f1f) !important;
+            border-color: var(--lungisa-primary, #ed1f1f) !important;
+        }
+
+    </style>
+
 </head>
 <body>
     <!-- ================= HEADER AND NAVIGATION ================= -->
@@ -31,9 +66,15 @@
             <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
         </a>
 
-        <nav>
+        <!-- hamburger -->
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <!-- nav wrapper -->
+        <nav id="main-nav" class="main-nav">
             <ul>
-                <li><a href="/Home/Index" class="nav-link active">HOME</a></li>
+                <li><a href="/Home/Index" class="nav-link">HOME</a></li>
                 <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
                 <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
                 <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
@@ -99,6 +140,23 @@
             <p style="color:red; margin-top:10px;">@TempData["Error"]</p>
         }
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous">
+    </script>
+    <script>
+        (function () {
+            const btn = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            if (!btn || !nav) return;
+
+            btn.addEventListener('click', () => {
+                const isOpen = nav.classList.toggle('open');
+                btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+        })();
+    </script>
+
 
 </body>
 

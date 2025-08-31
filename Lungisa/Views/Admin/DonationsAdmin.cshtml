@@ -1,4 +1,6 @@
-﻿@model List<Lungisa.Models.DonationModel>
+﻿<!-- Payal and Nyanda -->
+<!-- 06 August 2025 -->
+@model List<Lungisa.Models.DonationModel>
 
 @{
     ViewBag.Title = "Donations Dashboard";
@@ -26,24 +28,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <!-- ================= ADMIN HEADER AND NAVIGATION ================= -->
     <header>
         <a class="logo" href="/">
             <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
         </a>
 
-        <nav>
+        <!-- hamburger -->
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <!-- nav wrapper -->
+        <nav id="main-nav" class="main-nav">
             <ul>
                 <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
                 <li><a href="/DonationsAdmin" class="nav-link active">DONATIONS</a></li>
                 <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
                 <li><a href="/Events" class="nav-link">EVENTS</a></li>
-                <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS</a></li>
                 <li><a href="/Volunteers" class="nav-link ">VOLUNTEERS</a></li>
                 <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
                 <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
             </ul>
         </nav>
+
     </header>
 
     <br />
@@ -97,5 +106,21 @@
             </table>
         </div>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous">
+    </script>
+    <script>
+        (function () {
+            const btn = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            if (!btn || !nav) return;
+
+            btn.addEventListener('click', () => {
+                const isOpen = nav.classList.toggle('open');
+                btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+        })();
+    </script>
 </body>
 </html>

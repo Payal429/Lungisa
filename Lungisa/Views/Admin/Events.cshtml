@@ -29,24 +29,31 @@
 </head>
 
 <body>
-    <!-- ================= HEADER AND NAVIGATION ================= -->
+    <!-- ================= ADMIN HEADER AND NAVIGATION ================= -->
     <header>
         <a class="logo" href="/">
             <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
         </a>
 
-        <nav>
+        <!-- hamburger -->
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <!-- nav wrapper -->
+        <nav id="main-nav" class="main-nav">
             <ul>
                 <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
                 <li><a href="/DonationsAdmin" class="nav-link">DONATIONS</a></li>
                 <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
                 <li><a href="/Events" class="nav-link active">EVENTS</a></li>
-                <li><a href="/NewsAdmin" class="nav-link">NEWS </a></li>
-                <li><a href="/Volunteers" class="nav-link">VOLUNTEERS</a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS</a></li>
+                <li><a href="/Volunteers" class="nav-link ">VOLUNTEERS</a></li>
                 <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
-                <li><a href="/Contact" class="nav-link">CONTACT</a></li>
+                <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
             </ul>
         </nav>
+
     </header>
 
     <div class="container">
@@ -103,10 +110,10 @@
                             foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>@item.Event.Name</td>
-                                    <td>@DateTime.Parse(item.Event.DateTime).ToString("f")</td>
-                                    <td>@item.Event.Venue</td>
-                                    <td>
+                                    <td data-label="Name">@item.Event.Name</td>
+                                    <td data-label="Date">@DateTime.Parse(item.Event.DateTime).ToString("f")</td>
+                                    <td data-label ="Venue">@item.Event.Venue</td>
+                                    <td data-label="Actions">
                                         <a class="btn-delete" href="/Events/Delete/@item.Key" onclick="return confirm('Delete this event?');">Delete</a>
                                     </td>
                                 </tr>
@@ -123,5 +130,21 @@
             </div>
         </section>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous">
+    </script>
+    <script>
+        (function () {
+            const btn = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            if (!btn || !nav) return;
+
+            btn.addEventListener('click', () => {
+                const isOpen = nav.classList.toggle('open');
+                btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+        })();
+    </script>
 </body>
 </html>

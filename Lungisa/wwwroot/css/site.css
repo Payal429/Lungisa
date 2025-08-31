@@ -3,8 +3,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins',sans-serif
+    font-family: 'Poppins', sans-serif;
 }
+
 /* ---------- VARIABLES ---------- */
 :root {
     --bg: #f5f7fa;
@@ -16,14 +17,15 @@
     --radius: 12px;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
+
 /* ---------- BODY ---------- */
 body {
-    background: #f5f7fa;
-    color: #333;
+    background: var(--bg);
+    color: var(--text);
     line-height: 1.6;
-    margin: 0;
 }
-/* ---------- HEADER ---------- */
+
+/* ---------- HEADER BASE ---------- */
 header {
     display: flex;
     align-items: center;
@@ -35,47 +37,52 @@ header {
     z-index: 1000;
     background-color: black;
 }
-    /* ---------- LOGO SIZING ---------- */
+
+    /* Logo */
     header .logo img {
-        height: 40px; 
+        height: 40px;
         width: auto;
         display: block;
     }
 
-    /* ---------- NAVIGATION ---------- */
-    header nav ul {
+/* Desktop nav */
+#main-nav {
+    display: block;
+}
+
+    #main-nav ul {
         display: flex;
         gap: 32px;
         list-style: none;
         margin: 0;
         padding: 0;
         font-size: 15px;
-        color: white;
+        color:white;
     }
 
-/* ---------- NAVIGATION LINKS ---------- */
+nav ul li a {
+    color: white !important;
+}
 .nav-link {
     text-decoration: none;
     transition: color 0.2s;
     color: white;
 }
-    /* ---------- HOVER COLOR ---------- */
-    .nav-link:hover {
-        color: #ed1f1f; 
-    }
-    /* ---------- ACTIVE COLOR ---------- */
+
+    .nav-link:hover,
     .nav-link.active {
-        color: #ed1f1f; 
-        font-weight:bold;
+        color: #ed1f1f;
+        font-weight: bold;
     }
 
-/* ---------- DONATE BUTTON + ADMIN BUTTON ---------- */
-/* ---------- GROUP THE BUTTONS SIDE-BY-SIDE ---------- */
+/* Header buttons (desktop) */
 .header-buttons {
     display: flex;
     align-items: center;
-    gap: 12px; 
+    gap: 12px;
+    color:white;
 }
+
 .btn-donate, .btn-admin {
     background: #ed1f1f;
     color: white;
@@ -84,64 +91,99 @@ header {
     font-weight: 600;
     font-size: 15px;
     text-decoration: none;
-    transition: background 0.25s, transform 0.25s;
+    transition: background 0.25s, transform 0.25s, color 0.25s;
 }
-    /* ---------- HOVER COLOR ---------- */
+
     .btn-donate:hover, .btn-admin:hover {
         background-color: white;
         color: black;
         transform: translateY(-2px);
     }
 
+/* ---------- HAMBURGER ---------- */
+.menu-toggle {
+    display: none; /* hidden on desktop */
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+    .menu-toggle span {
+        display: block;
+        height: 3px;
+        width: 100%;
+        background: white;
+        border-radius: 2px;
+        transition: transform .25s, opacity .25s;
+    }
+
+/* Animate hamburger into X when open */
+#main-nav.open ~ .menu-toggle span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+#main-nav.open ~ .menu-toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+#main-nav.open ~ .menu-toggle span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
 /* ---------- FOOTER ---------- */
 .site-footer {
     background: black;
-    color: #ffffff;
+    color: white;
     padding: 50px 5% 20px;
 }
+
 .footer-top {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 10px;
     align-items: start;
 }
-    /* ---------- LOGO SIZING ---------- */
+
     .footer-top .logo img {
         height: 48px;
         width: auto;
         display: block;
     }
 
-/* ---------- COLUMNS ---------- */
 .footer-col h3 {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 16px;
-    color: #ffffff;
+    color: white;
 }
+
 .footer-col ul {
     list-style: none;
     line-height: 2;
     font-size: 15px;
 }
+
 .footer-col a {
-    color: #ffffff;
+    color: white;
     text-decoration: none;
     transition: color 0.25s;
 }
-    /* ---------- HOVER COLOR ---------- */
+
     .footer-col a:hover {
         color: #ed1f1f;
     }
 
-/* ---------- SOCIAL MEDIA COLUMN ---------- */
 .socials {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-/* ---------- SUBSCRIBE FORM ---------- */
 .subscribe form {
     display: flex;
     gap: 10px;
@@ -154,9 +196,10 @@ header {
     border: none;
     border-top: 1px solid #222;
     font-size: 14px;
-    background-color: #ffffff;
+    background: white;
     border-radius: 10px;
 }
+
 .subscribe button {
     background: #ed1f1f;
     color: white;
@@ -167,17 +210,12 @@ header {
     cursor: pointer;
     transition: background 0.25s;
 }
-    /* ---------- HOVER COLOR ---------- */
+
     .subscribe button:hover {
-        background-color: white;
+        background: white;
         color: black;
     }
 
-.site-footer .footer-col.subscribe h3 {
-    color: white;
-}
-
-/* ---------- BOTTOM LINE ---------- */
 .footer-bottom {
     text-align: center;
     margin-top: 50px;
@@ -187,53 +225,58 @@ header {
     padding-top: 20px;
 }
 
-
-/* ---- LOADING OVERLAY ---- */
-/*#loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg,#007C83,#B5E4E9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    transition: opacity .4s ease-out;
-}
-
-.loader-box {
-    text-align: center;
-    color: #fff;
-}
-
-.loader-logo {
-    height: 60px;
-    margin-bottom: 16px;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(255,255,255,.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 12px;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg)
-    }
-}*/
-
 /* ---------- RESPONSIVE DESIGN ---------- */
 @media (max-width: 900px) {
+    /* Show burger, hide desktop buttons */
+    .menu-toggle {
+        display: flex;
+    }
+
+    .header-buttons {
+        display: flex; /* show buttons on mobile */
+        flex-direction: column; /* optional: stack vertically */
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    /* Collapse nav */
+    #main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: black;
+        padding: 16px 5%;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+        z-index: 1001;
+        max-height: 75vh;
+        overflow-y: auto;
+    }
+
+        #main-nav.open {
+            display: block;
+        }
+
+        #main-nav ul {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+    .logo img {
+        height: 32px;
+    }
+
     .footer-top {
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (max-width: 550px) {
+    header {
+        padding: 12px 16px;
+    }
+
     .footer-top {
         grid-template-columns: 1fr;
     }

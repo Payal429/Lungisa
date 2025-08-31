@@ -94,19 +94,21 @@ textarea {
         margin-bottom: 24px;
     }
 
-/* ---------- TABLE ---------- */
+/* ---------- TABLE CONTAINER ---------- */
 .table-container {
-    max-height: 300px; /* Adjust height as needed */
-    overflow-y: auto;
-    border: 1px solid #ccc; /* Optional border */
+    width: 100%; /* full width */
+    overflow-x: auto; /* horizontal scroll on small screens */
+    max-height: 400px; /* optional: vertical scroll */
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
 
-    /* Keep table layout nice */
+    /* ---------- TABLE ---------- */
     .table-container table {
-        width: 100%;
+        width: 100%; /* use full container width */
+        min-width: 600px; /* ensures table doesn't collapse too small */
         border-collapse: collapse;
     }
-
     .table-container th,
     .table-container td {
         padding: 8px;
@@ -135,6 +137,82 @@ table .btn-delete, table .btn-edit, table.btn-save {
         background: black;
         color: white;
     }
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:768px) {
+    .table-container table {
+        min-width: 100%; /* table fits container */
+        display: block; /* ensures horizontal scroll works */
+    }
+
+    .table-container th,
+    .table-container td {
+        font-size: 13px; /* reduce font size */
+        padding: 6px;
+    }
+
+    .table-container .btn-edit,
+    .table-container .btn-delete,
+    .table-container .btn-save {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+}
+@media(max-width:480px) {
+    .table-container table,
+    .table-container thead,
+    .table-container tbody,
+    .table-container th,
+    .table-container td,
+    .table-container tr {
+        display: block;
+        width: 100%;
+    }
+
+    .table-container thead {
+        display: none;
+    }
+
+    .table-container tr {
+        margin-bottom: 16px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 12px;
+    }
+
+    .table-container td {
+        padding: 8px 12px;
+        text-align: right;
+        position: relative;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+
+        .table-container td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 12px;
+            width: 50%;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .table-container td:last-child {
+            border-bottom: none;
+        }
+
+    .table-container .btn-edit,
+    .table-container .btn-delete,
+    .table-container .btn-save {
+        width: 100%;
+        margin: 4px 0;
+        font-size: 14px;
+        padding: 8px 0;
+    }
+}
+
 /* ---------- BUTTON ---------- */
 .btn-save, .btn-publish, .btn-create {
     width: 100%;
