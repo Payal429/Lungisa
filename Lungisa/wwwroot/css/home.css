@@ -351,15 +351,15 @@
 }
 
 /* ========== SUBSCRIBE SECTION ========== */
-/* ---------- SUBSCRIBE ---------- */
 .subscribe-section {
-    position: relative; 
+    position: relative;
     text-align: center;
     padding: 90px 10%;
-    color: white; 
+    color: white;
     overflow: hidden;
 }
-    /* ---------- The background image layer ---------- */
+
+    /* Background image layer */
     .subscribe-section::before {
         content: '';
         position: absolute;
@@ -367,27 +367,32 @@
         background: url('Images/blackbackground.jpg') center/cover no-repeat;
         z-index: -1;
     }
-    /* ---------- Keep all the content above the image ---------- */
+
+    /* Keep content above image */
     .subscribe-section > * {
         position: relative;
         z-index: 1;
     }
+
     .subscribe-section h2 {
         font-size: 28px;
         font-weight: 700;
         margin-bottom: 12px;
         color: white;
     }
+
     .subscribe-section p {
         color: dimgrey;
         margin-bottom: 26px;
     }
+
     .subscribe-section form {
         max-width: 500px;
         margin: 0 auto;
         display: flex;
         gap: 12px;
     }
+
     .subscribe-section input {
         flex: 1;
         padding: 14px 18px;
@@ -396,6 +401,7 @@
         font-size: 15px;
         background: white;
     }
+
     .subscribe-section button {
         background: #ed1f1f;
         color: white;
@@ -406,11 +412,61 @@
         cursor: pointer;
         transition: .2s;
     }
+
         .subscribe-section button:hover {
             background: white;
             color: black;
         }
 
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .subscribe-section {
+        padding: 70px 8%;
+    }
+
+        .subscribe-section h2 {
+            font-size: 24px;
+        }
+
+        .subscribe-section p {
+            font-size: 14px;
+        }
+
+        .subscribe-section form {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .subscribe-section button {
+            padding: 12px 0;
+            width: 100%;
+        }
+}
+
+@media (max-width: 480px) {
+    .subscribe-section {
+        padding: 60px 5%;
+    }
+
+        .subscribe-section h2 {
+            font-size: 20px;
+        }
+
+        .subscribe-section p {
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .subscribe-section input {
+            padding: 12px 14px;
+            font-size: 14px;
+        }
+
+        .subscribe-section button {
+            font-size: 14px;
+            padding: 12px 0;
+        }
+}
 /* ========== EVENTS SECTION ========== */
 /* ---------- EVENTS ---------- */
 .events {
