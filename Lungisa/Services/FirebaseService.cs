@@ -66,6 +66,15 @@ namespace Lungisa.Services
                     AuthTokenAsyncFactory = () => Task.FromResult(config["Firebase:DatabaseSecret"])
                 });
         }
+        public async Task<UserRecord> CreateUserAsync(string email, string password)
+        {
+            var args = new UserRecordArgs()
+            {
+                Email = email,
+                Password = password,
+            };
+            return await FirebaseAuth.DefaultInstance.CreateUserAsync(args);
+        }
 
         public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
             => await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
@@ -118,7 +127,7 @@ namespace Lungisa.Services
         }*/
 
         // ===================== AUTHENTICATION =====================
-        // Create a new user in Firebase Authentication
+/*        // Create a new user in Firebase Authentication
         public async Task<UserRecord> CreateUserAsync(string email, string password)
         {
             var userArgs = new UserRecordArgs()
@@ -127,7 +136,7 @@ namespace Lungisa.Services
                 Password = password
             };
             return await FirebaseAuth.DefaultInstance.CreateUserAsync(userArgs);
-        }
+        }*/
 
         // ===================== PROJECTS =====================
         // Get all projects along with their Firebase keys

@@ -9,6 +9,12 @@ namespace Lungisa.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly FirebaseService firebase;
+
+        public AdminController(FirebaseService firebaseService)
+        {
+            firebase = firebaseService;
+        }
         // GET: Admin
         public ActionResult Index()
         {
@@ -56,9 +62,6 @@ namespace Lungisa.Controllers
         {
             return View();
         }
-
-        // Firebase service injected via constructor
-        private readonly FirebaseService firebase;
 
 
         // GET: Admin/AdminDashboard
