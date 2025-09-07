@@ -67,11 +67,19 @@
         }
 
         <form action="/Donations/PayFastPay" method="post">
-            <input type="text" name="FirstName" placeholder="First Name" required />
-            <input type="text" name="LastName" placeholder="Last Name" required />
-            <input type="email" name="Email" placeholder="Email" required />
-            <input type="number" step="0.01" name="Amount" placeholder="Amount" required />
-            <button type="submit">Donate</button>
+            <h2>Donation Amount</h2>
+            <input type="number" step="0.01" min="1" name="Amount" placeholder="Donation Amount"
+                   value="@Model?.Amount" required />
+
+            <h2>Personal Information</h2>
+            <input type="text" name="FirstName" placeholder="First Name"
+                   value="@Model?.FirstName" required />
+            <input type="text" name="LastName" placeholder="Last Name"
+                   value="@Model?.LastName" required />
+            <input type="email" name="Email" placeholder="Email Address"
+                   value="@Model?.Email" required />
+
+            <button type="submit" class="submit-btn">Donate Now</button>
         </form>
     </section>
 @* 
