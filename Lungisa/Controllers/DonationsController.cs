@@ -26,17 +26,20 @@ namespace Lungisa.Controllers
             _firebase = new FirebaseService(_config, _env);
         }
 
-        // Display Donations page
+        // GET: Show donation form
         [HttpGet]
         public IActionResult Index()
         {
             return View("~/Views/Home/Donations.cshtml");
         }
 
-        // POST: PayFast payment redirect
+        // POST: Handle form submission → redirect to PayFast
         [HttpPost]
         public async Task<IActionResult> PayFastPay(DonationModel model)
         {
+            if (!ModelState.IsValid)
+                return View("~/Views/Home/Donations.cshtml", model);
+
             // Generate unique payment reference
             var mPaymentId = Guid.NewGuid().ToString("N");
 
@@ -54,7 +57,7 @@ namespace Lungisa.Controllers
             };
             await _firebase.SaveDonation(pendingDonation);
 
-            // PayFast parameters
+            // Build PayFast parameters
             var pfData = new SortedDictionary<string, string>
             {
                 ["merchant_id"] = _config["PayFastSettings:MerchantId"],
@@ -76,13 +79,13 @@ namespace Lungisa.Controllers
             var processUrl = _config["PayFastSettings:ProcessUrl"];
             var queryString = string.Join("&", pfData.Select(kvp => $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}"));
 
-            // Logging for debugging on Render
+            // Log for Render debugging
             Console.WriteLine("Redirecting to PayFast: " + processUrl + "?" + queryString);
 
             return Redirect($"{processUrl}?{queryString}");
         }
 
-        // ITN endpoint for PayFast
+        // ITN endpoint (PayFast server calls this via POST)
         [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> Notify()
@@ -91,8 +94,6 @@ namespace Lungisa.Controllers
                 return BadRequest("No form data received");
 
             var form = Request.Form.ToDictionary(k => k.Key, v => v.Value.ToString());
-
-            // Log received ITN for debugging
             Console.WriteLine("ITN received: " + string.Join(", ", form.Select(k => k.Key + "=" + k.Value)));
 
             var receivedSignature = form.GetValueOrDefault("signature", "");
@@ -102,12 +103,8 @@ namespace Lungisa.Controllers
             var calculatedSignature = GeneratePayfastSignature(sortedData, _config["PayFastSettings:Passphrase"]);
 
             if (!string.Equals(receivedSignature, calculatedSignature, StringComparison.OrdinalIgnoreCase))
-            {
-                Console.WriteLine("Invalid PayFast signature");
                 return BadRequest("Invalid signature");
-            }
 
-            // Map to DonationModel
             var donation = new DonationModel
             {
                 DonorName = $"{form.GetValueOrDefault("name_first", "")} {form.GetValueOrDefault("name_last", "")}".Trim(),
@@ -133,19 +130,15 @@ namespace Lungisa.Controllers
             return Ok("ITN processed successfully");
         }
 
-        // Optional: Success and Cancel pages
         [HttpGet] public IActionResult Success() => View();
         [HttpGet] public IActionResult Cancel() => View();
 
-        // ================= Helper Methods =================
         private string GeneratePayfastSignature(SortedDictionary<string, string> data, string passphrase)
         {
             var sb = new StringBuilder();
             foreach (var kv in data)
-            {
                 if (!string.IsNullOrEmpty(kv.Value))
                     sb.Append(kv.Key).Append('=').Append(WebUtility.UrlEncode(kv.Value).Replace("%20", "+")).Append('&');
-            }
 
             if (!string.IsNullOrEmpty(passphrase))
                 sb.Append("passphrase=").Append(WebUtility.UrlEncode(passphrase).Replace("%20", "+"));
@@ -157,16 +150,14 @@ namespace Lungisa.Controllers
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
 
-        private string MapPayFastStatusToLocalStatus(string pfStatus)
-        {
-            return pfStatus.ToUpper() switch
+        private string MapPayFastStatusToLocalStatus(string pfStatus) =>
+            pfStatus.ToUpper() switch
             {
                 "COMPLETE" => "Success",
                 "FAILED" => "Failed",
                 "PENDING" => "Pending",
                 _ => pfStatus
             };
-        }
     }
 }
 
