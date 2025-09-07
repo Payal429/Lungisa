@@ -26,26 +26,28 @@ namespace Lungisa.Controllers
             _firebase = new FirebaseService(_config, _env);
         }
 
-        // GET: Donations page
+        // Display Donations page
         [HttpGet]
-        public IActionResult Index() => View("~/Views/Home/Donations.cshtml");
-
-        // POST or GET: PayFast payment redirect (supporting Render hosting)
-        [HttpPost]
-        [HttpGet]
-        public async Task<IActionResult> PayFastPay(string firstName, string lastName, string email, decimal amount)
+        public IActionResult Index()
         {
-            // generate unique merchant payment ID
+            return View("~/Views/Home/Donations.cshtml");
+        }
+
+        // POST: PayFast payment redirect
+        [HttpPost]
+        public async Task<IActionResult> PayFastPay(DonationModel model)
+        {
+            // Generate unique payment reference
             var mPaymentId = Guid.NewGuid().ToString("N");
 
-            // save donation as pending
+            // Save donation as pending
             var pendingDonation = new DonationModel
             {
-                DonorName = $"{firstName} {lastName}".Trim(),
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Amount = amount,
+                DonorName = $"{model.FirstName} {model.LastName}",
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Amount = model.Amount,
                 Status = "Pending",
                 Timestamp = DateTime.UtcNow,
                 M_PaymentId = mPaymentId
@@ -60,11 +62,11 @@ namespace Lungisa.Controllers
                 ["return_url"] = _config["PayFastSettings:ReturnUrl"],
                 ["cancel_url"] = _config["PayFastSettings:CancelUrl"],
                 ["notify_url"] = _config["PayFastSettings:NotifyUrl"],
-                ["name_first"] = firstName,
-                ["name_last"] = lastName,
-                ["email_address"] = email,
+                ["name_first"] = model.FirstName,
+                ["name_last"] = model.LastName,
+                ["email_address"] = model.Email,
                 ["m_payment_id"] = mPaymentId,
-                ["amount"] = amount.ToString("F2", CultureInfo.InvariantCulture),
+                ["amount"] = model.Amount.ToString("F2", CultureInfo.InvariantCulture),
                 ["item_name"] = "Donation to Lungisa NPO"
             };
 
@@ -74,32 +76,44 @@ namespace Lungisa.Controllers
             var processUrl = _config["PayFastSettings:ProcessUrl"];
             var queryString = string.Join("&", pfData.Select(kvp => $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}"));
 
+            // Logging for debugging on Render
+            Console.WriteLine("Redirecting to PayFast: " + processUrl + "?" + queryString);
+
             return Redirect($"{processUrl}?{queryString}");
         }
 
-        // ITN endpoint
+        // ITN endpoint for PayFast
         [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> Notify()
         {
-            if (!Request.HasFormContentType) return BadRequest("No form data");
+            if (!Request.HasFormContentType)
+                return BadRequest("No form data received");
 
             var form = Request.Form.ToDictionary(k => k.Key, v => v.Value.ToString());
-            if (!form.TryGetValue("signature", out var receivedSignature)) return BadRequest("Missing signature");
 
+            // Log received ITN for debugging
+            Console.WriteLine("ITN received: " + string.Join(", ", form.Select(k => k.Key + "=" + k.Value)));
+
+            var receivedSignature = form.GetValueOrDefault("signature", "");
             form.Remove("signature");
+
             var sortedData = new SortedDictionary<string, string>(form);
             var calculatedSignature = GeneratePayfastSignature(sortedData, _config["PayFastSettings:Passphrase"]);
 
             if (!string.Equals(receivedSignature, calculatedSignature, StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("Invalid PayFast signature");
                 return BadRequest("Invalid signature");
+            }
 
-            // Map PayFast fields
+            // Map to DonationModel
             var donation = new DonationModel
             {
                 DonorName = $"{form.GetValueOrDefault("name_first", "")} {form.GetValueOrDefault("name_last", "")}".Trim(),
                 Email = form.GetValueOrDefault("email_address", ""),
-                Amount = decimal.TryParse(form.GetValueOrDefault("amount_gross", form.GetValueOrDefault("amount", "0")), NumberStyles.Any, CultureInfo.InvariantCulture, out var amt) ? amt : 0,
+                Amount = decimal.TryParse(form.GetValueOrDefault("amount_gross", form.GetValueOrDefault("amount", "0")),
+                                         NumberStyles.Any, CultureInfo.InvariantCulture, out var amt) ? amt : 0,
                 Status = MapPayFastStatusToLocalStatus(form.GetValueOrDefault("payment_status", "Failed")),
                 PayFastPaymentId = form.GetValueOrDefault("pf_payment_id", ""),
                 M_PaymentId = form.GetValueOrDefault("m_payment_id", ""),
@@ -113,12 +127,13 @@ namespace Lungisa.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to save donation from ITN: " + ex.Message);
-                return StatusCode(500, "Failed to save");
+                return StatusCode(500, "Failed to save donation");
             }
 
-            return Ok("ITN processed");
+            return Ok("ITN processed successfully");
         }
 
+        // Optional: Success and Cancel pages
         [HttpGet] public IActionResult Success() => View();
         [HttpGet] public IActionResult Cancel() => View();
 
@@ -154,6 +169,7 @@ namespace Lungisa.Controllers
         }
     }
 }
+
 
 
 
