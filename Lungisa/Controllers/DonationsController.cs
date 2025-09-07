@@ -163,6 +163,7 @@ using System.Text;
 }*/
 
 
+
 namespace Lungisa.Controllers
 {
     public class DonationsController : Controller
@@ -189,6 +190,7 @@ namespace Lungisa.Controllers
         [HttpPost]
         public async Task<IActionResult> PayFastPay(DonationModel model)
         {
+            // Validate form inputs
             if (!ModelState.IsValid ||
                 string.IsNullOrWhiteSpace(model.FirstName) ||
                 string.IsNullOrWhiteSpace(model.LastName) ||
@@ -217,11 +219,11 @@ namespace Lungisa.Controllers
             try
             {
                 await _firebase.SaveDonation(pendingDonation);
-                Console.WriteLine($"Pending donation saved: {mPaymentId}");
+                Console.WriteLine($"[Render] Pending donation saved: {mPaymentId}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error saving pending donation: " + ex.Message);
+                Console.WriteLine("[Render] Error saving pending donation: " + ex.Message);
                 TempData["Error"] = "Failed to process donation. Please try again.";
                 return View("~/Views/Home/Donations.cshtml", model);
             }
@@ -242,16 +244,20 @@ namespace Lungisa.Controllers
                 ["item_name"] = "Donation to Lungisa NPO"
             };
 
+            // Generate signature like PayFast expects
             var signature = GeneratePayfastSignature(pfData, _config["PayFastSettings:Passphrase"]);
             pfData["signature"] = signature;
 
+            // Build full redirect URL
             var processUrl = _config["PayFastSettings:ProcessUrl"];
             var queryString = string.Join("&", pfData.Select(kvp =>
-                $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}"));
+                $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value).Replace("+", "%20")}"));
+            var fullUrl = $"{processUrl}?{queryString}";
 
-            Console.WriteLine("Redirecting to PayFast: " + processUrl + "?" + queryString);
+            Console.WriteLine("[Render] Redirecting to PayFast: " + fullUrl);
 
-            return Redirect($"{processUrl}?{queryString}");
+            // Redirect externally to PayFast
+            return Redirect(fullUrl);
         }
 
         // ITN endpoint (PayFast server calls this via POST)
@@ -263,7 +269,7 @@ namespace Lungisa.Controllers
                 return BadRequest("No form data received");
 
             var form = Request.Form.ToDictionary(k => k.Key, v => v.Value.ToString());
-            Console.WriteLine("ITN received: " + string.Join(", ", form.Select(k => k.Key + "=" + k.Value)));
+            Console.WriteLine("[Render] ITN received: " + string.Join(", ", form.Select(k => k.Key + "=" + k.Value)));
 
             if (!form.TryGetValue("signature", out string receivedSignature))
                 return BadRequest("Missing signature");
@@ -290,11 +296,11 @@ namespace Lungisa.Controllers
             try
             {
                 await _firebase.SaveDonation(donation);
-                Console.WriteLine($"Donation updated via ITN: {donation.M_PaymentId}");
+                Console.WriteLine($"[Render] Donation updated via ITN: {donation.M_PaymentId}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to save donation from ITN: " + ex.Message);
+                Console.WriteLine("[Render] Failed to save donation from ITN: " + ex.Message);
                 return StatusCode(500, "Failed to save donation");
             }
 
@@ -309,7 +315,10 @@ namespace Lungisa.Controllers
             var sb = new StringBuilder();
             foreach (var kv in data)
                 if (!string.IsNullOrEmpty(kv.Value))
-                    sb.Append(kv.Key).Append('=').Append(WebUtility.UrlEncode(kv.Value).Replace("%20", "+")).Append('&');
+                    sb.Append(kv.Key)
+                      .Append('=')
+                      .Append(WebUtility.UrlEncode(kv.Value).Replace("%20", "+"))
+                      .Append('&');
 
             if (!string.IsNullOrEmpty(passphrase))
                 sb.Append("passphrase=").Append(WebUtility.UrlEncode(passphrase).Replace("%20", "+"));
