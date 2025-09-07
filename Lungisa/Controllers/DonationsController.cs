@@ -76,20 +76,10 @@ namespace Lungisa.Controllers
             pfData.Add("signature", signature);
 
             var processUrl = _config["PayFastSettings:ProcessUrl"];
-            /*            var queryString = string.Join("&", pfData.Select(kvp => $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}"));
+            var queryString = string.Join("&", pfData.Select(kvp => $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}"));
 
-                        // Redirect to PayFast sandbox
-                        return Redirect($"{processUrl}?{queryString}");*/
-            // Build full redirect URL
-            var queryString = string.Join("&", pfData.Select(kvp =>
-                $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value).Replace("%20", "+")}"));
-            var fullUrl = $"{processUrl}?{queryString}";
-
-            // Debug log
-            Console.WriteLine("[DEBUG] Redirecting to PayFast: " + fullUrl);
-
-            return Redirect(fullUrl);
-
+            // Redirect to PayFast sandbox
+            return Redirect($"{processUrl}?{queryString}");
         }
 
         // ITN endpoint (PayFast notifies server of payment)
