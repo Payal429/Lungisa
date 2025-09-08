@@ -307,7 +307,6 @@ namespace Lungisa.Services
 
             return donations.Select(d => new DonationModel
             {
-                DonorName = d.Object.DonorName,
                 Email = d.Object.Email,
                 Amount = d.Object.Amount,
                 Timestamp = d.Object.Timestamp,
