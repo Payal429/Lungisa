@@ -15,93 +15,94 @@ namespace Lungisa.Controllers
 {
     public class DonationsController : Controller
     {
-        private readonly FirebaseService _firebaseService;
         private readonly IConfiguration _config;
+        private readonly FirebaseService _firebase;
 
-        public DonationsController(FirebaseService firebaseService, IConfiguration config)
+        public DonationsController(IConfiguration config)
         {
-            _firebaseService = firebaseService;
             _config = config;
+            _firebase = new FirebaseService(_config, null); // Works on Render with ENV vars
+        }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View("~/Views/Home/Donations.cshtml");
         }
 
         [HttpPost]
-        public async Task<IActionResult> PayFastPay(DonationModel model)
+        public async Task<IActionResult> Pay(DonationModel model)
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Invalid donation details.";
-                return RedirectToAction("Index", "Home");
+                TempData["Error"] = "Please fill in all fields correctly.";
+                return RedirectToAction("Index");
             }
 
-            // 1️⃣ Save to Firebase (pending donation)
-            model.Status = "Pending";
-            await _firebaseService.SaveDonation(model);
-
-            // 2️⃣ Prepare PayFast redirect URL
-            var payFastSettings = _config.GetSection("PayFastSettings");
-            string processUrl = payFastSettings["ProcessUrl"];
-            string merchantId = payFastSettings["MerchantId"];
-            string merchantKey = payFastSettings["MerchantKey"];
-            string returnUrl = payFastSettings["ReturnUrl"];
-            string cancelUrl = payFastSettings["CancelUrl"];
-            string notifyUrl = payFastSettings["NotifyUrl"];
-
-            string paymentId = Guid.NewGuid().ToString(); // unique id
+            // ✅ Generate unique payment ID
+            string paymentId = Guid.NewGuid().ToString();
             model.PayFastPaymentId = paymentId;
+            model.Status = "Pending";
 
-            // Build query string
-            var query = new StringBuilder();
-            query.Append($"merchant_id={merchantId}");
-            query.Append($"&merchant_key={merchantKey}");
-            query.Append($"&return_url={Uri.EscapeDataString(returnUrl)}");
-            query.Append($"&cancel_url={Uri.EscapeDataString(cancelUrl)}");
-            query.Append($"&notify_url={Uri.EscapeDataString(notifyUrl)}");
-            query.Append($"&m_payment_id={paymentId}");
-            query.Append($"&amount={model.Amount:0.00}");
-            query.Append($"&item_name=Donation to Lungisa NPO");
-            query.Append($"&name_first={Uri.EscapeDataString(model.FirstName)}");
-            query.Append($"&name_last={Uri.EscapeDataString(model.LastName)}");
-            query.Append($"&email_address={Uri.EscapeDataString(model.Email)}");
+            // ✅ Save donation to Firebase
+            await _firebase.SaveDonation(model);
 
-            string payFastRedirectUrl = $"{processUrl}?{query}";
+            // ✅ Build PayFast URL
+            string processUrl = _config["PayFastSettings:ProcessUrl"];
+            string merchantId = _config["PayFastSettings:MerchantId"];
+            string merchantKey = _config["PayFastSettings:MerchantKey"];
+            string returnUrl = _config["PayFastSettings:ReturnUrl"];
+            string cancelUrl = _config["PayFastSettings:CancelUrl"];
+            string notifyUrl = _config["PayFastSettings:NotifyUrl"];
 
-            return Redirect(payFastRedirectUrl);
+            var url = new StringBuilder($"{processUrl}?");
+            url.Append($"merchant_id={merchantId}");
+            url.Append($"&merchant_key={merchantKey}");
+            url.Append($"&m_payment_id={Uri.EscapeDataString(paymentId)}");
+            url.Append($"&amount={model.Amount:0.00}");
+            url.Append($"&item_name={Uri.EscapeDataString("Donation to Lungisa NPO")}");
+            url.Append($"&name_first={Uri.EscapeDataString(model.FirstName)}");
+            url.Append($"&name_last={Uri.EscapeDataString(model.LastName)}");
+            url.Append($"&email_address={Uri.EscapeDataString(model.Email)}");
+            url.Append($"&return_url={Uri.EscapeDataString(returnUrl)}");
+            url.Append($"&cancel_url={Uri.EscapeDataString(cancelUrl)}");
+            url.Append($"&notify_url={Uri.EscapeDataString(notifyUrl)}");
+
+            Console.WriteLine($"PayFast Redirect URL: {url}");
+            return Redirect(url.ToString());
         }
 
-        // ✅ Handle return from PayFast (success page)
+        [HttpPost]
+        public async Task<IActionResult> Notify()
+        {
+            var form = await Request.ReadFormAsync();
+            string paymentId = form["m_payment_id"];
+            string status = form["payment_status"];
+
+            var donations = await _firebase.GetDonations();
+            var donation = donations.FirstOrDefault(d => d.PayFastPaymentId == paymentId);
+
+            if (donation != null)
+            {
+                donation.Status = status; // COMPLETE / FAILED
+                await _firebase.SaveDonation(donation);
+            }
+
+            return Ok(); // PayFast expects 200 OK
+        }
+
         [HttpGet]
         public IActionResult Success()
         {
             return View();
         }
 
-        // ✅ Handle cancel
         [HttpGet]
         public IActionResult Cancel()
         {
             return View();
         }
-
-        // ✅ PayFast Notify (server-to-server callback)
-        [HttpPost]
-        public async Task<IActionResult> Notify([FromForm] Dictionary<string, string> data)
-        {
-            string paymentId = data.ContainsKey("m_payment_id") ? data["m_payment_id"] : null;
-            string status = data.ContainsKey("payment_status") ? data["payment_status"] : "Unknown";
-
-            var donations = await _firebaseService.GetDonations();
-            var donation = donations.FirstOrDefault(d => d.PayFastPaymentId == paymentId);
-
-            if (donation != null)
-            {
-                donation.Status = status;
-                await _firebaseService.SaveDonation(donation); // update status
-            }
-
-            return Ok(); // tell PayFast we received it
-        }
     }
-
 }
 
 

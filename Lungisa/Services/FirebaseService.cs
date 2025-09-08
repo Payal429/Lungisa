@@ -16,49 +16,28 @@ namespace Lungisa.Services
         private readonly FirebaseClient _firebaseClient;
 
         // Constructor: Initialize Firebase Admin SDK and Realtime Database
-        public FirebaseService(IConfiguration config, IWebHostEnvironment env)
+        public FirebaseService(IConfiguration config, IWebHostEnvironment env = null)
         {
-            // Attempt to read Firebase credentials from environment variable
             string firebaseJson = Environment.GetEnvironmentVariable("FIREBASE_CONFIG");
 
             if (!string.IsNullOrEmpty(firebaseJson))
             {
-                // ✅ Production (Render) → read from ENV var
+                // ✅ Render/production
                 var credential = GoogleCredential.FromJson(firebaseJson);
-
-                if (FirebaseApp.DefaultInstance == null)
-                {
-                    _firebaseApp = FirebaseApp.Create(new AppOptions
-                    {
-                        Credential = credential
-                    });
-                }
-                else
-                {
-                    _firebaseApp = FirebaseApp.DefaultInstance;
-                }
+                _firebaseApp = FirebaseApp.DefaultInstance ?? FirebaseApp.Create(new AppOptions { Credential = credential });
+            }
+            else if (env != null)
+            {
+                // ✅ Local dev
+                string path = Path.Combine(env.ContentRootPath, "Config", "firebaseServiceAccount.json");
+                if (!File.Exists(path)) throw new Exception("Firebase service account file not found.");
+                _firebaseApp = FirebaseApp.DefaultInstance ?? FirebaseApp.Create(new AppOptions { Credential = GoogleCredential.FromFile(path) });
             }
             else
             {
-                // ✅ Local development → fall back to file in Config/
-                string path = Path.Combine(env.ContentRootPath, "Config", "firebaseServiceAccount.json");
-                if (!File.Exists(path))
-                    throw new Exception("Firebase service account file not found.");
-
-                if (FirebaseApp.DefaultInstance == null)
-                {
-                    _firebaseApp = FirebaseApp.Create(new AppOptions
-                    {
-                        Credential = GoogleCredential.FromFile(path)
-                    });
-                }
-                else
-                {
-                    _firebaseApp = FirebaseApp.DefaultInstance;
-                }
+                throw new Exception("Firebase configuration not found!");
             }
 
-            // Initialize Firebase Realtime Database client
             _firebaseClient = new FirebaseClient(
                 config["Firebase:DatabaseUrl"],
                 new FirebaseOptions
@@ -66,6 +45,8 @@ namespace Lungisa.Services
                     AuthTokenAsyncFactory = () => Task.FromResult(config["Firebase:DatabaseSecret"])
                 });
         }
+
+
         public async Task<UserRecord> CreateUserAsync(string email, string password)
         {
             var args = new UserRecordArgs()
