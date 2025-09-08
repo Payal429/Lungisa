@@ -36,21 +36,13 @@ namespace Lungisa.Controllers
         }
 
         // POST: PayFast payment redirect
-        [HttpGet, HttpPost]
+        [HttpPost]
         public async Task<IActionResult> PayFastPay(DonationModel model)
         {
-            if (Request.Method == HttpMethods.Get)
-            {
-                // Map querystring to model if GET
-                model.Amount = decimal.TryParse(Request.Query["amount"], out var amt) ? amt : 0;
-                model.FirstName = Request.Query["name_first"];
-                model.LastName = Request.Query["name_last"];
-                model.Email = Request.Query["email_address"];
-            }
-
             // Generate merchant reference
             var mPaymentId = Guid.NewGuid().ToString("N");
 
+            // Save donation as Pending
             var pendingDonation = new DonationModel
             {
                 DonorName = $"{model.FirstName} {model.LastName}",
@@ -80,12 +72,13 @@ namespace Lungisa.Controllers
                 ["item_name"] = "Donation to Lungisa NPO"
             };
 
-            var signature = GeneratePayfastSignature(pfData, _config["PayFastSettings:PassPhrase"]);
+            var signature = GeneratePayfastSignature(pfData, _config["PayFastSettings:Passphrase"]);
             pfData.Add("signature", signature);
 
             var processUrl = _config["PayFastSettings:ProcessUrl"];
             var queryString = string.Join("&", pfData.Select(kvp => $"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}"));
 
+            // Redirect to PayFast sandbox
             return Redirect($"{processUrl}?{queryString}");
         }
 
