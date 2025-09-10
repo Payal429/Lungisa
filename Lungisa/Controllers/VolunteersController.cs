@@ -1,4 +1,9 @@
-﻿using Lungisa.Services;
+﻿// Payal and Nyanda
+// 15 August 2025
+// Handles volunteer management in the admin panel. This controller connects with Firebase to fetch volunteer data and uses EmailHelper to notify or 
+// contact volunteers. Provides functionality to view all volunteers and send emails directly from the admin dashboard.
+
+using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Mail;

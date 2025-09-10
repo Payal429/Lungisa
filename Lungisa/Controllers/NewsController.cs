@@ -1,4 +1,9 @@
-﻿using Lungisa.Services;
+﻿// Payal and Nyanda
+// 15 August 2025
+// Handles the public-facing News section. Fetches news articles from Firebase and displays article details. This controller ensures
+// the latest news is shown first and routes to Home views.
+
+using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lungisa.Controllers

@@ -1,4 +1,9 @@
-﻿using Lungisa.Models;
+﻿// Payal and Nyanda
+// 15 August 2025
+// Manages Lungisa projects in the admin dashboard. Interacts with Firebase to create, retrieve, and delete project records. Supports image uploads for 
+// project entries and handles form data for adding new projects.
+
+using Lungisa.Models;
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;
 

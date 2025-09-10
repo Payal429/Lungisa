@@ -1,4 +1,9 @@
-﻿using Lungisa.Models;
+﻿// Payal and Nyanda
+// 15 August 2025
+// Manages organisational events for both admin and public views. Provides functionality to add new events, list existing ones, and delete events.
+// Integrates with Firebase for persistent storage.
+
+using Lungisa.Models;
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc; // for DateTime parsing
 

@@ -1,14 +1,18 @@
 ﻿<!-- Payal and Nyanda -->
-<!-- 06 August 2025 -->
-<!-- This is the landing page for Projects, where users can view Lungisa’s current and upcoming initiatives.
-    The page is designed to later display a list of projects (with titles, descriptions, and statuses) in a structured format. -->
+<!-- 8 September 2025 -->
+<!--This page allows users to submit formal support requests or report issues directly to the Lungisa team. 
+The form collects details such as name, surname, email, nature of the request, and message. It ensures that 
+community needs or concerns are properly recorded and responded to.-->
 
-@model Lungisa.Models.NewsArticleModel
+@model Lungisa.Models.HomeViewModel
+
 @{
+    ViewBag.Title = "Requests";
     Layout = null;
 }
 
 <!DOCTYPE html>
+<html>
 <head>
     <!-- Meta -->
     <meta charset="utf-8" />
@@ -19,14 +23,14 @@
 
     <!-- Links -->
     <link rel="stylesheet" href="~/Content/home.css" />
+    <link rel="stylesheet" href="~/css/home.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/news.css" />
+    <link rel="stylesheet" href="~/css/requests.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
 
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
-<html>
 
 <body>
     <!-- ================= HEADER AND NAVIGATION ================= -->
@@ -43,10 +47,10 @@
         <!-- nav wrapper -->
         <nav id="main-nav" class="main-nav">
             <ul>
-                <li><a href="/Home/Index" class="nav-link">HOME</a></li>
+                <li><a href="/Home/Index" class="nav-link active">HOME</a></li>
                 <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
                 <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
-                <li><a href="/Home/News" class="nav-link active">LATEST NEWS</a></li>
+                <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
                 <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
             </ul>
         </nav>
@@ -57,17 +61,20 @@
         </div>
     </header>
 
+    <!-- ================= REQUEST FORM ================= -->
+    <section class="request-form-section">
+        <h2>Submit a Request</h2>
+        <p>If you need support or want to report something, fill in the form below and we'll get back to you.</p>
 
-    <div class="news-details">
-        <h1>@Model.Title</h1>
-        <div class="news-meta">
-            <span class="news-date">@Model.Date</span>
-        </div>
-        <img src="@Model.ImageUrl" alt="@Model.Title" />
-        <p class="news-body">@Model.Body</p>
-        <a class="back-link" href="@Url.Action("Index", "News")">&larr; Back to News</a>
-    </div>
-
+        <form method="post" action="/Home/SubmitRequest">
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input type="text" name="surname" placeholder="Your Surname" required />
+            <input type="email" name="email" placeholder="Your Email" required />
+            <input type="text" name="nature" placeholder="Nature of Request" required />
+            <textarea name="message" rows="6" placeholder="Your Request / Message" required></textarea>
+            <button type="submit">Submit Request</button>
+        </form>
+    </section>
 
     <!-- ================= FOOTER ================= -->
     <footer class="site-footer">
@@ -78,11 +85,11 @@
             <div class="footer-col">
                 <h3>LUNGIS</h3>
                 <ul>
-                    <li><a href="/Home/Index" class="nav-link">HOME</a></li>
+                    <li><a href="/Home/Index" class="nav-link active">HOME</a></li>
                     <li><a href="/Home/About" class="nav-link">ABOUT</a></li>
                     <li><a href="/Home/Services" class="nav-link">SERVICES</a></li>
-                    <li><a href="/Home/Projects" class="nav-link">PROJECTS</a></li>
-                    <li><a href="/Home/News" class="nav-link active">LATEST NEWS</a></li>
+                    <li><a href="#">PROJECTS</a></li>
+                    <li><a href="/Home/News" class="nav-link">LATEST NEWS</a></li>
                     <li><a href="/Home/Contact" class="nav-link">CONTACT</a></li>
                 </ul>
             </div>
@@ -99,27 +106,24 @@
 
             <div class="footer-col subscribe">
                 <h3>Subscribe to get latest updates</h3>
-                <form>
-                    <input type="email" placeholder="your email">
+                <form action="/Home/Subscribe" method="post">
+                    <input type="email" name="email" placeholder="your email" required>
                     <button type="submit">Subscribe</button>
                 </form>
             </div>
+
         </div>
 
         <div class="footer-bottom">
             <p>© 2025 Lungis. All rights reserved.</p>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous">
-    </script>
+
     <script>
         (function () {
             const btn = document.querySelector('.menu-toggle');
             const nav = document.getElementById('main-nav');
             if (!btn || !nav) return;
-
             btn.addEventListener('click', () => {
                 const isOpen = nav.classList.toggle('open');
                 btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -127,5 +131,5 @@
         })();
     </script>
 </body>
-
 </html>
+

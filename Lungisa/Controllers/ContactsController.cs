@@ -1,5 +1,7 @@
 ﻿// Payal and Nyanda 
 // 15 August 2025
+// Handles contact messages submitted via the contact form. Admins can view all contact entries from Firebase and send thank-you emails back to users who
+// reached out.
 
 using System.Net.Mail;
 using System.Net;

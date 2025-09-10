@@ -1,4 +1,9 @@
-﻿using Lungisa.Models;
+﻿// Payal and Nyanda
+// 15 August 2025
+// Provides an admin interface for managing news articles. Allows admins to create, view, and delete news articles stored in Firebase. Handles optional
+// image uploads and saves them in the server's Content/Images directory.
+
+using Lungisa.Models;
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;
 

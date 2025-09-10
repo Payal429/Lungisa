@@ -1,4 +1,10 @@
-﻿using System.Net.Mail;
+﻿// Payal and Nyanda
+// 15 August 2025
+// Handles subscriber management for the admin dashboard. Connects with Firebase to fetch and manage newsletter subscriber data. Provides functionality to 
+// send notification emails to subscribers regarding updates, news, and events.
+
+
+using System.Net.Mail;
 using System.Net;
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;

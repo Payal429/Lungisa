@@ -1,6 +1,7 @@
 ﻿// Payal and Nyanda
 // 15 August 2025
-
+// Provides an admin interface for managing donations. Allows administrators to view all donations stored in Firebase and send personalized thank-you emails
+// to donors via the EmailHelper service.
 
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;

@@ -57,6 +57,14 @@ namespace Lungisa.Controllers
         {
             return View();
         }
+        public ActionResult Requests()
+        {
+            return View();
+        }
+        public ActionResult AskCommunity()
+        {
+            return View();
+        }
 
         // ===================== INDEX PAGE =====================
         public async Task<ActionResult> Index()
