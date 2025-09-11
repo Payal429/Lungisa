@@ -5,7 +5,6 @@ using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
 using Lungisa.Models;
 
-
 namespace Lungisa.Services
 {
     public class FirebaseService
@@ -79,64 +78,6 @@ namespace Lungisa.Services
         public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
             => await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
 
-        /*public FirebaseService(IConfiguration config)
-        {
-            if (FirebaseApp.DefaultInstance == null)
-            {
-                _firebaseApp = FirebaseApp.Create(new AppOptions()
-                {
-                    Credential = GoogleCredential.FromFile(
-                        Path.Combine(Directory.GetCurrentDirectory(), "Config", "firebaseServiceAccount.json"))
-                });
-            }
-            else
-            {
-                _firebaseApp = FirebaseApp.DefaultInstance;
-            }
-        }
-
-        public async Task<FirebaseToken> VerifyIdTokenAsync(string idToken)
-        {
-            return await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
-        }
-
-
-    public FirebaseService(IWebHostEnvironment env)
-        {
-            // Initialize Firebase Admin SDK
-            if (FirebaseApp.DefaultInstance == null)
-            {
-                string path = Path.Combine(env.ContentRootPath, "Config", "firebaseServiceAccount.json");
-                _firebaseApp = FirebaseApp.Create(new AppOptions
-                {
-                    Credential = GoogleCredential.FromFile(path)
-                });
-            }
-            else
-            {
-                _firebaseApp = FirebaseApp.DefaultInstance;
-            }
-
-            // Initialize Realtime Database client
-            _firebaseClient = new FirebaseClient(
-                "https://lungisa-e03bd-default-rtdb.firebaseio.com/",
-                new FirebaseOptions
-                {
-                    AuthTokenAsyncFactory = () => Task.FromResult("NjOwtbddPfLXqPHWEtgYQA2JSz81WCbVjylCXmfk")
-                });
-        }*/
-
-        // ===================== AUTHENTICATION =====================
-/*        // Create a new user in Firebase Authentication
-        public async Task<UserRecord> CreateUserAsync(string email, string password)
-        {
-            var userArgs = new UserRecordArgs()
-            {
-                Email = email,
-                Password = password
-            };
-            return await FirebaseAuth.DefaultInstance.CreateUserAsync(userArgs);
-        }*/
 
         // ===================== PROJECTS =====================
         // Get all projects along with their Firebase keys
@@ -301,21 +242,64 @@ namespace Lungisa.Services
         // Fetch all donations
         public async Task<List<DonationModel>> GetDonations()
         {
-            var donations = await _firebaseClient
+            var donationsData = await _firebaseClient
                 .Child("Donations")
-                .OnceAsync<DonationModel>();
+                .OnceAsync<dynamic>();
 
-            return donations.Select(d => new DonationModel
+            var donations = new List<DonationModel>();
+
+            foreach (var d in donationsData)
             {
-                DonorName = d.Object.DonorName,
-                Email = d.Object.Email,
-                Amount = d.Object.Amount,
-                Timestamp = d.Object.Timestamp,
-                PayFastPaymentId = d.Object.PayFastPaymentId,
-                Status = d.Object.Status,
-                FirstName = d.Object.FirstName,
-                LastName = d.Object.LastName
-            }).ToList();
+                var obj = d.Object;
+
+                // Safely parse timestamp
+                DateTime timestamp;
+                try
+                {
+                    if (obj.timestamp is long l) // stored as Unix milliseconds
+                        timestamp = DateTimeOffset.FromUnixTimeMilliseconds(l).UtcDateTime;
+                    else if (obj.timestamp is string s && DateTime.TryParse(s, out DateTime dt))
+                        timestamp = dt;
+                    else
+                        timestamp = DateTime.UtcNow;
+                }
+                catch
+                {
+                    timestamp = DateTime.UtcNow;
+                }
+
+                // Safely parse amount
+                decimal amount = 0;
+                try
+                {
+                    if (obj.Amount != null)
+                        amount = Convert.ToDecimal(obj.Amount);
+                }
+                catch
+                {
+                    amount = 0;
+                }
+
+                donations.Add(new DonationModel
+                {
+                    DonorName = obj.DonorName ?? "",
+                    Email = obj.Email ?? "",
+                    Amount = amount,
+                    Timestamp = timestamp,
+                    Status = obj.Status ?? "Pending",
+                    FirstName = obj.FirstName ?? "",
+                    LastName = obj.LastName ?? "",
+                    PayFastPaymentId = obj.PayFastPaymentId ?? "",
+                    M_PaymentId = obj.M_PaymentId ?? "",
+                    PaymentReference = obj.PaymentReference ?? ""
+                });
+            }
+
+            return donations;
         }
+
+
+
+
     }
 }

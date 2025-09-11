@@ -62,6 +62,10 @@ namespace Lungisa.Controllers
         {
             return View();
         }
+        public ActionResult DonationsAdmin()
+        {
+            return View();
+        }
 
 
         // GET: Admin/AdminDashboard

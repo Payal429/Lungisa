@@ -77,7 +77,9 @@ namespace Lungisa.Controllers
                 ["name_last"] = model.LastName,
                 ["email_address"] = model.Email,
                 ["m_payment_id"] = mPaymentId,
-                ["amount"] = model.Amount.ToString("F2", CultureInfo.InvariantCulture),
+                
+                // Using InvariantCulture via string.Format instead of ToString
+                ["amount"] = string.Format(CultureInfo.InvariantCulture, "{0:F2}", model.Amount),
                 ["item_name"] = "Donation to Lungisa NPO"
             };
 
