@@ -84,6 +84,46 @@ namespace Lungisa.Controllers
             // Redirect to the EventsPage so the user sees the updated list
             return RedirectToAction("EventsPage");
         }
+        [HttpGet]
+        public async Task<ActionResult> EditEvent(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction("EventsPage");
+
+            // Retrieve the event by key from Firebase
+            var eventToEdit = await firebase.GetEventByKey(id);
+
+            // Pass the event and key to the view
+            ViewBag.EventToEdit = eventToEdit;
+            ViewBag.EventKey = id;
+
+            // Load all events to display in the table
+            var events = await firebase.GetAllEventsWithKeys();
+            return View("~/Views/Admin/Events.cshtml", events);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateEvent(string eventKey, string name, string dateTime, string venue, string description)
+        {
+            var existingEvent = await firebase.GetEventByKey(eventKey);
+
+            if (existingEvent == null)
+            {
+                TempData["Success"] = "⚠️ Event not found!";
+                return RedirectToAction("EventsPage");
+            }
+
+            // Update properties
+            existingEvent.Event.Name = name;
+            existingEvent.Event.DateTime = dateTime;
+            existingEvent.Event.Venue = venue;
+            existingEvent.Event.Description = description;
+
+            await firebase.UpdateEvent(eventKey, existingEvent.Event);
+
+            TempData["Success"] = "✅ Event updated successfully!";
+            return RedirectToAction("EventsPage");
+        }
 
     }
 }

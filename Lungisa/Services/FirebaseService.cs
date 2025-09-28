@@ -117,6 +117,25 @@ namespace Lungisa.Services
             var projects = await _firebaseClient.Child("Projects").OnceAsync<ProjectModel>();
             return projects.Select(p => p.Object).ToList();
         }
+        public async Task<FirebaseProject> GetProjectByKey(string key)
+        {
+            var project = await _firebaseClient
+                .Child("Projects")
+                .Child(key)
+                .OnceSingleAsync<ProjectModel>();
+
+            if (project == null) return null;
+
+            return new FirebaseProject { Key = key, Project = project };
+        }
+        public async Task UpdateProject(string key, ProjectModel project)
+        {
+            await _firebaseClient
+                .Child("Projects")
+                .Child(key)
+                .PutAsync(project);
+        }
+
 
         // ===================== EVENTS =====================
         // Get all events along with their Firebase keys
@@ -155,6 +174,27 @@ namespace Lungisa.Services
             var events = await _firebaseClient.Child("Events").OnceAsync<EventModel>();
             return events.Select(e => e.Object).ToList();
         }
+        public async Task<FirebaseEvent> GetEventByKey(string key)
+        {
+            var eventModel = await _firebaseClient
+                .Child("Events")
+                .Child(key)
+                .OnceSingleAsync<EventModel>();
+
+            if (eventModel == null) return null;
+
+            return new FirebaseEvent { Key = key, Event = eventModel };
+        }
+
+        public async Task UpdateEvent(string key, EventModel eventModel)
+        {
+            await _firebaseClient
+                .Child("Events")
+                .Child(key)
+                .PutAsync(eventModel);
+        }
+
+
 
         // ===================== NEWS =====================
         // Get all news articles along with their Firebase keys
@@ -186,6 +226,15 @@ namespace Lungisa.Services
             public string Key { get; set; }
             public NewsArticleModel Article { get; set; }
         }
+
+        public async Task UpdateNews(string key, NewsArticleModel article)
+        {
+            await _firebaseClient
+                .Child("News")
+                .Child(key)
+                .PutAsync(article);
+        }
+
 
         // ===================== SUBSCRIBERS =====================
         // Save a new subscriber

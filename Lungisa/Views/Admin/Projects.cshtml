@@ -2,180 +2,167 @@
 @{
     ViewBag.Title = "Project Management";
     Layout = null;
+
+    // Project to edit (from EditProject GET)
+    var projectToEdit = ViewBag.ProjectToEdit as Lungisa.Services.FirebaseService.FirebaseProject;
+    var projectKey = ViewBag.ProjectKey as string;
 }
 
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Meta -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-
-    <!-- Title -->
     <title>Projects Management</title>
 
-    <!-- Links -->
     <link rel="stylesheet" href="~/css/formStyle.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
-
-    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-    <!-- ================= ADMIN HEADER AND NAVIGATION ================= -->
-    <header>
-        <a class="logo" href="/">
-            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
-        </a>
+<header>
+    <a class="logo" href="/"><img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo"></a>
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
+    <nav id="main-nav" class="main-nav">
+        <ul>
+            <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
+            <li><a href="/DonationsAdmin" class="nav-link">DONATIONS</a></li>
+            <li><a href="/Projects" class="nav-link active">PROJECTS</a></li>
+            <li><a href="/Events" class="nav-link">EVENTS</a></li>
+            <li><a href="/NewsAdmin" class="nav-link">NEWS</a></li>
+            <li><a href="/Volunteers" class="nav-link ">VOLUNTEERS</a></li>
+            <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
+            <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
+        </ul>
+    </nav>
+</header>
 
-        <!-- hamburger -->
-        <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false">
-            <span></span><span></span><span></span>
-        </button>
+<div class="container">
+    <h1>Manage Projects</h1>
+    <p>Add, edit or delete organisational projects.</p>
 
-        <!-- nav wrapper -->
-        <nav id="main-nav" class="main-nav">
-            <ul>
-                <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
-                <li><a href="/DonationsAdmin" class="nav-link">DONATIONS</a></li>
-                <li><a href="/Projects" class="nav-link active">PROJECTS</a></li>
-                <li><a href="/Events" class="nav-link">EVENTS</a></li>
-                <li><a href="/NewsAdmin" class="nav-link">NEWS</a></li>
-                <li><a href="/Volunteers" class="nav-link ">VOLUNTEERS</a></li>
-                <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
-                <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- ================= MANAGE PROJECTS ================= -->
-    <div class="container">
-        <!-- ================= HEADING ================= -->
-        <h1>Manage Projects</h1>
-        <p>Add, edit or delete organisational projects.</p>
-
-        <section class="section-card1">
-            <!-- ================= SUCCESS MESSAGE ================= -->
+    <section class="section-card1">
+        <h2>@(projectKey != null ? "Edit Project" : "Add New Project")</h2>
             @if (TempData["Success"] != null)
             {
-                <div class="success-message">
-                    @TempData["Success"]
-                </div>
+                <div class="success-message">@TempData["Success"]</div>
+            }
+        <br />
+        <form action="@(projectKey != null ? "/Projects/UpdateProject" : "/Projects/AddProject")" method="post" enctype="multipart/form-data">
+            @if(projectKey != null)
+            {
+                <input type="hidden" name="projectKey" value="@projectKey" />
             }
 
-            <!-- ================= FORM ================= -->
-            <h2>Add New Project</h2>
-            <form action="/Projects/AddProject" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input name="title" type="text" required />
-                </div>
-
-                <label for="project-type">Project Type</label>
-                <div class="project-header">
-                    <select name="Type" id="project-type" class="dropdown-project" required>
-                        <option value="" disabled selected>Select a project type</option>
-                        <option value="completed">Completed</option>
-                        <option value="currently">Current</option>
-                        <option value="upcoming">Upcoming</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" rows="4" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Start Date</label>
-                    <input name="startDate" type="date" />
-                </div>
-
-                <div class="form-group">
-                    <label>End Date</label>
-                    <input name="endDate" type="date" />
-                </div>
-
-                <div class="form-group">
-                    <label>Upload Image</label>
-                    <input type="file" name="image" accept="image/*" />
-                </div>
-
-                <button class="btn-save" type="submit">Save Project</button>
-            </form>
-        </section>
-
-        <br /><br />
-
-        <!-- ================= LIST OF EXISTING PROJECTS ================= -->
-        <section class="section-card2">
-            <h2>Existing Projects</h2>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Any())
-                        {
-                            foreach (var item in Model)
-                            {
-                                if (item?.Project != null)
-                                {
-                                    <tr>
-                                        <td>@item.Project.Title</td>
-                                        <td>@item.Project.Type</td>
-                                        <td>@item.Project.Description</td>
-                                        <td>@item.Project.StartDate</td>
-                                        <td>@item.Project.EndDate</td>
-                                        <td>
-                                            <a class="btn-delete" href="/Projects/Delete/@item.Key" onclick="return confirm('Delete this project?');">Delete</a>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="6">⚠️ No projects found.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <div class="form-group">
+                <label>Title</label>
+                <input name="title" type="text" required value="@(projectToEdit?.Project.Title ?? "")" />
             </div>
 
-            <p>Total Projects: @(Model?.Count ?? 0)</p>
-        </section>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous">
-    </script>
+            <div class="form-group">
+                <label for="project-type">Project Type</label>
+                <select name="type" id="project-type" class="dropdown-project" required>
+                    <option value="" disabled selected>Select a project type</option>
 
-    <script>
-        (function () {
-            const btn = document.querySelector('.menu-toggle');
-            const nav = document.getElementById('main-nav');
-            if (!btn || !nav) return;
+                    @if (projectToEdit?.Project.Type == "completed")
+                    { <option value="completed" selected>Completed</option> }
+                    else { <option value="completed">Completed</option> }
 
-            btn.addEventListener('click', () => {
-                const isOpen = nav.classList.toggle('open');
-                btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            });
-        })();
-    </script>
+                    @if (projectToEdit?.Project.Type == "currently")
+                    { <option value="currently" selected>Current</option> }
+                    else { <option value="currently">Current</option> }
 
+                    @if (projectToEdit?.Project.Type == "upcoming")
+                    { <option value="upcoming" selected>Upcoming</option> }
+                    else { <option value="upcoming">Upcoming</option> }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" rows="4" required>@(projectToEdit?.Project.Description ?? "")</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Start Date</label>
+                <input name="startDate" type="date" value="@(projectToEdit?.Project.StartDate ?? "")" />
+            </div>
+
+            <div class="form-group">
+                <label>End Date</label>
+                <input name="endDate" type="date" value="@(projectToEdit?.Project.EndDate ?? "")" />
+            </div>
+
+            <div class="form-group">
+                <label>Upload Image</label>
+                <input type="file" name="image" accept="image/*" />
+                @if(projectToEdit?.Project.ImageUrl != null)
+                {
+                    <p>Current Image: <img src="@projectToEdit.Project.ImageUrl" width="100" /></p>
+                }
+            </div>
+
+            <button class="btn-save" type="submit">
+                @(projectKey != null ? "Update Project" : "Save Project")
+            </button>
+        </form>
+    </section>
+
+    <br /><br />
+
+    <section class="section-card2">
+        <h2>Existing Projects</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (item?.Project != null)
+                            {
+                                <tr>
+                                    <td>@item.Project.Title</td>
+                                    <td>@item.Project.Type</td>
+                                    <td>@item.Project.Description</td>
+                                    <td>@item.Project.StartDate</td>
+                                    <td>@item.Project.EndDate</td>
+                                    <td>
+                                        <a class="btn-delete" href="/Projects/Delete/@item.Key" onclick="return confirm('Delete this project?');">Delete</a>
+                                        <a class="btn-edit" href="/Projects/EditProject/@item.Key">Edit</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">⚠️ No projects found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <p>Total Projects: @(Model?.Count ?? 0)</p>
+    </section>
+</div>
 </body>
 </html>

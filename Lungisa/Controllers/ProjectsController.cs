@@ -106,5 +106,65 @@ namespace Lungisa.Controllers
             return RedirectToAction("Projects");
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult> EditProject(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction("Projects");
+
+            // Get the project by key from Firebase
+            var project = await firebase.GetProjectByKey(id); // Implement this in your FirebaseService
+
+            // Pass project and key to the view via ViewBag
+            ViewBag.ProjectToEdit = project;
+            ViewBag.ProjectKey = id;
+
+            // Load all projects as usual
+            var projects = await firebase.GetAllProjectsWithKeys();
+            return View("~/Views/Admin/Projects.cshtml", projects);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateProject(string projectKey, string title, string type, string description, string startDate, string endDate, IFormFile image)
+        {
+            // Get the existing project from Firebase
+            var existingProject = await firebase.GetProjectByKey(projectKey);
+
+            if (existingProject == null)
+            {
+                TempData["Success"] = "⚠️ Project not found!";
+                return RedirectToAction("Projects");
+            }
+
+            string imageUrl = existingProject.Project.ImageUrl;
+
+            // Handle image upload if a new image is provided
+            if (image != null && image.Length > 0)
+            {
+                string fileName = Path.GetFileName(image.FileName);
+                string path = Path.Combine(_env.WebRootPath, "Content", "Images", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                imageUrl = "/Content/Images/" + fileName;
+            }
+
+            // Update the project
+            existingProject.Project.Title = title;
+            existingProject.Project.Type = type;
+            existingProject.Project.Description = description;
+            existingProject.Project.StartDate = startDate;
+            existingProject.Project.EndDate = endDate;
+            existingProject.Project.ImageUrl = imageUrl;
+
+            await firebase.UpdateProject(projectKey, existingProject.Project);
+
+            TempData["Success"] = "✅ Project updated successfully!";
+            return RedirectToAction("Projects");
+        }
     }
 }

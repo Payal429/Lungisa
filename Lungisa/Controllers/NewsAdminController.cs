@@ -103,5 +103,58 @@ namespace Lungisa.Controllers
             // Redirect back to Index to refresh the news list
             return RedirectToAction("Index");
         }
+        // GET: /NewsAdmin/EditNews/{id}
+        [HttpGet]
+        public async Task<ActionResult> EditNews(string id)
+        {
+            var firebaseArticle = await firebase.GetAllNewsWithKeys();
+            var articleData = firebaseArticle.FirstOrDefault(a => a.Key == id);
+
+            if (articleData == null) return NotFound();
+
+            ViewBag.ArticleToEdit = articleData.Article;
+            ViewBag.ArticleKey = articleData.Key;
+
+            return View("~/Views/Admin/NewsAdmin.cshtml", firebaseArticle);
+        }
+
+        // POST: /NewsAdmin/UpdateNews
+        [HttpPost]
+        public async Task<ActionResult> UpdateNews(string articleKey, string title, string summary, string body, IFormFile image)
+        {
+            // Retrieve existing article
+            var existingArticle = (await firebase.GetAllNewsWithKeys())
+                                  .FirstOrDefault(a => a.Key == articleKey)?.Article;
+
+            if (existingArticle == null) return NotFound();
+
+            string imageUrl = existingArticle.ImageUrl ?? "/Content/Images/default-news.png";
+
+            if (image != null && image.Length > 0)
+            {
+                string fileName = Path.GetFileName(image.FileName);
+                string path = Path.Combine(_env.WebRootPath, "Content", "Images", fileName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                    await image.CopyToAsync(stream);
+
+                imageUrl = "/Content/Images/" + fileName;
+            }
+
+            var updatedArticle = new NewsArticleModel
+            {
+                Title = title,
+                Summary = summary,
+                Body = body,
+                Date = DateTime.Now.ToString("yyyy-MM-dd"),
+                ImageUrl = imageUrl
+            };
+
+            await firebase.UpdateNews(articleKey, updatedArticle);
+
+            TempData["Success"] = "✅ News article updated successfully!";
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

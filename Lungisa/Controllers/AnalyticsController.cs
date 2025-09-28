@@ -76,12 +76,11 @@ namespace Lungisa.Controllers
                 .Select(i => donations
                     .Where(d => d.Object.TimestampDate.HasValue &&
                                 d.Object.TimestampDate.Value.Date == today.AddDays(-i) &&
-                                !string.IsNullOrEmpty(d.Object.Email))
-                    .Select(d => d.Object.Email)
-                    .Distinct()
-                    .Count())
+                                d.Object.Amount.HasValue)
+                    .Sum(d => d.Object.Amount.Value))
                 .Reverse()
                 .ToArray();
+
 
             // Volunteers: unique volunteers per day
             ViewBag.VolunteerTrendLabels = Enumerable.Range(0, 7)
@@ -148,12 +147,11 @@ namespace Lungisa.Controllers
                         Count = donations
                             .Where(d => d.Object.TimestampDate.HasValue &&
                                         d.Object.TimestampDate.Value.Date == day &&
-                                        !string.IsNullOrEmpty(d.Object.Email))
-                            .Select(d => d.Object.Email)
-                            .Distinct()
-                            .Count()
+                                        d.Object.Amount.HasValue)
+                            .Sum(d => d.Object.Amount.Value)
                     };
                 }).ToList();
+
 
             var volunteerTrend = Enumerable.Range(0, (endDate - startDate).Days + 1)
                 .Select(i =>

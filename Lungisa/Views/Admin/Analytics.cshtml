@@ -1,4 +1,6 @@
-﻿@using Lungisa.Models
+﻿
+
+@using Lungisa.Models
 @model List<Lungisa.Models.PageAnalytics>
 
 @{
@@ -15,15 +17,23 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>@ViewBag.Title – Lungisa</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Title -->
+    <title>Analytics</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
-            --lungisa-red: #e60023;
+            --lungisa-red: #ed1f1f;
             --lungisa-black: #1a1a1a;
             --lungisa-white: #ffffff;
             --lungisa-light-gray: #f5f5f5;
@@ -37,7 +47,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--lungisa-light-gray);
             color: var(--lungisa-black);
             line-height: 1.5;
@@ -147,7 +157,7 @@
         }
 
             button:hover {
-                background: #c5001d;
+                background: #ed1f1f;
             }
 
         /* Graphs side-by-side wrapper */
@@ -169,7 +179,38 @@
             }
     </style>
 </head>
+
+
 <body>
+    <!-- ================= ADMIN HEADER AND NAVIGATION ================= -->
+    <header>
+        <a class="logo" href="/">
+            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
+        </a>
+
+        <!-- hamburger -->
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <!-- nav wrapper -->
+        <nav id="main-nav" class="main-nav">
+            <ul>
+                <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
+                <li><a href="/DonationsAdmin" class="nav-link">DONATIONS</a></li>
+                <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
+                <li><a href="/Events" class="nav-link">EVENTS</a></li>
+                <li><a href="/NewsAdmin" class="nav-link">NEWS</a></li>
+                <li><a href="/Volunteers" class="nav-link ">VOLUNTEERS</a></li>
+                <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
+                <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    </br>
+    </br>
+
     <div class="analytics-container">
         <h1>Website Analytics Dashboard</h1>
 
@@ -205,7 +246,7 @@
         </table>
 
         <h2>Trends</h2>
-        <div style="margin-bottom:20px;">
+@*         <div style="margin-bottom:20px;">
             <label for="startDate">Start Date:</label>
             <input type="date" id="startDate" />
 
@@ -213,7 +254,7 @@
             <input type="date" id="endDate" />
 
             <button onclick="loadTrends()" style="margin-left:10px;">Apply</button>
-        </div>
+        </div> *@
 
         <div class="charts-row">
             <canvas id="donationsChart"></canvas>
@@ -330,5 +371,6 @@
             navigator.sendBeacon('/Analytics/TrackVisit', JSON.stringify({ page: pageName, duration: duration }));
         });
     </script>
+
 </body>
 </html>

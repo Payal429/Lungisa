@@ -1,48 +1,31 @@
-﻿<!-- Payal and Nyanda -->
-<!-- 06 August 2025 -->
-<!-- Admin panel for creating and managing organisational events. Events include details such as name, date/time, venue, and description. -->
-
-
-@model List<Lungisa.Services.FirebaseService.FirebaseEvent>
+﻿@model List<Lungisa.Services.FirebaseService.FirebaseEvent>
 @{
     ViewBag.Title = "Manage Events and Programs";
     Layout = null;
+
+    var eventToEdit = ViewBag.EventToEdit as Lungisa.Services.FirebaseService.FirebaseEvent;
+    var eventKey = ViewBag.EventKey as string;
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
-    <!-- Meta -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-
-    <!-- Title -->
-    <title>Events and Programs Form</title>
-
-    <!-- Links -->
+    <title>Events and Programs</title>
     <link rel="stylesheet" href="~/Content/formStyle.css" />
     <link rel="stylesheet" href="~/css/formStyle.css" />
     <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-
-    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
-
 <body>
-    <!-- ================= ADMIN HEADER AND NAVIGATION ================= -->
+    <!-- Header -->
     <header>
-        <a class="logo" href="/">
-            <img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo">
-        </a>
-
-        <!-- hamburger -->
+        <a class="logo" href="/"><img src="~/Content/Images/LungisaLogo.png" alt="Lungisa Logo"></a>
         <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-
-        <!-- nav wrapper -->
         <nav id="main-nav" class="main-nav">
             <ul>
                 <li><a href="/Admin/AdminDashboard" class="nav-link">DASHBOARD</a></li>
@@ -50,55 +33,61 @@
                 <li><a href="/Projects" class="nav-link">PROJECTS</a></li>
                 <li><a href="/Events" class="nav-link active">EVENTS</a></li>
                 <li><a href="/NewsAdmin" class="nav-link">NEWS</a></li>
-                <li><a href="/Volunteers" class="nav-link ">VOLUNTEERS</a></li>
+                <li><a href="/Volunteers" class="nav-link">VOLUNTEERS</a></li>
                 <li><a href="/Subscribers" class="nav-link">SUBSCRIBERS</a></li>
                 <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
             </ul>
         </nav>
-
     </header>
 
     <div class="container">
         <h1>Manage Events</h1>
         <p>Add, edit or delete public events.</p>
 
-        @* Show success message *@
-        @if (ViewBag.Success != null)
-        {
-            <div class="alert-success">@ViewBag.Success</div>
-        }
-
+        <!-- Add/Edit Form -->
         <section class="section-card1">
-            <h2>New Event</h2>
+            <h2>@(eventKey != null ? "Edit Event" : "New Event")</h2>
+            <form action="@(eventKey != null ? "/Events/UpdateEvent" : "/Events/AddEvent")" method="post">
+                @if (eventKey != null)
+                {
+                    <input type="hidden" name="eventKey" value="@eventKey" />
+                }
+                @if (ViewBag.Success != null)
+                {
+                    <div class="alert-success">@ViewBag.Success</div>
+                }
+                </br>
 
-            <form action="/Events/AddEvent" method="post">
                 <div class="form-group">
                     <label>Event Name</label>
-                    <input name="name" type="text" required />
+                    <input name="name" type="text" required value="@(eventToEdit?.Event.Name ?? "")" />
                 </div>
 
                 <div class="form-group">
                     <label>Date & Time</label>
-                    <input name="dateTime" type="datetime-local" required />
+                    <input name="dateTime" type="datetime-local" required
+                           value="@(eventToEdit != null ? DateTime.Parse(eventToEdit.Event.DateTime).ToString("yyyy-MM-ddTHH:mm") : "")" />
                 </div>
 
                 <div class="form-group">
                     <label>Venue</label>
-                    <input name="venue" type="text" required />
+                    <input name="venue" type="text" required value="@(eventToEdit?.Event.Venue ?? "")" />
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea name="description" rows="4" required></textarea>
+                    <textarea name="description" rows="4" required>@(eventToEdit?.Event.Description ?? "")</textarea>
                 </div>
 
-                <button class="btn-save" type="submit">Save Event</button>
+                <button class="btn-save" type="submit">
+                    @(eventKey != null ? "Update Event" : "Save Event")
+                </button>
             </form>
         </section>
 
-        <br />
-        <br />
+        <br /><br />
 
+        <!-- Existing Events Table -->
         <section class="section-card2">
             <h2>Upcoming Events</h2>
             <div class="table-container">
@@ -114,9 +103,10 @@
                                 <tr>
                                     <td data-label="Name">@item.Event.Name</td>
                                     <td data-label="Date">@DateTime.Parse(item.Event.DateTime).ToString("f")</td>
-                                    <td data-label ="Venue">@item.Event.Venue</td>
+                                    <td data-label="Venue">@item.Event.Venue</td>
                                     <td data-label="Actions">
                                         <a class="btn-delete" href="/Events/Delete/@item.Key" onclick="return confirm('Delete this event?');">Delete</a>
+                                        <a class="btn-edit" href="/Events/EditEvent/@item.Key">Edit</a>
                                     </td>
                                 </tr>
                             }
@@ -130,12 +120,14 @@
                     </tbody>
                 </table>
             </div>
+            <p>Total Events: @(Model?.Count ?? 0)</p>
         </section>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous">
-    </script>
+            crossorigin="anonymous"></script>
+
     <script>
         (function () {
             const btn = document.querySelector('.menu-toggle');
