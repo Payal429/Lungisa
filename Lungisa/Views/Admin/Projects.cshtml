@@ -1,16 +1,10 @@
-﻿<!-- Payal and Nyanda -->
-<!-- 06 August 2025 -->
-<!-- Admin interface for creating, viewing, and deleting organisational projects. Allows administrators to add project 
-    details such as title, type, description, start date, end date, and an optional image.  -->
-
-@model List<Lungisa.Services.FirebaseService.FirebaseProject>
+﻿@model List<Lungisa.Services.FirebaseService.FirebaseProject>
 @{
     ViewBag.Title = "Project Management";
     Layout = null;
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <!-- Meta -->
@@ -21,9 +15,7 @@
     <title>Projects Management</title>
 
     <!-- Links -->
-    <link rel="stylesheet" href="~/Content/formStyle.css" />
     <link rel="stylesheet" href="~/css/formStyle.css" />
-    <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/Content/Images/LOGOLungisa.png">
 
@@ -56,7 +48,6 @@
                 <li><a href="/Contacts" class="nav-link">CONTACT</a></li>
             </ul>
         </nav>
-
     </header>
 
     <!-- ================= MANAGE PROJECTS ================= -->
@@ -64,59 +55,60 @@
         <!-- ================= HEADING ================= -->
         <h1>Manage Projects</h1>
         <p>Add, edit or delete organisational projects.</p>
+
         <section class="section-card1">
-            <!-- ================= FORM ================= -->
-            <h2>Add New Project</h2>
+            <!-- ================= SUCCESS MESSAGE ================= -->
             @if (TempData["Success"] != null)
             {
-                <script>
-                    alert("@TempData["Success"]");
-                </script>
+                <div class="success-message">
+                    @TempData["Success"]
+                </div>
             }
 
-        <form action="/Projects/AddProject" method="post" enctype="multipart/form-data">
+            <!-- ================= FORM ================= -->
+            <h2>Add New Project</h2>
+            <form action="/Projects/AddProject" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input name="title" type="text" required />
+                </div>
 
-            <div class="form-group">
-                <label>Title</label>
-                <input name="title" type="text" required />
-            </div>
+                <label for="project-type">Project Type</label>
+                <div class="project-header">
+                    <select name="Type" id="project-type" class="dropdown-project" required>
+                        <option value="" disabled selected>Select a project type</option>
+                        <option value="completed">Completed</option>
+                        <option value="currently">Current</option>
+                        <option value="upcoming">Upcoming</option>
+                    </select>
+                </div>
 
-            <label for="project-type">Project Type</label>
-            <div class="project-header">
-                <select name="Type" id="project-type" class="dropdown-project" required>
-                    <option value="" disabled selected>Select a project type</option>
-                    <option value="completed">Completed</option>
-                    <option value="currently">Current</option>
-                    <option value="upcoming">Upcoming</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="4" required></textarea>
+                </div>
 
-            <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" rows="4" required></textarea>
-            </div>
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input name="startDate" type="date" />
+                </div>
 
-            <div class="form-group">
-                <label>Start Date</label>
-                <input name="startDate" type="date" />
-            </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input name="endDate" type="date" />
+                </div>
 
-            <div class="form-group">
-                <label>End Date</label>
-                <input name="endDate" type="date" />
-            </div>
-            <div class="form-group">
-                <label>Upload Image</label>
-                <input type="file" name="image" accept="image/*" />
-            </div>
-            <button class="btn-save" type="submit">Save Project</button>
+                <div class="form-group">
+                    <label>Upload Image</label>
+                    <input type="file" name="image" accept="image/*" />
+                </div>
 
-        </form>
-
-
+                <button class="btn-save" type="submit">Save Project</button>
+            </form>
         </section>
-        <br />
-        <br />
+
+        <br /><br />
+
         <!-- ================= LIST OF EXISTING PROJECTS ================= -->
         <section class="section-card2">
             <h2>Existing Projects</h2>
@@ -134,7 +126,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model != null)
+                        @if (Model != null && Model.Any())
                         {
                             foreach (var item in Model)
                             {
@@ -165,12 +157,13 @@
 
             <p>Total Projects: @(Model?.Count ?? 0)</p>
         </section>
-
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous">
     </script>
+
     <script>
         (function () {
             const btn = document.querySelector('.menu-toggle');
@@ -183,5 +176,6 @@
             });
         })();
     </script>
+
 </body>
 </html>

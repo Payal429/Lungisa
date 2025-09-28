@@ -1,0 +1,334 @@
+﻿@using Lungisa.Models
+@model List<Lungisa.Models.PageAnalytics>
+
+@{
+    Layout = null;
+    ViewBag.Title = "Analytics";
+
+    var pageStats = ViewBag.PageStats as List<PageAnalytics> ?? new List<PageAnalytics>();
+    var donationLabels = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.DonationTrendLabels ?? new string[0]);
+    var donationValues = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.DonationTrendValues ?? new int[0]);
+    var volunteerLabels = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.VolunteerTrendLabels ?? new string[0]);
+    var volunteerValues = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.VolunteerTrendValues ?? new int[0]);
+    var trafficLabels = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.TrafficTrendLabels ?? new string[0]);
+    var trafficValues = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.TrafficTrendValues ?? new int[0]);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title – Lungisa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lungisa-red: #e60023;
+            --lungisa-black: #1a1a1a;
+            --lungisa-white: #ffffff;
+            --lungisa-light-gray: #f5f5f5;
+            --lungisa-border: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--lungisa-light-gray);
+            color: var(--lungisa-black);
+            line-height: 1.5;
+        }
+
+        .analytics-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--lungisa-black);
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--lungisa-white);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--lungisa-black);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            }
+
+        /* Table */
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 40px 0 16px;
+            color: var(--lungisa-black);
+            letter-spacing: -0.25px;
+        }
+
+        .table {
+            width: 100%;
+            background: var(--lungisa-white);
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+            .table thead {
+                background: var(--lungisa-red);
+                color: var(--lungisa-white);
+            }
+
+            .table th,
+            .table td {
+                padding: 16px 20px;
+                text-align: left;
+            }
+
+            .table tbody tr:nth-child(even) {
+                background: var(--lungisa-light-gray);
+            }
+
+            .table tbody tr:hover {
+                background: rgba(230, 0, 35, 0.05);
+            }
+
+        /* Charts Section */
+        label {
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid var(--lungisa-border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        button {
+            background: var(--lungisa-red);
+            color: var(--lungisa-white);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+            button:hover {
+                background: #c5001d;
+            }
+
+        /* Graphs side-by-side wrapper */
+        .charts-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+            .charts-row canvas {
+                flex: 1 1 30%;
+                min-width: 280px;
+                background: var(--lungisa-white);
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                height: 300px !important;
+            }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <h1>Website Analytics Dashboard</h1>
+
+        <div class="stats-cards">
+            <div class="card">💰 Donations: @ViewBag.DonationsCount</div>
+            <div class="card">🙋 Volunteers: @ViewBag.VolunteersCount</div>
+            <div class="card">📩 Subscribers: @ViewBag.SubscribersCount</div>
+            <div class="card">👀 Total Visits: @ViewBag.TotalVisits</div>
+            <div class="card">
+                ⏱ Avg Time Spent: @(ViewBag.AvgDuration != null ? Math.Round((double)ViewBag.AvgDuration, 1) : 0) sec
+            </div>
+        </div>
+
+        <h2>Page-wise Stats</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Page</th>
+                    <th>Visits</th>
+                    <th>Avg Duration (sec)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in pageStats)
+                {
+                    <tr>
+                        <td>@p.Page</td>
+                        <td>@p.VisitCount</td>
+                        <td>@Math.Round(p.AvgDuration, 1)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h2>Trends</h2>
+        <div style="margin-bottom:20px;">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" />
+
+            <label for="endDate" style="margin-left:10px;">End Date:</label>
+            <input type="date" id="endDate" />
+
+            <button onclick="loadTrends()" style="margin-left:10px;">Apply</button>
+        </div>
+
+        <div class="charts-row">
+            <canvas id="donationsChart"></canvas>
+            <canvas id="volunteersChart"></canvas>
+            <canvas id="trafficChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let donationsChart, volunteersChart, trafficChart;
+
+        function initCharts() {
+            const donationLabels = @Html.Raw(donationLabels);
+            const donationCounts = @Html.Raw(donationValues);
+            const volunteerLabels = @Html.Raw(volunteerLabels);
+            const volunteerCounts = @Html.Raw(volunteerValues);
+            const trafficLabels = @Html.Raw(trafficLabels);
+            const trafficCounts = @Html.Raw(trafficValues);
+
+            donationsChart = new Chart(document.getElementById("donationsChart"), {
+                type: 'line',
+                data: {
+                    labels: donationLabels,
+                    datasets: [{
+                        label: 'Donations',
+                        data: donationCounts,
+                        borderColor: '#e60023',
+                        backgroundColor: 'rgba(230, 0, 35, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                }
+            });
+
+            volunteersChart = new Chart(document.getElementById("volunteersChart"), {
+                type: 'bar',
+                data: {
+                    labels: volunteerLabels,
+                    datasets: [{
+                        label: 'Volunteers',
+                        data: volunteerCounts,
+                        backgroundColor: '#1a1a1a'
+                    }]
+                }
+            });
+
+            trafficChart = new Chart(document.getElementById("trafficChart"), {
+                type: 'line',
+                data: {
+                    labels: trafficLabels,
+                    datasets: [{
+                        label: 'Visits',
+                        data: trafficCounts,
+                        borderColor: '#e60023',
+                        backgroundColor: 'rgba(230, 0, 35, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                }
+            });
+        }
+
+        initCharts();
+
+        function loadTrends() {
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+
+            if (!startDate || !endDate) {
+                alert("Please select both start and end dates.");
+                return;
+            }
+
+            fetch(`/Analytics/GetTrends?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const donationLabels = data.Donations.map(d => new Date(d.Date).toLocaleDateString());
+                    const donationCounts = data.Donations.map(d => d.Count);
+
+                    const volunteerLabels = data.Volunteers.map(v => new Date(v.Date).toLocaleDateString());
+                    const volunteerCounts = data.Volunteers.map(v => v.Count);
+
+                    const trafficLabels = data.Traffic.map(t => new Date(t.Date).toLocaleDateString());
+                    const trafficCounts = data.Traffic.map(t => t.Count);
+
+                    if (donationsChart) donationsChart.destroy();
+                    if (volunteersChart) volunteersChart.destroy();
+                    if (trafficChart) trafficChart.destroy();
+
+                    donationsChart = new Chart(document.getElementById("donationsChart"), {
+                        type: 'line',
+                        data: { labels: donationLabels, datasets: [{ label: 'Donations', data: donationCounts, borderColor: '#e60023', backgroundColor: 'rgba(230, 0, 35, 0.1)', fill: true, tension: 0.3 }] }
+                    });
+
+                    volunteersChart = new Chart(document.getElementById("volunteersChart"), {
+                        type: 'bar',
+                        data: { labels: volunteerLabels, datasets: [{ label: 'Volunteers', data: volunteerCounts, backgroundColor: '#1a1a1a' }] }
+                    });
+
+                    trafficChart = new Chart(document.getElementById("trafficChart"), {
+                        type: 'line',
+                        data: { labels: trafficLabels, datasets: [{ label: 'Visits', data: trafficCounts, borderColor: '#e60023', backgroundColor: 'rgba(230, 0, 35, 0.1)', fill: true, tension: 0.3 }] }
+                    });
+                })
+                .catch(err => console.error("Error loading trends:", err));
+        }
+
+        const pageName = window.location.pathname;
+        const startTime = Date.now();
+
+        window.addEventListener("beforeunload", () => {
+            const duration = Math.floor((Date.now() - startTime) / 1000);
+            navigator.sendBeacon('/Analytics/TrackVisit', JSON.stringify({ page: pageName, duration: duration }));
+        });
+    </script>
+</body>
+</html>

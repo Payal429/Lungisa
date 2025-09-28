@@ -2,6 +2,7 @@
 // 15 August 2025
 // Handles all administrative endpoints for the Lungisa application.
 
+using FirebaseAdmin.Auth;
 using Lungisa.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -66,6 +67,10 @@ namespace Lungisa.Controllers
         {
             return View();
         }
+        public ActionResult Analytics()
+        {
+            return View();
+        }
 
 
         // GET: Admin/AdminDashboard
@@ -93,42 +98,38 @@ namespace Lungisa.Controllers
 
         // POST: Admin/CreateAdmin
         [HttpPost]
-        public async Task<ActionResult> CreateAdmin(string email, string password)
+        public async Task<IActionResult> CreateAdmin(string firstName, string lastName, string email, string password, string phoneNumber, string role)
         {
-            // Re-authorize the current user before allowing action.
-            var adminUid = HttpContext.Session.GetString("AdminUid");
-            if (string.IsNullOrEmpty(adminUid))
-                return RedirectToAction("Index", "Login");
-
-            // Basic validation.
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-            {
-                ViewBag.Error = "Email and Password are required.";
-                return View();
-            }
-
-            if (password.Length < 6)
-            {
-                ViewBag.Error = "Password must be at least 6 characters.";
-                return View();
-            }
-
             try
             {
-                // Attempt to create the user in Firebase Authentication.
-                var newUser = await firebase.CreateUserAsync(email, password);
+                // 1️⃣ Create admin user in Firebase Authentication
+                var userRecordArgs = new UserRecordArgs
+                {
+                    Email = email,
+                    Password = password,
+                    DisplayName = $"{firstName} {lastName}",
+                    PhoneNumber = string.IsNullOrEmpty(phoneNumber) ? null : phoneNumber
+                };
 
-                // Provide feedback to the view.
-                ViewBag.Success = $"Admin created successfully! UID: {newUser.Uid}";
+                var userRecord = await FirebaseAuth.DefaultInstance.CreateUserAsync(userRecordArgs);
 
-                return View();
+                // 2️⃣ Save extra admin info in Firebase Realtime Database
+                await firebase.SaveAdmin(userRecord.Uid, email, firstName, lastName, phoneNumber, role);
+
+                ViewBag.Success = "Admin created successfully!";
             }
-            catch (System.Exception ex)
+            catch (FirebaseAuthException ex)
             {
-                // Display any Firebase-related errors.
-                ViewBag.Error = ex.Message;
-                return View();
+                ViewBag.Error = $"Firebase Auth Error: {ex.Message}";
             }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Error: {ex.Message}";
+            }
+
+            return View();
         }
+    
+
     }
 }

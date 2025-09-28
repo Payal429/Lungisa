@@ -130,6 +130,20 @@ community needs or concerns are properly recorded and responded to.-->
             });
         })();
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("/Analytics/TrackVisit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    page: window.location.pathname,   // page being visited
+                    duration: Math.floor(Math.random() * 200) // test duration
+                })
+            });
+        });
+    </script>
+
+
 </body>
 </html>
 
