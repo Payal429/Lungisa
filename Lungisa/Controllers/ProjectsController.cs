@@ -55,9 +55,9 @@ namespace Lungisa.Controllers
         [HttpPost]
         public async Task<ActionResult> AddProject(string title, string type, string description, string startDate, string endDate, IFormFile image)
         {
-            string imageUrl = "/Content/Images/default-news.png"; // fallback
+            // Default fallback image if no image is uploaded
+            string imageUrl = "/Content/Images/projectmanagement.png";
 
-            // If an image was uploaded
             if (image != null && image.Length > 0)
             {
                 string fileName = Path.GetFileName(image.FileName);
@@ -70,6 +70,7 @@ namespace Lungisa.Controllers
 
                 imageUrl = "/Content/Images/" + fileName;
             }
+
 
             // Create a new project model with form values and default image URL
             ProjectModel Project = new ProjectModel
@@ -137,9 +138,9 @@ namespace Lungisa.Controllers
                 return RedirectToAction("Projects");
             }
 
-            string imageUrl = existingProject.Project.ImageUrl;
+            // Start with default in case existing project has no image
+            string imageUrl = existingProject.Project.ImageUrl ?? "/Content/Images/projectmanagement.png";
 
-            // Handle image upload if a new image is provided
             if (image != null && image.Length > 0)
             {
                 string fileName = Path.GetFileName(image.FileName);
@@ -152,6 +153,7 @@ namespace Lungisa.Controllers
 
                 imageUrl = "/Content/Images/" + fileName;
             }
+
 
             // Update the project
             existingProject.Project.Title = title;

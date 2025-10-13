@@ -319,7 +319,7 @@
             });
         })();
     </script>
-    <script>
+@*     <script>
         document.addEventListener("DOMContentLoaded", () => {
             fetch("/Analytics/TrackVisit", {
                 method: "POST",
@@ -330,7 +330,37 @@
                 })
             });
         });
+    </script> *@
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Get current page path
+            let currentPage = window.location.pathname;
+
+            // If it's the root "/", mark it as "/Home/Index"
+            if (currentPage === "/") {
+                currentPage = "/Home/Index";
+            }
+
+            // Send visit data to backend
+            fetch("/Analytics/TrackVisit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    page: currentPage,                       // store "/Home/Index"
+                    duration: Math.floor(Math.random() * 200) // random test duration
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error("Failed to track visit:", response.status);
+                    } else {
+                        console.log("Visit tracked:", currentPage);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        });
     </script>
+
 
 
 

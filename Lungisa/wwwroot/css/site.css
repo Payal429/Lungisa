@@ -60,9 +60,6 @@ header {
         color:white;
     }
 
-nav ul li a {
-    color: white !important;
-}
 .nav-link {
     text-decoration: none;
     transition: color 0.2s;
